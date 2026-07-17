@@ -10,6 +10,7 @@ import { EventsPage } from './pages/EventsPage'
 import { ChallengesPage } from './pages/ChallengesPage'
 import { AboutPage } from './pages/AboutPage'
 import { RegisterPage } from './pages/RegisterPage'
+import { GalleryPage } from './pages/GalleryPage'
 import { AdminPage } from './pages/admin/AdminPage'
 import { ContentProvider } from './content/ContentContext'
 
@@ -47,6 +48,7 @@ function Layout() {
           <Route path="/challenges" element={<ChallengesPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/events" element={<EventsPage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </main>

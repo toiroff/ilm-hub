@@ -15,6 +15,19 @@ export type ChallengeWeek = {
   detail: string
 }
 
+export type GalleryItemType = 'photos' | 'videos' | 'ceremonies' | 'projects'
+
+/** Extra gallery media managed in admin (project photos/videos are auto-included). */
+export type GalleryItem = {
+  id: string
+  type: GalleryItemType
+  /** Image URL, or poster frame when videoUrl is set */
+  src: string
+  label: string
+  /** Optional playable video (project detail videos or uploaded clips) */
+  videoUrl?: string
+}
+
 export type SiteContent = {
   hero: {
     line1: string
@@ -56,6 +69,7 @@ export type SiteContent = {
   challenges: Challenge[]
   challengeWeeks: ChallengeWeek[]
   seasons: Season[]
+  gallery: GalleryItem[]
 }
 
 export const CONTENT_ROW_ID = 'main'

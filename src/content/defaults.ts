@@ -75,4 +75,36 @@ export const defaultSiteContent: SiteContent = {
   challenges: structuredClone(challenges),
   challengeWeeks: structuredClone(challengeWeeks),
   seasons: structuredClone(seasons),
+  gallery: [
+    {
+      id: 'gallery-1',
+      type: 'photos',
+      src: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80',
+      label: 'Study session',
+    },
+    {
+      id: 'gallery-2',
+      type: 'ceremonies',
+      src: 'https://images.unsplash.com/photo-1523580494863-6f3031224c6a?auto=format&fit=crop&w=800&q=80',
+      label: 'Graduation',
+    },
+    {
+      id: 'gallery-3',
+      type: 'photos',
+      src: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80',
+      label: 'Team collab',
+    },
+    {
+      id: 'gallery-4',
+      type: 'ceremonies',
+      src: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80',
+      label: 'Opening night',
+    },
+    {
+      id: 'gallery-5',
+      type: 'photos',
+      src: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80',
+      label: 'Community',
+    },
+  ],
 }

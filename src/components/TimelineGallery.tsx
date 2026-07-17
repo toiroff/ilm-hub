@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import { X, Play } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Reveal, Stagger, StaggerItem } from './Reveal'
-import { gallery, timeline } from '../data/content'
+import { Reveal } from './Reveal'
+import { timeline } from '../data/content'
 import { useSiteContent } from '../content/ContentContext'
 
 export function Timeline() {
@@ -44,107 +43,7 @@ export function Timeline() {
   )
 }
 
-const filters = ['all', 'photos', 'videos', 'ceremonies', 'projects'] as const
-
-export function Gallery() {
-  const [filter, setFilter] = useState<(typeof filters)[number]>('all')
-  const [active, setActive] = useState<(typeof gallery)[number] | null>(null)
-
-  const items =
-    filter === 'all' ? gallery : gallery.filter((g) => g.type === filter)
-
-  return (
-    <section id="gallery" className="section-pad py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl">
-        <Reveal className="text-center">
-          <p className="text-sm font-semibold tracking-[0.2em] text-teal uppercase">
-            Gallery
-          </p>
-          <h2 className="mt-4 font-display text-4xl font-bold tracking-tight sm:text-5xl">
-            Moments from the community
-          </h2>
-        </Reveal>
-
-        <Reveal delay={0.1}>
-          <div className="mt-10 flex flex-wrap justify-center gap-2">
-            {filters.map((f) => (
-              <button
-                key={f}
-                type="button"
-                onClick={() => setFilter(f)}
-                className={`rounded-full px-4 py-2 text-sm font-medium capitalize transition ${
-                  filter === f
-                    ? 'bg-teal text-navy'
-                    : 'border border-white/10 text-white/60 hover:text-white'
-                }`}
-              >
-                {f}
-              </button>
-            ))}
-          </div>
-        </Reveal>
-
-        <Stagger className="mt-12 columns-1 gap-4 sm:columns-2 lg:columns-3">
-          {items.map((item) => (
-            <StaggerItem key={item.id} className="mb-4 break-inside-avoid">
-              <button
-                type="button"
-                onClick={() => setActive(item)}
-                className="group relative block w-full overflow-hidden rounded-2xl"
-              >
-                <img
-                  src={item.src}
-                  alt={item.label}
-                  className="w-full object-cover transition duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 flex items-end bg-gradient-to-t from-navy/80 via-transparent to-transparent opacity-0 transition group-hover:opacity-100">
-                  <div className="flex w-full items-center justify-between p-4">
-                    <span className="text-sm font-medium text-white">
-                      {item.label}
-                    </span>
-                    {item.type === 'videos' && (
-                      <Play className="h-5 w-5 text-gold" />
-                    )}
-                  </div>
-                </div>
-              </button>
-            </StaggerItem>
-          ))}
-        </Stagger>
-      </div>
-
-      <AnimatePresence>
-        {active && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
-            onClick={() => setActive(null)}
-          >
-            <button
-              type="button"
-              className="absolute right-6 top-6 rounded-full border border-white/20 p-2 text-white"
-              onClick={() => setActive(null)}
-              aria-label="Close"
-            >
-              <X className="h-5 w-5" />
-            </button>
-            <motion.img
-              initial={{ scale: 0.92, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.92, opacity: 0 }}
-              src={active.src}
-              alt={active.label}
-              className="max-h-[85vh] max-w-4xl rounded-2xl object-contain"
-              onClick={(e) => e.stopPropagation()}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </section>
-  )
-}
+export { Gallery } from './GalleryGrid'
 
 export function Testimonials() {
   const { content } = useSiteContent()
@@ -158,7 +57,10 @@ export function Testimonials() {
   if (!t) return null
 
   return (
-    <section id="testimonials" className="section-pad relative overflow-hidden py-24 lg:py-32">
+    <section
+      id="testimonials"
+      className="section-pad relative overflow-hidden py-24 lg:py-32"
+    >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(246,199,68,0.08),transparent_55%)]" />
       <div className="relative mx-auto max-w-7xl">
         <Reveal className="text-center">
@@ -198,7 +100,9 @@ export function Testimonials() {
                 type="button"
                 onClick={() => setIndex(i)}
                 className={`h-2.5 rounded-full transition-all ${
-                  i === safeIndex ? 'w-8 bg-teal' : 'w-2.5 bg-white/20 hover:bg-white/40'
+                  i === safeIndex
+                    ? 'w-8 bg-teal'
+                    : 'w-2.5 bg-white/20 hover:bg-white/40'
                 }`}
                 aria-label={`Testimonial ${i + 1}`}
               />

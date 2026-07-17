@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react'
 import { defaultSiteContent } from './defaults'
-import { CONTENT_ROW_ID, type SiteContent } from './types'
+import { CONTENT_ROW_ID, type GalleryItem, type SiteContent } from './types'
 import { isSupabaseConfigured, supabase } from '../lib/supabase'
 
 type ContentContextValue = {
@@ -29,11 +29,42 @@ function normalizeProject<T extends { gallery?: string[] | null }>(project: T) {
   }
 }
 
+function normalizeGalleryItem(raw: unknown): GalleryItem | null {
+  if (!raw || typeof raw !== 'object') return null
+  const item = raw as Partial<GalleryItem>
+  const src = typeof item.src === 'string' ? item.src.trim() : ''
+  if (!src) return null
+  const type =
+    item.type === 'videos' ||
+    item.type === 'ceremonies' ||
+    item.type === 'projects' ||
+    item.type === 'photos'
+      ? item.type
+      : 'photos'
+  return {
+    id:
+      typeof item.id === 'string' && item.id.trim()
+        ? item.id
+        : `gallery-${Math.random().toString(36).slice(2, 9)}`,
+    type,
+    src,
+    label: typeof item.label === 'string' && item.label.trim() ? item.label : 'Gallery',
+    videoUrl:
+      typeof item.videoUrl === 'string' && item.videoUrl.trim()
+        ? item.videoUrl.trim()
+        : undefined,
+  }
+}
+
 function mergeContent(raw: unknown): SiteContent {
   const base = structuredClone(defaultSiteContent)
   if (!raw || typeof raw !== 'object') return base
   const data = raw as Partial<SiteContent>
   const projects = (data.projects ?? base.projects).map(normalizeProject)
+  const galleryRaw = data.gallery ?? base.gallery
+  const gallery = (Array.isArray(galleryRaw) ? galleryRaw : [])
+    .map(normalizeGalleryItem)
+    .filter((g): g is GalleryItem => Boolean(g))
   return {
     ...base,
     ...data,
@@ -49,6 +80,7 @@ function mergeContent(raw: unknown): SiteContent {
     challenges: data.challenges ?? base.challenges,
     challengeWeeks: data.challengeWeeks ?? base.challengeWeeks,
     seasons: data.seasons ?? base.seasons,
+    gallery,
   }
 }
 

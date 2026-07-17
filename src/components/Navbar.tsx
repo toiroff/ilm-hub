@@ -11,6 +11,7 @@ const links = [
   { to: '/projects', label: 'Projects' },
   { to: '/challenges', label: 'Challenges' },
   { to: '/events', label: 'Events' },
+  { to: '/gallery', label: 'Gallery' },
   { to: '/#contact', label: 'Contact', hash: 'contact' },
 ]
 

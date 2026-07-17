@@ -17,9 +17,10 @@ import {
   Users,
   BarChart3,
   Info,
+  Images,
 } from 'lucide-react'
 import { useSiteContent } from '../../content/ContentContext'
-import type { SiteContent } from '../../content/types'
+import type { GalleryItem, GalleryItemType, SiteContent } from '../../content/types'
 import type { EventItem, Project, Season } from '../../data/content'
 import type { TeamMember } from '../../data/team'
 import type { Testimonial } from '../../data/testimonials'
@@ -34,6 +35,7 @@ type Tab =
   | 'projects'
   | 'events'
   | 'challenges'
+  | 'gallery'
   | 'voices'
   | 'stats'
 
@@ -45,6 +47,7 @@ const tabs: { id: Tab; label: string; icon: typeof Sparkles }[] = [
   { id: 'projects', label: 'Projects', icon: FolderKanban },
   { id: 'events', label: 'Events', icon: CalendarDays },
   { id: 'challenges', label: 'Seasons', icon: Flame },
+  { id: 'gallery', label: 'Gallery', icon: Images },
   { id: 'voices', label: 'Voices', icon: MessageSquareQuote },
   { id: 'stats', label: 'Stats', icon: BarChart3 },
 ]
@@ -260,6 +263,7 @@ export function AdminPage() {
   const [eventId, setEventId] = useState(content.events[0]?.id ?? '')
   const [seasonId, setSeasonId] = useState(content.seasons[0]?.id ?? '')
   const [voiceIndex, setVoiceIndex] = useState(0)
+  const [galleryIndex, setGalleryIndex] = useState(0)
 
   useEffect(() => {
     if (!supabase) {
@@ -301,6 +305,7 @@ export function AdminPage() {
         : (content.seasons[0]?.id ?? ''),
     )
     setVoiceIndex(0)
+    setGalleryIndex(0)
   }, [content])
 
   const selectedProject = useMemo(
@@ -319,6 +324,16 @@ export function AdminPage() {
   )
 
   const selectedVoice = draft.testimonials[voiceIndex] ?? null
+  const selectedGallery = draft.gallery[galleryIndex] ?? null
+
+  const updateGalleryItem = (patch: Partial<GalleryItem>) => {
+    if (!selectedGallery) return
+    const id = selectedGallery.id
+    setDraft((d) => ({
+      ...d,
+      gallery: d.gallery.map((g) => (g.id === id ? { ...g, ...patch } : g)),
+    }))
+  }
 
   const updateProject = (patch: Partial<Project>) => {
     if (!selectedProject) return
@@ -1508,6 +1523,136 @@ export function AdminPage() {
                     className="inline-flex items-center gap-2 rounded-full border border-orange/40 px-4 py-2 text-sm text-orange"
                   >
                     <Trash2 className="h-4 w-4" /> Delete this season
+                  </button>
+                </div>
+              )}
+            </Panel>
+          )}
+
+          {tab === 'gallery' && (
+            <Panel
+              title="Gallery"
+              description="Extra photos/videos for Home and /gallery. Project covers, project galleries, and project videos are included automatically."
+            >
+              <div className="mb-5 flex flex-wrap items-center gap-2">
+                {draft.gallery.map((g, i) => (
+                  <button
+                    key={g.id}
+                    type="button"
+                    onClick={() => setGalleryIndex(i)}
+                    className={`max-w-[10rem] truncate rounded-full px-3 py-1.5 text-sm ${
+                      galleryIndex === i
+                        ? 'bg-indigo text-white'
+                        : 'border border-white/15 text-white/60'
+                    }`}
+                  >
+                    {g.label || `Item ${i + 1}`}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => {
+                    const next: GalleryItem = {
+                      id: `gallery-${Date.now().toString(36)}`,
+                      type: 'photos',
+                      src: '',
+                      label: 'New gallery item',
+                    }
+                    setDraft((d) => ({
+                      ...d,
+                      gallery: [...d.gallery, next],
+                    }))
+                    setGalleryIndex(draft.gallery.length)
+                    setStatus('Gallery item added — upload media, then Save.')
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-teal/50 px-3 py-1.5 text-sm text-teal"
+                >
+                  <Plus className="h-4 w-4" /> Add item
+                </button>
+              </div>
+
+              {!selectedGallery ? (
+                <p className="text-sm text-white/50">
+                  No extra gallery items yet. Project media still appears on the
+                  site automatically.
+                </p>
+              ) : (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field
+                    label="Label"
+                    value={selectedGallery.label}
+                    onChange={(v) => updateGalleryItem({ label: v })}
+                  />
+                  <label className="block space-y-1.5">
+                    <span className="text-xs font-medium tracking-wide text-white/45 uppercase">
+                      Type
+                    </span>
+                    <select
+                      value={selectedGallery.type}
+                      onChange={(e) =>
+                        updateGalleryItem({
+                          type: e.target.value as GalleryItemType,
+                        })
+                      }
+                      className="w-full rounded-xl border border-white/10 bg-[#0b1220] px-3 py-2.5 text-sm text-white outline-none focus:border-teal/50"
+                    >
+                      <option value="photos">photos</option>
+                      <option value="videos">videos</option>
+                      <option value="ceremonies">ceremonies</option>
+                      <option value="projects">projects</option>
+                    </select>
+                  </label>
+                  <div className="sm:col-span-2">
+                    <ImageField
+                      label="Image / poster"
+                      value={selectedGallery.src}
+                      onChange={(v) => updateGalleryItem({ src: v })}
+                      onUpload={(file) =>
+                        handleUpload(
+                          file,
+                          (url) => updateGalleryItem({ src: url }),
+                          'gallery',
+                        )
+                      }
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <VideoField
+                      label="Video (optional)"
+                      value={selectedGallery.videoUrl ?? ''}
+                      hint="If set, this item plays as video in the lightbox. Poster uses the image above."
+                      onChange={(v) =>
+                        updateGalleryItem({
+                          videoUrl: v.trim() || undefined,
+                          type: v.trim() ? 'videos' : selectedGallery.type,
+                        })
+                      }
+                      onUpload={(file) =>
+                        handleUpload(
+                          file,
+                          (url) =>
+                            updateGalleryItem({
+                              videoUrl: url,
+                              type: 'videos',
+                            }),
+                          'gallery/video',
+                        )
+                      }
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDraft((d) => ({
+                        ...d,
+                        gallery: d.gallery.filter((_, i) => i !== galleryIndex),
+                      }))
+                      setGalleryIndex(0)
+                      setStatus('Gallery item removed — click Save to publish.')
+                    }}
+                    className="inline-flex items-center gap-2 text-sm text-orange"
+                  >
+                    <Trash2 className="h-4 w-4" /> Delete this item
                   </button>
                 </div>
               )}

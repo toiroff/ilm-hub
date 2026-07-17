@@ -16,7 +16,7 @@ const footerLinks = [
     title: 'Community',
     items: [
       { label: 'Testimonials', to: '/#testimonials' },
-      { label: 'Gallery', to: '/#gallery' },
+      { label: 'Gallery', to: '/gallery' },
       { label: 'Register', to: '/register' },
     ],
   },
