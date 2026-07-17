@@ -22,10 +22,18 @@ type ContentContextValue = {
 
 const ContentContext = createContext<ContentContextValue | null>(null)
 
+function normalizeProject<T extends { gallery?: string[] | null }>(project: T) {
+  return {
+    ...project,
+    gallery: Array.isArray(project.gallery) ? project.gallery.filter(Boolean) : [],
+  }
+}
+
 function mergeContent(raw: unknown): SiteContent {
   const base = structuredClone(defaultSiteContent)
   if (!raw || typeof raw !== 'object') return base
   const data = raw as Partial<SiteContent>
+  const projects = (data.projects ?? base.projects).map(normalizeProject)
   return {
     ...base,
     ...data,
@@ -34,7 +42,7 @@ function mergeContent(raw: unknown): SiteContent {
     whoWeAre: { ...base.whoWeAre, ...data.whoWeAre },
     teamLeads: data.teamLeads ?? base.teamLeads,
     teamMembers: data.teamMembers ?? base.teamMembers,
-    projects: data.projects ?? base.projects,
+    projects,
     stats: data.stats ?? base.stats,
     testimonials: data.testimonials ?? base.testimonials,
     events: data.events ?? base.events,

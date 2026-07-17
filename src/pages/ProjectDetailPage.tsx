@@ -148,24 +148,27 @@ export function ProjectDetailPage() {
         </div>
       </section>
 
-      <section className="section-pad pb-16">
-        <div className="mx-auto max-w-7xl">
-          <Reveal>
-            <h2 className="font-display text-3xl font-bold">Gallery</h2>
-          </Reveal>
-          <Stagger className="mt-8 columns-1 gap-4 sm:columns-2 lg:columns-3">
-            {project.gallery.map((src, i) => (
-              <StaggerItem key={src} className="mb-4 break-inside-avoid">
-                <img
-                  src={src}
-                  alt={`${project.title} moment ${i + 1}`}
-                  className="w-full rounded-2xl border border-white/10"
-                />
-              </StaggerItem>
-            ))}
-          </Stagger>
-        </div>
-      </section>
+      {project.gallery.length > 0 && (
+        <section className="section-pad pb-16">
+          <div className="mx-auto max-w-7xl">
+            <Reveal>
+              <h2 className="font-display text-3xl font-bold">Gallery</h2>
+            </Reveal>
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {project.gallery.map((src, i) => (
+                <Reveal key={`${src}-${i}`} delay={Math.min(i * 0.05, 0.3)}>
+                  <img
+                    src={src}
+                    alt={`${project.title} moment ${i + 1}`}
+                    className="h-auto w-full rounded-2xl border border-white/10"
+                    loading="lazy"
+                  />
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {others.length > 0 && (
         <section className="section-pad pb-16">

@@ -1148,7 +1148,7 @@ export function AdminPage() {
                   <div>
                     <h3 className="font-display text-lg font-bold">Gallery</h3>
                     <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                      {selectedProject.gallery.map((src, i) => (
+                      {(selectedProject.gallery ?? []).map((src, i) => (
                         <div
                           key={`${src}-${i}`}
                           className="rounded-xl border border-white/10 p-2"
@@ -1162,7 +1162,7 @@ export function AdminPage() {
                             type="button"
                             onClick={() =>
                               updateProject({
-                                gallery: selectedProject.gallery.filter(
+                                gallery: (selectedProject.gallery ?? []).filter(
                                   (_, j) => j !== i,
                                 ),
                               })
@@ -1179,28 +1179,31 @@ export function AdminPage() {
                       <input
                         type="file"
                         accept="image/*"
+                        multiple
                         className="hidden"
                         onChange={async (e) => {
-                          const file = e.target.files?.[0]
-                          if (!file || !selectedProject) return
+                          const files = Array.from(e.target.files ?? [])
+                          if (!files.length || !selectedProject) return
                           const id = selectedProject.id
-                          await handleUpload(
-                            file,
-                            (url) => {
-                              setDraft((d) => ({
-                                ...d,
-                                projects: d.projects.map((p) =>
-                                  p.id === id
-                                    ? {
-                                        ...p,
-                                        gallery: [...p.gallery, url],
-                                      }
-                                    : p,
-                                ),
-                              }))
-                            },
-                            `projects/${id}`,
-                          )
+                          for (const file of files) {
+                            await handleUpload(
+                              file,
+                              (url) => {
+                                setDraft((d) => ({
+                                  ...d,
+                                  projects: d.projects.map((p) =>
+                                    p.id === id
+                                      ? {
+                                          ...p,
+                                          gallery: [...(p.gallery ?? []), url],
+                                        }
+                                      : p,
+                                  ),
+                                }))
+                              },
+                              `projects/${id}`,
+                            )
+                          }
                           e.target.value = ''
                         }}
                       />
