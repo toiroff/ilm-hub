@@ -3,9 +3,11 @@ import { ArrowRight, Mail, MapPin, Send } from 'lucide-react'
 import { Reveal } from './Reveal'
 import { Button } from './Button'
 import { SEASON3_APPLY_URL } from '../lib/links'
+import { useLocale } from '../i18n/locale'
 
 export function Contact() {
   const [sent, setSent] = useState(false)
+  const { t } = useLocale()
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
@@ -42,9 +44,9 @@ export function Contact() {
             </div>
           </div>
 
-          <Button href={SEASON3_APPLY_URL} className="mt-10">
-            Register for Season 3 <ArrowRight className="h-4 w-4" />
-          </Button>
+            <Button href={SEASON3_APPLY_URL} className="mt-10">
+              {t('cta.registerSeason3')} <ArrowRight className="h-4 w-4" />
+            </Button>
         </Reveal>
 
         <Reveal delay={0.15}>
@@ -114,6 +116,7 @@ export function Contact() {
 }
 
 export function FinalCTA() {
+  const { t } = useLocale()
   return (
     <section className="section-pad pb-24 lg:pb-32">
       <Reveal>
@@ -129,7 +132,7 @@ export function FinalCTA() {
               and graduate with a community of learners.
             </p>
             <Button href={SEASON3_APPLY_URL} variant="gold" className="mt-8">
-              Register for Next Season <ArrowRight className="h-4 w-4" />
+              {t('cta.registerNext')} <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
         </div>

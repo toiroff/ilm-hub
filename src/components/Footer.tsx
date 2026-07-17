@@ -1,29 +1,37 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { ArrowRight, Globe2 } from 'lucide-react'
 import { SEASON3_APPLY_URL } from '../lib/links'
-
-const footerLinks = [
-  {
-    title: 'Explore',
-    items: [
-      { label: 'About', to: '/about' },
-      { label: 'Challenges', to: '/challenges' },
-      { label: 'Projects', to: '/projects' },
-      { label: 'Events', to: '/events' },
-    ],
-  },
-  {
-    title: 'Community',
-    items: [
-      { label: 'Testimonials', to: '/#testimonials' },
-      { label: 'Gallery', to: '/gallery' },
-      { label: 'Register', to: '/register' },
-    ],
-  },
-]
+import { useLocale } from '../i18n/locale'
 
 export function Footer() {
   const navigate = useNavigate()
+  const { t, locale } = useLocale()
+
+  const footerLinks = [
+    {
+      title: t('footer.explore'),
+      items: [
+        { label: t('nav.about'), to: '/about' },
+        { label: t('nav.challenges'), to: '/challenges' },
+        { label: t('nav.projects'), to: '/projects' },
+        { label: t('nav.events'), to: '/events' },
+      ],
+    },
+    {
+      title: locale === 'uz' ? 'Jamiyat' : 'Community',
+      items: [
+        {
+          label: locale === 'uz' ? 'Fikrlar' : 'Testimonials',
+          to: '/#testimonials',
+        },
+        { label: t('nav.gallery'), to: '/gallery' },
+        {
+          label: locale === 'uz' ? 'Roʻyxat' : 'Register',
+          to: '/register',
+        },
+      ],
+    },
+  ]
 
   const goHome = () => {
     navigate('/')
@@ -52,9 +60,9 @@ export function Footer() {
               />
             </Link>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/55">
-              An educational initiative helping high school students and
-              graduates build discipline, consistency, and practical skills
-              across Uzbekistan.
+              {locale === 'uz'
+                ? 'Litsey oʻquvchilari va bitiruvchilarga Oʻzbekiston boʻylab intizom, izchillik va amaliy koʻnikmalar qurishga yordam beruvchi taʼlim tashabbusi.'
+                : 'An educational initiative helping high school students and graduates build discipline, consistency, and practical skills across Uzbekistan.'}
             </p>
             <a
               href={SEASON3_APPLY_URL}
@@ -62,7 +70,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gold transition hover:gap-3"
             >
-              Join Season 3 <ArrowRight className="h-4 w-4" />
+              {t('footer.joinSeason')} <ArrowRight className="h-4 w-4" />
             </a>
           </div>
 
@@ -88,7 +96,7 @@ export function Footer() {
 
           <div className="lg:col-span-3">
             <h4 className="font-display text-sm font-semibold tracking-wide text-white">
-              Connect
+              {t('footer.connect')}
             </h4>
             <p className="mt-4 text-sm text-white/50">
               hello@ilmhub.community
@@ -109,8 +117,11 @@ export function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-8 text-xs text-white/35 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} ILM Hub. All rights reserved.</p>
-          <p>Learn. Build. Inspire.</p>
+          <p>
+            © {new Date().getFullYear()} ILM Hub.{' '}
+            {locale === 'uz' ? 'Barcha huquqlar himoyalangan.' : 'All rights reserved.'}
+          </p>
+          <p>{locale === 'uz' ? 'Oʻrgan. Yarat. Ilhomlantir.' : 'Learn. Build. Inspire.'}</p>
         </div>
       </div>
     </footer>

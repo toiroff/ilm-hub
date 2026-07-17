@@ -1,7 +1,8 @@
 import { ArrowRight } from 'lucide-react'
 import { Reveal, Stagger, StaggerItem } from '../components/Reveal'
 import { Button } from '../components/Button'
-import { journeyTimeline } from '../data/team'
+import { useLocale } from '../i18n/locale'
+import { localizedJourney } from '../i18n/staticContent'
 import { SEASON3_APPLY_URL } from '../lib/links'
 import { useSiteContent } from '../content/ContentContext'
 
@@ -14,7 +15,9 @@ const typeStyles: Record<string, string> = {
 
 export function AboutPage() {
   const { content } = useSiteContent()
+  const { locale } = useLocale()
   const { about, teamLeads, teamMembers } = content
+  const journey = localizedJourney(locale)
 
   return (
     <div className="pt-20">
@@ -93,7 +96,7 @@ export function AboutPage() {
 
           <div className="relative mt-16">
             <div className="absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-teal via-indigo to-gold sm:left-1/2 sm:-translate-x-px" />
-            {journeyTimeline.map((item, i) => (
+            {journey.map((item, i) => (
               <Reveal
                 key={`${item.period}-${item.title}`}
                 delay={i * 0.04}

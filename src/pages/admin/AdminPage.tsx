@@ -20,12 +20,19 @@ import {
   Images,
 } from 'lucide-react'
 import { useSiteContent } from '../../content/ContentContext'
-import type { GalleryItem, GalleryItemType, SiteContent } from '../../content/types'
+import type {
+  GalleryItem,
+  GalleryItemType,
+  LocalizedSiteContent,
+  SiteContent,
+} from '../../content/types'
 import type { EventItem, Project, Season } from '../../data/content'
 import type { TeamMember } from '../../data/team'
 import type { Testimonial } from '../../data/testimonials'
 import { isSupabaseConfigured, supabase } from '../../lib/supabase'
 import type { Session } from '@supabase/supabase-js'
+import type { Locale } from '../../i18n/messages'
+import { useLocale } from '../../i18n/locale'
 
 type Tab =
   | 'hero'
@@ -248,20 +255,33 @@ function Panel({
 }
 
 export function AdminPage() {
-  const { content, loading, saveContent, uploadImage, refresh } =
-    useSiteContent()
+  const { bundle, loading, saveBundle, uploadImage, refresh } = useSiteContent()
+  const { t } = useLocale()
   const [session, setSession] = useState<Session | null>(null)
   const [authLoading, setAuthLoading] = useState(true)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [authError, setAuthError] = useState<string | null>(null)
-  const [draft, setDraft] = useState<SiteContent>(content)
+  const [adminLocale, setAdminLocale] = useState<Locale>('en')
+  const [draftBundle, setDraftBundle] = useState<LocalizedSiteContent>(() =>
+    structuredClone(bundle),
+  )
+  const draft = draftBundle[adminLocale]
+  const setDraft = (
+    updater: SiteContent | ((prev: SiteContent) => SiteContent),
+  ) => {
+    setDraftBundle((b) => {
+      const current = b[adminLocale]
+      const next = typeof updater === 'function' ? updater(current) : updater
+      return { ...b, [adminLocale]: next }
+    })
+  }
   const [tab, setTab] = useState<Tab>('projects')
   const [status, setStatus] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
-  const [projectId, setProjectId] = useState(content.projects[0]?.id ?? '')
-  const [eventId, setEventId] = useState(content.events[0]?.id ?? '')
-  const [seasonId, setSeasonId] = useState(content.seasons[0]?.id ?? '')
+  const [projectId, setProjectId] = useState(bundle.en.projects[0]?.id ?? '')
+  const [eventId, setEventId] = useState(bundle.en.events[0]?.id ?? '')
+  const [seasonId, setSeasonId] = useState(bundle.en.seasons[0]?.id ?? '')
   const [voiceIndex, setVoiceIndex] = useState(0)
   const [galleryIndex, setGalleryIndex] = useState(0)
 
@@ -286,27 +306,50 @@ export function AdminPage() {
     return () => sub.subscription.unsubscribe()
   }, [])
 
-  // Only sync draft when saved content from server changes — NOT when ids change
+  // Sync draft when saved bundle from server changes
   useEffect(() => {
-    setDraft(structuredClone(content))
+    setDraftBundle(structuredClone(bundle))
+    const source = bundle[adminLocale]
     setProjectId((prev) =>
-      content.projects.some((p) => p.id === prev)
+      source.projects.some((p) => p.id === prev)
         ? prev
-        : (content.projects[0]?.id ?? ''),
+        : (source.projects[0]?.id ?? ''),
     )
     setEventId((prev) =>
-      content.events.some((e) => e.id === prev)
+      source.events.some((e) => e.id === prev)
         ? prev
-        : (content.events[0]?.id ?? ''),
+        : (source.events[0]?.id ?? ''),
     )
     setSeasonId((prev) =>
-      content.seasons.some((s) => s.id === prev)
+      source.seasons.some((s) => s.id === prev)
         ? prev
-        : (content.seasons[0]?.id ?? ''),
+        : (source.seasons[0]?.id ?? ''),
     )
     setVoiceIndex(0)
     setGalleryIndex(0)
-  }, [content])
+  }, [bundle])
+
+  // Keep selection valid when switching EN/UZ
+  useEffect(() => {
+    const source = draftBundle[adminLocale]
+    setProjectId((prev) =>
+      source.projects.some((p) => p.id === prev)
+        ? prev
+        : (source.projects[0]?.id ?? ''),
+    )
+    setEventId((prev) =>
+      source.events.some((e) => e.id === prev)
+        ? prev
+        : (source.events[0]?.id ?? ''),
+    )
+    setSeasonId((prev) =>
+      source.seasons.some((s) => s.id === prev)
+        ? prev
+        : (source.seasons[0]?.id ?? ''),
+    )
+    setVoiceIndex(0)
+    setGalleryIndex(0)
+  }, [adminLocale])
 
   const selectedProject = useMemo(
     () => draft.projects.find((p) => p.id === projectId) ?? null,
@@ -460,9 +503,9 @@ export function AdminPage() {
   const handleSave = async () => {
     setSaving(true)
     setStatus(null)
-    const { error } = await saveContent(draft)
+    const { error } = await saveBundle(draftBundle)
     setSaving(false)
-    setStatus(error ? `Error: ${error}` : 'Saved — live site updated.')
+    setStatus(error ? `Error: ${error}` : t('admin.saved'))
   }
 
   const handleUpload = async (
@@ -579,6 +622,22 @@ export function AdminPage() {
         </nav>
 
         <div className="space-y-2 border-t border-white/10 p-3">
+          <div className="flex gap-1 rounded-xl border border-white/10 p-1">
+            {(['en', 'uz'] as Locale[]).map((loc) => (
+              <button
+                key={loc}
+                type="button"
+                onClick={() => setAdminLocale(loc)}
+                className={`flex-1 rounded-lg py-1.5 text-xs font-semibold transition ${
+                  adminLocale === loc
+                    ? 'bg-teal text-navy'
+                    : 'text-white/50 hover:text-white'
+                }`}
+              >
+                {loc === 'en' ? 'EN' : 'Oʻzbek'}
+              </button>
+            ))}
+          </div>
           <button
             type="button"
             onClick={() => void handleSave()}
@@ -590,7 +649,7 @@ export function AdminPage() {
             ) : (
               <Save className="h-4 w-4" />
             )}
-            Save changes
+            {saving ? t('admin.saving') : t('admin.save')}
           </button>
           <Link
             to="/"
@@ -616,7 +675,7 @@ export function AdminPage() {
               {tabs.find((t) => t.id === tab)?.label}
             </h2>
             <p className="text-sm text-white/40">
-              Edit content, then Save to update the live site.
+              {adminLocale === 'uz' ? t('admin.editingUz') : t('admin.editingEn')}
             </p>
           </div>
           <button

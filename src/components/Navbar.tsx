@@ -1,25 +1,60 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { Menu, X, ArrowRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from './Button'
 import { SEASON3_APPLY_URL } from '../lib/links'
+import { useLocale } from '../i18n/locale'
+import type { Locale } from '../i18n/messages'
 
-const links = [
-  { to: '/', label: 'Home', hash: '' },
-  { to: '/about', label: 'About' },
-  { to: '/projects', label: 'Projects' },
-  { to: '/challenges', label: 'Challenges' },
-  { to: '/events', label: 'Events' },
-  { to: '/gallery', label: 'Gallery' },
-  { to: '/#contact', label: 'Contact', hash: 'contact' },
-]
+function LanguageSwitch({ compact = false }: { compact?: boolean }) {
+  const { locale, setLocale, t } = useLocale()
+  return (
+    <div
+      className={`flex rounded-full border border-white/15 p-0.5 ${
+        compact ? 'w-full' : ''
+      }`}
+      role="group"
+      aria-label="Language"
+    >
+      {(['en', 'uz'] as Locale[]).map((loc) => (
+        <button
+          key={loc}
+          type="button"
+          onClick={() => setLocale(loc)}
+          className={`rounded-full px-2.5 py-1 text-xs font-semibold transition ${
+            compact ? 'flex-1' : ''
+          } ${
+            locale === loc
+              ? 'bg-teal text-navy'
+              : 'text-white/55 hover:text-white'
+          }`}
+        >
+          {t(`lang.${loc}`)}
+        </button>
+      ))}
+    </div>
+  )
+}
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
+  const { t } = useLocale()
+
+  const links = useMemo(
+    () => [
+      { to: '/', label: t('nav.home'), hash: '' },
+      { to: '/about', label: t('nav.about') },
+      { to: '/projects', label: t('nav.projects') },
+      { to: '/challenges', label: t('nav.challenges') },
+      { to: '/events', label: t('nav.events') },
+      { to: '/#contact', label: t('nav.contact'), hash: 'contact' },
+    ],
+    [t],
+  )
 
   const goHome = () => {
     navigate('/')
@@ -79,7 +114,7 @@ export function Navbar() {
         <div className="hidden items-center gap-1 lg:flex">
           {links.map((link) => (
             <NavLink
-              key={link.label}
+              key={link.to + link.label}
               to={link.to}
               onClick={(e) => {
                 if (link.to === '/') {
@@ -141,9 +176,10 @@ export function Navbar() {
           ))}
         </div>
 
-        <div className="hidden lg:block">
+        <div className="hidden items-center gap-3 lg:flex">
+          <LanguageSwitch />
           <Button href={SEASON3_APPLY_URL} className="!py-2.5 !px-5 text-sm">
-            Join Next Season <ArrowRight className="h-4 w-4" />
+            {t('nav.join')} <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
 
@@ -168,7 +204,7 @@ export function Navbar() {
             <div className="section-pad flex flex-col gap-1 py-4">
               {links.map((link) => (
                 <Link
-                  key={link.label}
+                  key={link.to + link.label}
                   to={link.to}
                   onClick={(e) => {
                     if (link.to === '/') {
@@ -181,8 +217,11 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
+              <div className="mt-2 px-1">
+                <LanguageSwitch compact />
+              </div>
               <Button href={SEASON3_APPLY_URL} className="mt-3 w-full">
-                Join Next Season <ArrowRight className="h-4 w-4" />
+                {t('nav.join')} <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
           </motion.div>

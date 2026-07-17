@@ -4,10 +4,12 @@ import { Button } from './Button'
 import { SEASON3_APPLY_URL } from '../lib/links'
 import { useSiteContent } from '../content/ContentContext'
 import { MediaBackground } from './MediaBackground'
+import { useLocale } from '../i18n/locale'
 
 export function Hero() {
   const { content } = useSiteContent()
   const { hero } = content
+  const { t } = useLocale()
 
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden">
@@ -68,10 +70,10 @@ export function Hero() {
             className="mt-10 flex flex-wrap gap-4"
           >
             <Button href={SEASON3_APPLY_URL}>
-              Join Season 3 <ArrowRight className="h-4 w-4" />
+              {t('cta.joinSeason3')} <ArrowRight className="h-4 w-4" />
             </Button>
             <Button href="#seasons" variant="secondary">
-              Explore Previous Seasons
+              {t('cta.exploreSeasons')}
             </Button>
           </motion.div>
         </div>

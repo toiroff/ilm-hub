@@ -5,10 +5,12 @@ import { Reveal, Stagger, StaggerItem } from '../components/Reveal'
 import { Button } from '../components/Button'
 import { SEASON3_APPLY_URL } from '../lib/links'
 import { useSiteContent } from '../content/ContentContext'
+import { useLocale } from '../i18n/locale'
 
 export function SeasonPage() {
   const { id } = useParams()
   const { content } = useSiteContent()
+  const { t } = useLocale()
   const season =
     content.seasons.find((s) => s.id === id) ?? content.seasons[0]
   const voices = content.testimonials.filter(
@@ -46,7 +48,7 @@ export function SeasonPage() {
             to="/challenges#seasons"
             className="inline-flex items-center gap-2 text-sm text-white/60 transition hover:text-white"
           >
-            <ArrowLeft className="h-4 w-4" /> Back to seasons
+            <ArrowLeft className="h-4 w-4" /> {t('season.back')}
           </Link>
           <Reveal>
             <p className="mt-8 text-sm font-semibold tracking-[0.2em] text-gold uppercase">
@@ -134,13 +136,13 @@ export function SeasonPage() {
         <Reveal>
           <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-r from-brand-navy to-indigo p-10 sm:p-14">
             <h2 className="font-display text-3xl font-bold sm:text-4xl">
-              Register for Next Season
+              {t('cta.registerNext')}
             </h2>
             <p className="mt-3 max-w-xl text-white/70">
               Carry the spirit of Season {season.number} into Season 3.
             </p>
             <Button href={SEASON3_APPLY_URL} variant="gold" className="mt-8">
-              Join Season 3 <ArrowRight className="h-4 w-4" />
+              {t('cta.joinSeason3')} <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
         </Reveal>

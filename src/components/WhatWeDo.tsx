@@ -1,6 +1,7 @@
 import { Target, FolderKanban, CalendarDays, Award } from 'lucide-react'
 import { Reveal, Stagger, StaggerItem } from './Reveal'
-import { whatWeDo } from '../data/content'
+import { useLocale } from '../i18n/locale'
+import { localizedWhatWeDo } from '../i18n/staticContent'
 
 const icons = {
   target: Target,
@@ -17,20 +18,25 @@ const accents: Record<string, string> = {
 }
 
 export function WhatWeDo() {
+  const { locale } = useLocale()
+  const cards = localizedWhatWeDo(locale)
+
   return (
     <section id="what-we-do" className="section-pad py-24 lg:py-32">
       <div className="mx-auto max-w-7xl">
         <Reveal className="max-w-2xl">
           <p className="text-sm font-semibold tracking-[0.2em] text-teal uppercase">
-            What We Do
+            {locale === 'uz' ? 'Nima qilamiz' : 'What We Do'}
           </p>
           <h2 className="mt-4 font-display text-4xl font-bold tracking-tight sm:text-5xl">
-            Everything students need to stay consistent
+            {locale === 'uz'
+              ? 'Talabalarga izchil qolish uchun kerak boʻlgan hamma narsa'
+              : 'Everything students need to stay consistent'}
           </h2>
         </Reveal>
 
         <Stagger className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {whatWeDo.map((card) => {
+          {cards.map((card) => {
             const Icon = icons[card.icon as keyof typeof icons]
             return (
               <StaggerItem key={card.title}>

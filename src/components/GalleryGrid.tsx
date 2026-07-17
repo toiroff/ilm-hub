@@ -11,6 +11,7 @@ import {
   filterGalleryItems,
   type GalleryFilter,
 } from '../lib/gallery'
+import { useLocale } from '../i18n/locale'
 
 type GalleryGridProps = {
   /** Limit items on home teaser; omit for full feed */
@@ -24,11 +25,12 @@ type GalleryGridProps = {
 export function GalleryGrid({
   limit,
   showViewAll = false,
-  eyebrow = 'Gallery',
-  title = 'Moments from the community',
+  eyebrow,
+  title,
   subtitle,
 }: GalleryGridProps) {
   const { content } = useSiteContent()
+  const { t } = useLocale()
   const [filter, setFilter] = useState<GalleryFilter>('all')
   const [active, setActive] = useState<GalleryItem | null>(null)
 
@@ -39,19 +41,22 @@ export function GalleryGrid({
   )
   const items = limit ? filtered.slice(0, limit) : filtered
   const hasMore = Boolean(limit && filtered.length > limit)
+  const eyebrowText = eyebrow ?? t('gallery.eyebrow')
+  const titleText = title ?? t('gallery.title')
+  const subtitleText = subtitle ?? t('gallery.subtitle')
 
   return (
     <section id="gallery" className="section-pad py-24 lg:py-32">
       <div className="mx-auto max-w-7xl">
         <Reveal className="text-center">
           <p className="text-sm font-semibold tracking-[0.2em] text-teal uppercase">
-            {eyebrow}
+            {eyebrowText}
           </p>
           <h2 className="mt-4 font-display text-4xl font-bold tracking-tight sm:text-5xl">
-            {title}
+            {titleText}
           </h2>
-          {subtitle ? (
-            <p className="mx-auto mt-4 max-w-2xl text-white/55">{subtitle}</p>
+          {subtitleText ? (
+            <p className="mx-auto mt-4 max-w-2xl text-white/55">{subtitleText}</p>
           ) : null}
         </Reveal>
 
@@ -68,7 +73,7 @@ export function GalleryGrid({
                     : 'border border-white/10 text-white/60 hover:text-white'
                 }`}
               >
-                {f}
+                {t(`gallery.filter.${f}`)}
               </button>
             ))}
           </div>
@@ -76,7 +81,7 @@ export function GalleryGrid({
 
         {items.length === 0 ? (
           <p className="mt-12 text-center text-sm text-white/45">
-            No gallery items yet. Add photos in Admin → Gallery, or on projects.
+            {t('gallery.empty')}
           </p>
         ) : (
           <div className="mt-12 columns-1 gap-4 sm:columns-2 lg:columns-3">
@@ -109,7 +114,7 @@ export function GalleryGrid({
                     </div>
                     {isVideo ? (
                       <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-navy/70 px-2.5 py-1 text-xs font-medium text-gold backdrop-blur">
-                        <Play className="h-3 w-3" /> Video
+                        <Play className="h-3 w-3" /> {t('gallery.videoBadge')}
                       </span>
                     ) : null}
                   </button>
@@ -125,7 +130,7 @@ export function GalleryGrid({
               to="/gallery"
               className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-white transition hover:border-teal/40 hover:text-teal"
             >
-              View full gallery <ArrowRight className="h-4 w-4" />
+              {t('gallery.viewAll')} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         ) : null}
@@ -184,11 +189,5 @@ export function GalleryGrid({
 
 /** Home-page gallery teaser (kept name for HomePage import). */
 export function Gallery() {
-  return (
-    <GalleryGrid
-      limit={9}
-      showViewAll
-      subtitle="Photos and videos from projects, camps, and community moments."
-    />
-  )
+  return <GalleryGrid limit={9} showViewAll />
 }

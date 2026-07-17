@@ -4,9 +4,11 @@ import { Reveal, Stagger, StaggerItem } from './Reveal'
 import { Button } from './Button'
 import { SEASON3_APPLY_URL } from '../lib/links'
 import { useSiteContent } from '../content/ContentContext'
+import { useLocale } from '../i18n/locale'
 
 export function FeaturedChallenge() {
   const { content } = useSiteContent()
+  const { t } = useLocale()
   const challengeWeeks = content.challengeWeeks
 
   return (
@@ -32,7 +34,7 @@ export function FeaturedChallenge() {
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Button href={SEASON3_APPLY_URL} variant="gold">
-                Join Next Season <ArrowRight className="h-4 w-4" />
+                {t('nav.join')} <ArrowRight className="h-4 w-4" />
               </Button>
               <Button to="/challenges" variant="secondary">
                 Explore Challenges

@@ -13,10 +13,12 @@ import { Button } from '../components/Button'
 import { MediaBackground } from '../components/MediaBackground'
 import { SEASON3_APPLY_URL } from '../lib/links'
 import { useSiteContent } from '../content/ContentContext'
+import { useLocale } from '../i18n/locale'
 
 export function ProjectDetailPage() {
   const { id } = useParams()
   const { content } = useSiteContent()
+  const { t } = useLocale()
   const project =
     content.projects.find((p) => p.id === id) ??
     content.projects[0] ??
@@ -39,7 +41,7 @@ export function ProjectDetailPage() {
             to="/projects"
             className="inline-flex items-center gap-2 text-sm text-white/60 transition hover:text-white"
           >
-            <ArrowLeft className="h-4 w-4" /> Back to projects
+            <ArrowLeft className="h-4 w-4" /> {t('project.back')}
           </Link>
           <Reveal>
             <div className="mt-8 flex flex-wrap gap-3 text-xs">
@@ -152,7 +154,7 @@ export function ProjectDetailPage() {
         <section className="section-pad pb-16">
           <div className="mx-auto max-w-7xl">
             <Reveal>
-              <h2 className="font-display text-3xl font-bold">Gallery</h2>
+              <h2 className="font-display text-3xl font-bold">{t('project.gallery')}</h2>
             </Reveal>
             <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {project.gallery.map((src, i) => (
@@ -173,7 +175,7 @@ export function ProjectDetailPage() {
       {others.length > 0 && (
         <section className="section-pad pb-16">
           <div className="mx-auto max-w-7xl">
-            <h2 className="font-display text-2xl font-bold">More projects</h2>
+            <h2 className="font-display text-2xl font-bold">{t('project.more')}</h2>
             <div className="mt-8 grid gap-6 sm:grid-cols-2">
               {others.map((p) => (
                 <Link
@@ -206,14 +208,14 @@ export function ProjectDetailPage() {
         <Reveal>
           <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-r from-brand-navy to-indigo p-10 sm:p-14">
             <h2 className="font-display text-3xl font-bold sm:text-4xl">
-              Join Season 3
+              {t('cta.joinSeason3')}
             </h2>
             <p className="mt-3 max-w-xl text-white/70">
               Be part of the next chapter of ILM Hub — challenges, community,
               and projects that go beyond the classroom.
             </p>
             <Button href={SEASON3_APPLY_URL} variant="gold" className="mt-8">
-              Register for Season 3 <ArrowRight className="h-4 w-4" />
+              {t('cta.registerSeason3')} <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
         </Reveal>

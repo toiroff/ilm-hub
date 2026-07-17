@@ -1,25 +1,29 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Reveal } from './Reveal'
-import { timeline } from '../data/content'
 import { useSiteContent } from '../content/ContentContext'
+import { useLocale } from '../i18n/locale'
+import { localizedTimeline } from '../i18n/staticContent'
 
 export function Timeline() {
+  const { locale } = useLocale()
+  const items = localizedTimeline(locale)
+
   return (
     <section id="timeline" className="section-pad py-24 lg:py-32">
       <div className="mx-auto max-w-3xl">
         <Reveal className="text-center">
           <p className="text-sm font-semibold tracking-[0.2em] text-teal uppercase">
-            Season Journey
+            {locale === 'uz' ? 'Mavsum yoʻli' : 'Season Journey'}
           </p>
           <h2 className="mt-4 font-display text-4xl font-bold tracking-tight sm:text-5xl">
-            Challenge agenda
+            {locale === 'uz' ? 'Challenge kun tartibi' : 'Challenge agenda'}
           </h2>
         </Reveal>
 
         <div className="relative mt-16">
           <div className="absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-teal via-indigo to-gold sm:left-1/2 sm:-translate-x-px" />
-          {timeline.map((item, i) => (
+          {items.map((item, i) => (
             <Reveal
               key={item.title}
               delay={i * 0.05}
@@ -47,6 +51,7 @@ export { Gallery } from './GalleryGrid'
 
 export function Testimonials() {
   const { content } = useSiteContent()
+  const { locale } = useLocale()
   const testimonials = content.testimonials
   const [index, setIndex] = useState(0)
   const safeIndex = testimonials.length
@@ -65,10 +70,12 @@ export function Testimonials() {
       <div className="relative mx-auto max-w-7xl">
         <Reveal className="text-center">
           <p className="text-sm font-semibold tracking-[0.2em] text-teal uppercase">
-            Voices
+            {locale === 'uz' ? 'Ovozlar' : 'Voices'}
           </p>
           <h2 className="mt-4 font-display text-4xl font-bold tracking-tight sm:text-5xl">
-            Voices from the community
+            {locale === 'uz'
+              ? 'Jamiyatdan ovozlar'
+              : 'Voices from the community'}
           </h2>
         </Reveal>
 

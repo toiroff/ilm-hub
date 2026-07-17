@@ -72,4 +72,9 @@ export type SiteContent = {
   gallery: GalleryItem[]
 }
 
+export type LocalizedSiteContent = {
+  en: SiteContent
+  uz: SiteContent
+}
+
 export const CONTENT_ROW_ID = 'main'

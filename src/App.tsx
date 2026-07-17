@@ -13,6 +13,7 @@ import { RegisterPage } from './pages/RegisterPage'
 import { GalleryPage } from './pages/GalleryPage'
 import { AdminPage } from './pages/admin/AdminPage'
 import { ContentProvider } from './content/ContentContext'
+import { LocaleProvider } from './i18n/locale'
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
@@ -59,11 +60,13 @@ function Layout() {
 
 export default function App() {
   return (
-    <ContentProvider>
-      <BrowserRouter>
-        <ScrollToTop />
-        <Layout />
-      </BrowserRouter>
-    </ContentProvider>
+    <LocaleProvider>
+      <ContentProvider>
+        <BrowserRouter>
+          <ScrollToTop />
+          <Layout />
+        </BrowserRouter>
+      </ContentProvider>
+    </LocaleProvider>
   )
 }

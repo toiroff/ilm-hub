@@ -1,10 +1,11 @@
 import { ArrowRight, CheckCircle2, Flame, Users, Trophy } from 'lucide-react'
-import { weekOneWins } from '../data/content'
 import { Reveal, Stagger, StaggerItem } from '../components/Reveal'
 import { Button } from '../components/Button'
 import { PreviousSeasons } from '../components/ChallengeSeasons'
 import { SEASON3_APPLY_URL } from '../lib/links'
 import { useSiteContent } from '../content/ContentContext'
+import { useLocale } from '../i18n/locale'
+import { localizedWeekOneWins } from '../i18n/staticContent'
 
 const pillars = [
   {
@@ -28,9 +29,11 @@ const tracks = ['IELTS', 'SAT', 'IT (No-coding)', 'Biology']
 
 export function ChallengesPage() {
   const { content } = useSiteContent()
+  const { t, locale } = useLocale()
   const challenges = content.challenges
   const challengeWeeks = content.challengeWeeks
   const featured = challenges.find((c) => c.featured) ?? challenges[0]
+  const wins = localizedWeekOneWins(locale)
 
   if (!featured) {
     return (
@@ -58,7 +61,7 @@ export function ChallengesPage() {
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Button href={SEASON3_APPLY_URL} variant="gold">
-                Join Season 3 <ArrowRight className="h-4 w-4" />
+                {t('cta.joinSeason3')} <ArrowRight className="h-4 w-4" />
               </Button>
               <Button href="#agenda" variant="secondary">
                 See agenda
@@ -191,7 +194,7 @@ export function ChallengesPage() {
             </p>
           </Reveal>
           <Stagger className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {weekOneWins.map((win) => (
+            {wins.map((win) => (
               <StaggerItem key={win}>
                 <div className="flex h-full items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                   <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
@@ -246,7 +249,7 @@ export function ChallengesPage() {
               the community.
             </p>
             <Button href={SEASON3_APPLY_URL} variant="gold" className="mt-8">
-              Register for Season 3 <ArrowRight className="h-4 w-4" />
+              {t('cta.registerSeason3')} <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
         </Reveal>

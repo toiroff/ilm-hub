@@ -1,0 +1,121 @@
+export type Locale = 'en' | 'uz'
+
+export const LOCALES: Locale[] = ['en', 'uz']
+
+export const LOCALE_LABELS: Record<Locale, string> = {
+  en: 'EN',
+  uz: 'UZ',
+}
+
+type Messages = Record<string, string>
+
+export const messages: Record<Locale, Messages> = {
+  en: {
+    'nav.home': 'Home',
+    'nav.about': 'About',
+    'nav.projects': 'Projects',
+    'nav.challenges': 'Challenges',
+    'nav.events': 'Events',
+    'nav.gallery': 'Gallery',
+    'nav.contact': 'Contact',
+    'nav.join': 'Join Next Season',
+    'footer.explore': 'Explore',
+    'footer.connect': 'Connect',
+    'footer.joinSeason': 'Join Season 3',
+    'cta.joinSeason3': 'Join Season 3',
+    'cta.registerSeason3': 'Register for Season 3',
+    'cta.registerNext': 'Register for Next Season',
+    'cta.registerInterest': 'Register Interest',
+    'cta.exploreSeasons': 'Explore Previous Seasons',
+    'gallery.eyebrow': 'Gallery',
+    'gallery.title': 'Moments from the community',
+    'gallery.subtitle':
+      'Photos and videos from projects, camps, and community moments.',
+    'gallery.pageTitle': 'Photos & videos from ILM Hub',
+    'gallery.pageSubtitle':
+      'Project covers, galleries, and videos are included automatically — plus extras you add in Admin.',
+    'gallery.empty':
+      'No gallery items yet. Add photos in Admin → Gallery, or on projects.',
+    'gallery.viewAll': 'View full gallery',
+    'gallery.filter.all': 'all',
+    'gallery.filter.photos': 'photos',
+    'gallery.filter.videos': 'videos',
+    'gallery.filter.ceremonies': 'ceremonies',
+    'gallery.filter.projects': 'projects',
+    'gallery.videoBadge': 'Video',
+    'project.back': 'Back to projects',
+    'project.gallery': 'Gallery',
+    'project.overview': 'Overview',
+    'project.highlights': 'Highlights',
+    'project.activities': 'Activities',
+    'project.schedule': 'Schedule',
+    'project.outcomes': 'Outcomes',
+    'project.more': 'More projects',
+    'season.back': 'Back to seasons',
+    'admin.backToSite': 'Back to site',
+    'admin.save': 'Save changes',
+    'admin.saving': 'Saving…',
+    'admin.hint': 'Edit content, then Save to update the live site.',
+    'admin.editingEn': 'Editing English — Save publishes both languages.',
+    'admin.editingUz': 'Editing Uzbek — Save publishes both languages.',
+    'admin.saved': 'Saved — live site updated.',
+    'lang.en': 'EN',
+    'lang.uz': 'UZ',
+  },
+  uz: {
+    'nav.home': 'Bosh sahifa',
+    'nav.about': 'Biz haqimizda',
+    'nav.projects': 'Loyihalar',
+    'nav.challenges': 'Challenges',
+    'nav.events': 'Tadbirlar',
+    'nav.gallery': 'Galereya',
+    'nav.contact': 'Aloqa',
+    'nav.join': 'Challengega qoʻshiling',
+    'footer.explore': 'Kashf eting',
+    'footer.connect': 'Bogʻlanish',
+    'footer.joinSeason': 'Challengega qoʻshiling',
+    'cta.joinSeason3': 'Challengega qoʻshiling',
+    'cta.registerSeason3': 'Challengega qoʻshiling',
+    'cta.registerNext': 'Challengega qoʻshiling',
+    'cta.registerInterest': 'Qiziqish bildirishing',
+    'cta.exploreSeasons': 'Oldingi mavsumlarni koʻrish',
+    'gallery.eyebrow': 'Galereya',
+    'gallery.title': 'Jamiyatdan lahzalar',
+    'gallery.subtitle':
+      'Loyihalar, lagerlar va jamiyatdan suratlar hamda videolar.',
+    'gallery.pageTitle': 'ILM Hub surat va videolari',
+    'gallery.pageSubtitle':
+      'Loyiha muqovalari, galereyalar va videolar avtomatik qoʻshiladi — Admin orqali qoʻshimcha ham qoʻshishingiz mumkin.',
+    'gallery.empty':
+      'Hali galereya elementlari yoʻq. Admin → Galereya yoki loyihalarga surat qoʻshing.',
+    'gallery.viewAll': 'Toʻliq galereyani koʻrish',
+    'gallery.filter.all': 'barchasi',
+    'gallery.filter.photos': 'suratlar',
+    'gallery.filter.videos': 'videolar',
+    'gallery.filter.ceremonies': 'marosimlar',
+    'gallery.filter.projects': 'loyihalar',
+    'gallery.videoBadge': 'Video',
+    'project.back': 'Loyihalarga qaytish',
+    'project.gallery': 'Galereya',
+    'project.overview': 'Umumiy koʻrinish',
+    'project.highlights': 'Asosiy jihatlar',
+    'project.activities': 'Faoliyatlar',
+    'project.schedule': 'Jadval',
+    'project.outcomes': 'Natijalar',
+    'project.more': 'Boshqa loyihalar',
+    'season.back': 'Mavsumlarga qaytish',
+    'admin.backToSite': 'Saytga qaytish',
+    'admin.save': 'Saqlash',
+    'admin.saving': 'Saqlanmoqda…',
+    'admin.hint': 'Kontentni tahrirlang, soʻng Saytni yangilash uchun Saqlang.',
+    'admin.editingEn': 'Inglizcha tahrir — Saqlash ikkala tilni ham nashr qiladi.',
+    'admin.editingUz': 'Oʻzbekcha tahrir — Saqlash ikkala tilni ham nashr qiladi.',
+    'admin.saved': 'Saqlandi — jonli sayt yangilandi.',
+    'lang.en': 'EN',
+    'lang.uz': 'UZ',
+  },
+}
+
+export function translate(locale: Locale, key: string): string {
+  return messages[locale][key] ?? messages.en[key] ?? key
+}
