@@ -25,6 +25,37 @@ export function Hero() {
         <div className="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-teal/20 blur-[90px]" />
       </div>
 
+      <motion.div
+        initial={{ opacity: 0, x: 60 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.9, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute left-3/4 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 lg:block"
+      >
+        <div className="relative">
+          <div className="absolute -inset-8 rounded-full bg-teal/25 blur-[70px]" />
+          <motion.div
+            animate={{ y: [0, -12, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative"
+          >
+            <img
+              src="/assets/app-phone.png"
+              alt="ILM Hub app home screen"
+              className="w-64 drop-shadow-[0_25px_50px_rgba(0,0,0,0.6)] xl:w-72"
+            />
+          </motion.div>
+          <div className="relative mt-6 flex flex-col items-center gap-1.5">
+            <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-gold">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-gold" />
+              {t('app.comingSoon')}
+            </span>
+            <span className="max-w-[240px] text-center text-xs text-white/50">
+              {t('app.tagline')}
+            </span>
+          </div>
+        </div>
+      </motion.div>
+
       <div className="section-pad relative z-10 mx-auto w-full max-w-7xl pt-28 pb-24 lg:pt-32">
         <div className="max-w-3xl">
           <h1 className="font-display text-6xl font-bold leading-[0.95] tracking-tight sm:text-7xl md:text-8xl lg:text-9xl">

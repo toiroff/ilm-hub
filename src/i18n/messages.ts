@@ -27,6 +27,8 @@ export const messages: Record<Locale, Messages> = {
     'cta.registerNext': 'Register for Next Season',
     'cta.registerInterest': 'Register Interest',
     'cta.exploreSeasons': 'Explore Previous Seasons',
+    'app.comingSoon': 'Coming soon',
+    'app.tagline': 'The ILM Hub app — 21-day challenge in your pocket',
     'gallery.eyebrow': 'Gallery',
     'gallery.title': 'Moments from the community',
     'gallery.subtitle':
@@ -79,6 +81,8 @@ export const messages: Record<Locale, Messages> = {
     'cta.registerNext': 'Challengega qoʻshiling',
     'cta.registerInterest': 'Qiziqish bildirishing',
     'cta.exploreSeasons': 'Oldingi mavsumlarni koʻrish',
+    'app.comingSoon': 'Tez orada',
+    'app.tagline': 'ILM Hub ilovasi — 21 kunlik challenge choʻntagingizda',
     'gallery.eyebrow': 'Galereya',
     'gallery.title': 'Jamiyatdan lahzalar',
     'gallery.subtitle':
