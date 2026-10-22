@@ -34,6 +34,21 @@ type ContentContextValue = {
 
 const ContentContext = createContext<ContentContextValue | null>(null)
 
+/** Free Supabase plan limit per file; the `media` bucket is set to the same in supabase/setup.sql. */
+const MAX_UPLOAD_MB = 50
+
+/** Turn Supabase permission errors into something an editor can act on. */
+function explainError(message: string) {
+  if (/row-level security|violates|unauthorized|not authorized|403/i.test(message)) {
+    return 'This account is not allowed to edit the site. Add its email to site_admins in Supabase (see ADMIN.md).'
+  }
+  return message
+}
+
+function hasContent(data: unknown) {
+  return Boolean(data && typeof data === 'object' && Object.keys(data).length > 0)
+}
+
 export function ContentProvider({ children }: { children: ReactNode }) {
   const { locale } = useLocale()
   const [bundle, setBundle] = useState<LocalizedSiteContent>(
@@ -57,8 +72,9 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     if (error) {
       console.warn('Content load failed, using defaults:', error.message)
       setBundle(structuredClone(defaultLocalizedContent))
-    } else if (data?.data) {
-      setBundle(mergeLocalizedBundle(data.data))
+    } else if (hasContent(data?.data)) {
+      // An empty row (fresh project, nothing saved yet) keeps the curated EN + UZ defaults
+      setBundle(mergeLocalizedBundle(data!.data))
     } else {
       setBundle(structuredClone(defaultLocalizedContent))
     }
@@ -81,7 +97,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
       data: next,
       updated_at: new Date().toISOString(),
     })
-    if (error) return { error: error.message }
+    if (error) return { error: explainError(error.message) }
     setBundle(next)
     return { error: null }
   }, [])
@@ -94,7 +110,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
           'Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env',
       }
     }
-    const maxMb = file.type.startsWith('video/') ? 80 : 12
+    const maxMb = file.type.startsWith('video/') ? MAX_UPLOAD_MB : 12
     if (file.size > maxMb * 1024 * 1024) {
       return {
         url: null,
@@ -110,7 +126,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
       upsert: false,
       contentType: file.type || undefined,
     })
-    if (error) return { url: null, error: error.message }
+    if (error) return { url: null, error: explainError(error.message) }
     const { data } = supabase.storage.from('media').getPublicUrl(path)
     return { url: data.publicUrl, error: null }
   }, [])

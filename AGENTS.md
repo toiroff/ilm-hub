@@ -170,7 +170,7 @@ In development, Supabase calls go through Vite proxy path `/supabase-api` (see `
 ### CMS uploads
 
 - Uploaded via admin → Supabase Storage bucket **`media`** (public)
-- Images max ~12MB; videos max ~80MB (client check); raise Supabase bucket limits if needed
+- Images max 12MB; videos max 50MB (Free plan file limit — client check + `media` bucket limit in `supabase/setup.sql`)
 - Prefer short muted **MP4** for backgrounds
 
 ### Hero
