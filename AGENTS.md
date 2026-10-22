@@ -92,7 +92,7 @@ vite.config.ts            # Tailwind + /supabase-api proxy in dev
 
 | Path | Purpose |
 |------|---------|
-| `/` | Home (hero, stats, who we are, challenges teaser, seasons, gallery, voices, contact) |
+| `/` | Home: hero → **What is ILM Mode?** (definition, facts, rhythm, calendar) → **What graduates say** → what we do → seasons → featured project → Habit Zone → team → FAQ → closing CTA |
 | `/about` | Mission, story, values, journey timeline, team |
 | `/projects` | Project cards (cover **photo** only) |
 | `/projects/:id` | Project detail (hero = **video** if set, else cover photo) |

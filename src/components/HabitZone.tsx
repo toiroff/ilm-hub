@@ -27,7 +27,7 @@ export function HabitZoneSection() {
   const steps = [t('hz.step1'), t('hz.step2'), t('hz.step3')]
 
   return (
-    <section id="habit-zone" className="scroll-mt-20 bg-tint">
+    <section id="habit-zone" className="scroll-mt-20 bg-white">
       <div className="container-page grid gap-14 py-20 lg:grid-cols-12 lg:items-center lg:gap-16 lg:py-28">
         <div className="lg:col-span-6">
           <div className="flex items-center gap-4">
@@ -64,7 +64,7 @@ export function HabitZoneSection() {
         </div>
 
         <div className="lg:col-span-6">
-          <div className="grid grid-cols-2 items-start gap-5 rounded-2xl bg-white px-6 pt-10 pb-6 sm:gap-8 sm:px-12 sm:pt-14">
+          <div className="grid grid-cols-2 items-start gap-5 rounded-2xl bg-tint px-6 pt-10 pb-6 sm:gap-8 sm:px-12 sm:pt-14">
             <Phone screen="home" alt={t('hz.shot.home')} />
             <Phone screen="group-today" alt={t('hz.shot.group')} className="mt-12 sm:mt-20" />
           </div>

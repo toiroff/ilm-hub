@@ -15,12 +15,12 @@ export function HomePage() {
   return (
     <>
       <Hero />
-      <WhatWeDo />
       <Challenge />
-      <HabitZoneSection />
+      <Voices />
+      <WhatWeDo />
       <Seasons />
       <FeaturedProject />
-      <Voices />
+      <HabitZoneSection />
       <Team />
       <Faq />
       <ClosingCta />

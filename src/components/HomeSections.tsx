@@ -27,22 +27,6 @@ export function WhatWeDo() {
   const w = content.whoWeAre
   const rows = [
     {
-      title: t('home.what.challenge'),
-      text: t('home.intro.challenges'),
-      image: '/assets/who-we-are.png',
-      alt: 'Challenge graduates with their certificates',
-      link: { to: '/challenges', label: t('home.what.challengeLink') },
-      extra: (
-        <ul className="mt-6 flex flex-wrap gap-2">
-          {TRACKS.map((track) => (
-            <li key={track} className="rounded-lg bg-tint px-3 py-1.5 text-[15px] font-medium">
-              {track}
-            </li>
-          ))}
-        </ul>
-      ),
-    },
-    {
       title: t('home.what.projects'),
       text: t('home.intro.projects'),
       image: '/assets/projects/english-day-camp/photo-1.png',
@@ -153,21 +137,38 @@ export function ChallengeCalendar() {
 export function Challenge() {
   const { content } = useSiteContent()
   const { t } = useLocale()
+  const facts = [
+    ['21', t('home.challenge.fact.days')],
+    [String(TRACKS.length), `${t('home.challenge.fact.tracks')}: ${TRACKS.join(', ')}`],
+    [t('home.challenge.fact.dailyValue'), t('home.challenge.fact.daily')],
+    [t('home.challenge.fact.certValue'), t('home.challenge.fact.cert')],
+  ]
 
   return (
     <section id="challenge" className="scroll-mt-20 bg-white">
       <div className="container-page py-20 lg:py-28">
-        <div className="grid gap-6 lg:grid-cols-12 lg:gap-16">
+        <div className="grid gap-12 lg:grid-cols-12 lg:items-end lg:gap-16">
           <div className="lg:col-span-7">
             <p className="eyebrow">{t('home.challenge.eyebrow')}</p>
-            <h2 className="h-section mt-5">{t('home.challenge.title')}</h2>
+            <h2 className="h-section mt-5">
+              {t('home.challenge.title')} <span className="text-blue">{t('home.challenge.titleAccent')}</span>
+            </h2>
+            <p className="mt-6 max-w-[56ch] text-xl leading-relaxed text-ink-soft">{t('home.challenge.lead')}</p>
           </div>
-          <p className="text-lg leading-relaxed text-ink-soft lg:col-span-5 lg:self-end">{t('home.challenge.body')}</p>
+          <dl className="grid grid-cols-2 gap-3 lg:col-span-5">
+            {facts.map(([value, label]) => (
+              <div key={label} className="rounded-2xl bg-tint p-5">
+                <dd className="text-[28px] leading-none font-bold tracking-[-0.03em] text-ink">{value}</dd>
+                <dt className="mt-2 text-[15px] leading-snug text-ink-soft">{label}</dt>
+              </div>
+            ))}
+          </dl>
         </div>
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div className="mt-16 grid gap-12 border-t border-line pt-14 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
-            <ol className="border-t border-line">
+            <p className="text-lg font-bold tracking-tight">{t('home.challenge.rhythm')}</p>
+            <ol className="mt-4 border-t border-line">
               {content.challengeWeeks.map((step, i) => (
                 <li key={`${step.title}-${i}`} className="flex items-center gap-5 border-b border-line py-6">
                   <span className="w-10 shrink-0 text-2xl font-bold text-accent tabular-nums">
@@ -179,14 +180,6 @@ export function Challenge() {
               ))}
             </ol>
 
-            <p className="mt-10 text-sm font-semibold text-ink-faint">{t('home.challenge.tracks')}</p>
-            <ul className="mt-3 flex flex-wrap gap-2">
-              {TRACKS.map((track) => (
-                <li key={track} className="rounded-lg bg-tint px-3 py-1.5 text-[15px] font-medium">
-                  {track}
-                </li>
-              ))}
-            </ul>
             <div className="mt-10 flex flex-wrap gap-3">
               <Button to="/challenges">
                 {t('home.challenge.agenda')} <ArrowRight className="h-4 w-4" />
@@ -380,7 +373,7 @@ function SourceLink({ href }: { href: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-1 text-sm font-semibold text-blue hover:underline"
+      className="inline-flex items-center gap-1 text-sm font-semibold text-white underline decoration-white/40 underline-offset-4 hover:decoration-white"
     >
       {t('home.voices.source')} <ArrowUpRight className="h-4 w-4" />
     </a>
@@ -389,48 +382,94 @@ function SourceLink({ href }: { href: string }) {
 
 export function Voices() {
   const { content } = useSiteContent()
-  const { t } = useLocale()
-  const [featured, ...rest] = content.testimonials
-  if (!featured) return null
+  const { t, locale } = useLocale()
+  const [season, setSeason] = useState('all')
+  const [expanded, setExpanded] = useState(false)
+  const PHONE_LIMIT = 4
+  const all = content.testimonials
+  if (all.length === 0) return null
+
+  const seasonNumber = (id: string) => Number(id.replace(/\D/g, '')) || 0
+  const seasonLabel = (id: string) =>
+    locale === 'uz' ? `${seasonNumber(id)}-mavsum` : `Season ${seasonNumber(id)}`
+  const seasonIds = [...new Set(all.map((v) => v.seasonId))].sort((x, y) => seasonNumber(y) - seasonNumber(x))
+  const items = season === 'all' ? all : all.filter((v) => v.seasonId === season)
+  const filters = [
+    { id: 'all', label: t('home.voices.all'), count: all.length },
+    ...seasonIds.map((id) => ({ id, label: seasonLabel(id), count: all.filter((v) => v.seasonId === id).length })),
+  ]
 
   return (
-    <section className="bg-white">
+    <section className="bg-navy text-white">
       <div className="container-page py-20 lg:py-28">
-        <p className="eyebrow">{t('home.voices.title')}</p>
-        <div className="mt-10 grid gap-12 lg:grid-cols-12 lg:gap-16">
-          <figure className="lg:col-span-7">
-            <span className="block text-[96px] leading-[0.6] font-bold text-accent" aria-hidden="true">
-              “
-            </span>
-            <blockquote className="mt-6 text-[22px] leading-[1.5] font-medium tracking-[-0.01em] sm:text-[26px]">
-              {featured.quote}
-            </blockquote>
-            <figcaption className="mt-8 flex items-center gap-4">
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-navy text-sm font-bold text-white">
-                {initials(featured.name)}
-              </span>
-              <span>
-                <span className="block font-semibold">{featured.name}</span>
-                <span className="block text-[15px] text-ink-faint">{featured.role}</span>
-              </span>
-              {featured.link && <SourceLink href={featured.link} />}
-            </figcaption>
-          </figure>
-          <div className="space-y-4 lg:col-span-5">
-            {rest.slice(0, 2).map((v) => (
-              <figure key={`${v.name}-${v.seasonId}`} className="rounded-2xl bg-tint p-7">
-                <blockquote className="leading-relaxed text-ink-soft">“{v.quote}”</blockquote>
-                <figcaption className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[15px]">
-                  <span>
-                    <span className="font-semibold">{v.name}</span>
-                    <span className="text-ink-faint"> · {v.role}</span>
-                  </span>
-                  {v.link && <SourceLink href={v.link} />}
-                </figcaption>
-              </figure>
+        <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-16">
+          <div className="lg:col-span-7">
+            <p className="eyebrow eyebrow-light">{t('home.voices.title')}</p>
+            <h2 className="h-section mt-5">{t('home.voices.heading')}</h2>
+            <p className="mt-5 max-w-[48ch] text-lg leading-relaxed text-white/70">{t('home.voices.sub')}</p>
+          </div>
+          <div className="flex flex-wrap gap-2 lg:col-span-5 lg:justify-end" role="group" aria-label={t('home.voices.title')}>
+            {filters.map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => {
+                  setSeason(f.id)
+                  setExpanded(false)
+                }}
+                aria-pressed={season === f.id}
+                className={`press inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold ${
+                  season === f.id ? 'bg-white text-navy' : 'bg-white/10 text-white/80 hover:bg-white/15 hover:text-white'
+                }`}
+              >
+                {f.label}
+                <span className={season === f.id ? 'text-ink-faint' : 'text-white/45'}>{f.count}</span>
+              </button>
             ))}
           </div>
         </div>
+
+        <div className="mt-12 columns-1 gap-4 sm:columns-2 lg:columns-3">
+          {items.map((v, i) => (
+            <figure
+              key={`${v.name}-${v.seasonId}-${i}`}
+              className={`mb-4 break-inside-avoid rounded-2xl bg-navy-2 p-6 sm:p-7 ${
+                !expanded && i >= PHONE_LIMIT ? 'hidden sm:block' : ''
+              }`}
+            >
+              <span className="block text-[44px] leading-[0.5] font-bold text-accent" aria-hidden="true">
+                “
+              </span>
+              <blockquote className="mt-4 leading-relaxed text-white/85">{v.quote}</blockquote>
+              <figcaption className="mt-6 flex items-center gap-3 border-t border-white/10 pt-5">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-xs font-bold text-navy">
+                  {initials(v.name)}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block leading-snug font-semibold">{v.name}</span>
+                  <span className="block text-sm text-white/55">{v.role}</span>
+                </span>
+                <span className="shrink-0 rounded-md bg-white/10 px-2 py-0.5 text-xs font-semibold text-white/75">
+                  {seasonLabel(v.seasonId)}
+                </span>
+              </figcaption>
+              {v.link && (
+                <div className="mt-4">
+                  <SourceLink href={v.link} />
+                </div>
+              )}
+            </figure>
+          ))}
+        </div>
+        {!expanded && items.length > PHONE_LIMIT && (
+          <button
+            type="button"
+            onClick={() => setExpanded(true)}
+            className="press mt-2 w-full rounded-xl border border-white/25 py-3 text-[15px] font-semibold text-white hover:border-white/60 sm:hidden"
+          >
+            {t('home.voices.more').replace('{n}', String(items.length))}
+          </button>
+        )}
       </div>
     </section>
   )
