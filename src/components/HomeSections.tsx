@@ -1,6 +1,6 @@
-import { useState, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, ArrowUpRight, Check, Download, Plus } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Check, ChevronLeft, ChevronRight, Download, Plus } from 'lucide-react'
 import { Button } from './Button'
 import { CoverImage } from './CoverImage'
 import { Phone } from './HabitZone'
@@ -379,14 +379,28 @@ function SourceLink({ href }: { href: string }) {
   )
 }
 
+/** How many cards fit side by side: 1 on phones, 2 on tablets, 3 on desktop. */
+function useCardsPerView() {
+  const query = () => (window.matchMedia('(min-width: 1024px)').matches ? 3 : window.matchMedia('(min-width: 640px)').matches ? 2 : 1)
+  const [perView, setPerView] = useState(query)
+  useEffect(() => {
+    const update = () => setPerView(query())
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+  return perView
+}
+
+const VOICE_INTERVAL_MS = 5000
+
 export function Voices() {
   const { content } = useSiteContent()
   const { t, locale } = useLocale()
   const [season, setSeason] = useState('all')
-  const [expanded, setExpanded] = useState(false)
-  const PHONE_LIMIT = 4
+  const [index, setIndex] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const perView = useCardsPerView()
   const all = content.testimonials
-  if (all.length === 0) return null
 
   const seasonNumber = (id: string) => Number(id.replace(/\D/g, '')) || 0
   const seasonLabel = (id: string) =>
@@ -397,9 +411,24 @@ export function Voices() {
     { id: 'all', label: t('home.voices.all'), count: all.length },
     ...seasonIds.map((id) => ({ id, label: seasonLabel(id), count: all.filter((v) => v.seasonId === id).length })),
   ]
+  const lastIndex = Math.max(0, items.length - perView)
+  const current = Math.min(index, lastIndex)
+  const go = (next: number) => setIndex(next > lastIndex ? 0 : next < 0 ? lastIndex : next)
+
+  // Slide one card every few seconds; stop while hovered/focused or for reduced-motion users
+  useEffect(() => {
+    if (paused || lastIndex === 0) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const timer = window.setInterval(() => {
+      setIndex((i) => (Math.min(i, lastIndex) >= lastIndex ? 0 : Math.min(i, lastIndex) + 1))
+    }, VOICE_INTERVAL_MS)
+    return () => window.clearInterval(timer)
+  }, [paused, lastIndex])
+
+  if (all.length === 0) return null
 
   return (
-    <section className="bg-navy text-white">
+    <section className="overflow-hidden bg-navy text-white">
       <div className="container-page py-20 lg:py-28">
         <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-16">
           <div className="lg:col-span-7">
@@ -414,7 +443,7 @@ export function Voices() {
                 type="button"
                 onClick={() => {
                   setSeason(f.id)
-                  setExpanded(false)
+                  setIndex(0)
                 }}
                 aria-pressed={season === f.id}
                 className={`press inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold ${
@@ -428,47 +457,93 @@ export function Voices() {
           </div>
         </div>
 
-        <div className="mt-12 columns-1 gap-4 sm:columns-2 lg:columns-3">
-          {items.map((v, i) => (
-            <figure
-              key={`${v.name}-${v.seasonId}-${i}`}
-              className={`mb-4 break-inside-avoid rounded-2xl bg-navy-2 p-6 sm:p-7 ${
-                !expanded && i >= PHONE_LIMIT ? 'hidden sm:block' : ''
-              }`}
+        <div
+          className="mt-12"
+          role="region"
+          aria-roledescription="carousel"
+          aria-label={t('home.voices.title')}
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onFocus={() => setPaused(true)}
+          onBlur={() => setPaused(false)}
+        >
+          <div className="-mx-2 overflow-hidden">
+            <ul
+              className="flex transition-transform duration-700 ease-out motion-reduce:transition-none"
+              style={{ transform: `translateX(-${(current * 100) / perView}%)` }}
             >
-              <span className="block text-[44px] leading-[0.5] font-bold text-accent" aria-hidden="true">
-                “
-              </span>
-              <blockquote className="mt-4 leading-relaxed text-white/85">{v.quote}</blockquote>
-              <figcaption className="mt-6 flex items-center gap-3 border-t border-white/10 pt-5">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-xs font-bold text-navy">
-                  {initials(v.name)}
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block leading-snug font-semibold">{v.name}</span>
-                  <span className="block text-sm text-white/55">{v.role}</span>
-                </span>
-                <span className="shrink-0 rounded-md bg-white/10 px-2 py-0.5 text-xs font-semibold text-white/75">
-                  {seasonLabel(v.seasonId)}
-                </span>
-              </figcaption>
-              {v.link && (
-                <div className="mt-4">
-                  <SourceLink href={v.link} />
-                </div>
-              )}
-            </figure>
-          ))}
+              {items.map((v, i) => {
+                const visible = i >= current && i < current + perView
+                return (
+                  <li
+                    key={`${v.name}-${v.seasonId}-${i}`}
+                    className="flex shrink-0 basis-full px-2 sm:basis-1/2 lg:basis-1/3"
+                    aria-hidden={!visible}
+                  >
+                    <figure className="flex w-full flex-col rounded-2xl bg-navy-2 p-6 sm:p-7">
+                      <span className="block text-[44px] leading-[0.5] font-bold text-accent" aria-hidden="true">
+                        “
+                      </span>
+                      <blockquote className="mt-4 flex-1 leading-relaxed text-white/85">{v.quote}</blockquote>
+                      <figcaption className="mt-6 flex items-center gap-3 border-t border-white/10 pt-5">
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-xs font-bold text-navy">
+                          {initials(v.name)}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block leading-snug font-semibold">{v.name}</span>
+                          <span className="block text-sm text-white/55">{v.role}</span>
+                        </span>
+                        <span className="shrink-0 rounded-md bg-white/10 px-2 py-0.5 text-xs font-semibold text-white/75">
+                          {seasonLabel(v.seasonId)}
+                        </span>
+                      </figcaption>
+                      {v.link && (
+                        <div className="mt-4">
+                          <SourceLink href={v.link} />
+                        </div>
+                      )}
+                    </figure>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+
+          {lastIndex > 0 && (
+            <div className="mt-8 flex items-center justify-between gap-6">
+              <div className="flex flex-wrap gap-2">
+                {Array.from({ length: lastIndex + 1 }, (_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => go(i)}
+                    aria-label={`${t('home.voices.goTo')} ${i + 1}`}
+                    aria-current={i === current}
+                    className={`h-2 rounded-full transition-all ${i === current ? 'w-8 bg-accent' : 'w-2 bg-white/25 hover:bg-white/45'}`}
+                  />
+                ))}
+              </div>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => go(current - 1)}
+                  aria-label={t('home.voices.prev')}
+                  className="press flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white hover:border-white/60 hover:bg-white/5"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => go(current + 1)}
+                  aria-label={t('home.voices.next')}
+                  className="press flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white hover:border-white/60 hover:bg-white/5"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-        {!expanded && items.length > PHONE_LIMIT && (
-          <button
-            type="button"
-            onClick={() => setExpanded(true)}
-            className="press mt-2 w-full rounded-xl border border-white/25 py-3 text-[15px] font-semibold text-white hover:border-white/60 sm:hidden"
-          >
-            {t('home.voices.more').replace('{n}', String(items.length))}
-          </button>
-        )}
       </div>
     </section>
   )
