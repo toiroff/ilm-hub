@@ -1,7 +1,6 @@
 import {
   challenges,
   challengeWeeks,
-  events,
   projects,
   seasons,
   stats,
@@ -12,13 +11,12 @@ import type { SiteContent, LocalizedSiteContent } from './types'
 
 export const defaultSiteContent: SiteContent = {
   hero: {
-    line1: 'Learn.',
-    line2: 'Build.',
-    line3: 'Inspire.',
+    line1: 'The student community',
+    line2: 'building discipline',
+    line3: 'across Uzbekistan.',
     subtitle:
       'A community across Uzbekistan where students build discipline through 21-day challenges, real projects, and shared growth.',
-    backgroundImage:
-      'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1920&q=80',
+    backgroundImage: '/assets/projects/english-day-camp/photo-7.png',
     backgroundVideo: '',
   },
   about: {
@@ -71,40 +69,21 @@ export const defaultSiteContent: SiteContent = {
     decimals: 'decimals' in s ? (s.decimals as number) : undefined,
   })),
   testimonials: structuredClone(testimonials),
-  events: structuredClone(events),
   challenges: structuredClone(challenges),
   challengeWeeks: structuredClone(challengeWeeks),
   seasons: structuredClone(seasons),
   gallery: [
     {
       id: 'gallery-1',
-      type: 'photos',
-      src: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80',
-      label: 'Study session',
+      type: 'ceremonies',
+      src: '/assets/who-we-are.png',
+      label: 'Certificate ceremony',
     },
     {
       id: 'gallery-2',
       type: 'ceremonies',
-      src: 'https://images.unsplash.com/photo-1523580494863-6f3031224c6a?auto=format&fit=crop&w=800&q=80',
-      label: 'Graduation',
-    },
-    {
-      id: 'gallery-3',
-      type: 'photos',
-      src: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80',
-      label: 'Team collab',
-    },
-    {
-      id: 'gallery-4',
-      type: 'ceremonies',
-      src: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80',
-      label: 'Opening night',
-    },
-    {
-      id: 'gallery-5',
-      type: 'photos',
-      src: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80',
-      label: 'Community',
+      src: '/assets/who-we-are-2.png',
+      label: 'Graduates with certificates',
     },
   ],
 }
@@ -112,9 +91,9 @@ export const defaultSiteContent: SiteContent = {
 /** Starter Uzbek (Latin) copy — media URLs shared with English defaults. */
 export const defaultSiteContentUz: SiteContent = {
   hero: {
-    line1: 'Oʻrgan.',
-    line2: 'Yarat.',
-    line3: 'Ilhomlantir.',
+    line1: 'Oʻzbekiston boʻylab',
+    line2: 'intizom quradigan',
+    line3: 'talabalar hamjamiyati.',
     subtitle:
       'Oʻzbekiston boʻylab talabalar 21 kunlik challenges, haqiqiy loyihalar va birgalikdagi oʻsish orqali intizom quradigan jamiyat.',
     backgroundImage: defaultSiteContent.hero.backgroundImage,
@@ -167,13 +146,6 @@ export const defaultSiteContentUz: SiteContent = {
       photo: teamLeads[0]!.photo,
       lead: true,
       bio: 'ILM Hub vizyonini boshqaradi — Telegram postlaridan lagerlar va challengesgacha, Oʻzbekiston boʻylab talabalarga intizom qurishda yordam beradi.',
-    },
-    {
-      name: teamLeads[1]!.name,
-      role: 'Loyiha menejeri',
-      photo: teamLeads[1]!.photo,
-      lead: true,
-      bio: 'ILM Hub dasturlari va operatsiyalarini boshqaradi, har bir mavsumni rejalashtirishdan bitirishgacha qoʻllab-quvvatlaydi.',
     },
   ],
   teamMembers: teamMembers.map((m) => ({
@@ -235,72 +207,103 @@ export const defaultSiteContentUz: SiteContent = {
       ...projects[1],
       title: 'IT Bootcamp',
       summary:
-        'Talabalarni raqamli koʻnikmalar va jamoaviy yaratishga tanishtiruvchi amaliy texnologiya bootcampi.',
+        '2025-yil may oyida IT sohasida ishlayotgan mutaxassislar talabalarni sunʼiy intellekt, Python va frontend dasturlash bilan tanishtirgan bootcamp.',
       description:
-        'Talabalar raqamli vositalar, asosiy IT koʻnikmalar va jamoaviy ishni amaliy sessiyalar va mini-loyihalar orqali oʻrgangan IT Bootcamp.',
-      season: '2-mavsum',
-      date: '2024',
+        'Sohadan uchta spiker ishtirok etgan IT Bootcamp. Mashgʻulotdan soʻng har bir ishtirokchi Frontend va Backendni oʻrganishni davom ettirish uchun yoʻl xaritasi va kundalik vazifalar oldi.',
+      season: '2025-yil bahor',
+      date: 'May 2025',
       location: 'Gibrid',
       category: 'Bootcamp',
       highlights: [
-        'Amaliy texnologiya workshopʼlari',
-        'Jamoaviy mini-loyihalar',
-        'Mentor boshchiligidagi sessiyalar',
+        'Uchta IT mutaxassisining chiqishlari',
+        'Sunʼiy intellekt, Python va Frontend',
+        'Har bir ishtirokchi uchun oʻquv yoʻl xaritasi',
       ],
       overview:
-        'IT Bootcamp ILM Hub talabalarini amaliy texnologiya tajribasiga olib keldi. Workshopʼlar va mini-loyihalar orqali ishtirokchilar asosiy raqamli koʻnikmalarni qurdilar va jamoa boʻlib ishlashni oʻrgandilar.',
+        'IT Bootcamp 2025-yil may oyida boʻlib oʻtdi. IT sohasida ishlayotgan uchta spiker — Elzodxon Sharofaddinov (AISHA AI asoschisi), Asadbek Rahimov (AI muhandisi, Python) va Farrux Adxamov (frontend dasturchi) — qanday oʻrgangani va qanday ishlashi haqida soʻzlab berdi. Mashgʻulotdan soʻng ishtirokchilar Frontend va Backendni mustaqil oʻrganish uchun yoʻl xaritasi va kundalik vazifalar oldi.',
       activities: [
-        'Orientatsiya va maqsad belgilash',
-        'Raqamli savodxonlik workshopʼlari',
-        'Qoʻllanmali amaliy mashq',
-        'Jamoaviy mini-loyiha',
-        'Demo kuni va fikr-mulohaza',
+        'Sunʼiy intellekt, Python va Frontend boʻyicha spiker sessiyalari',
+        'Frontend va Backend uchun yoʻl xaritasi',
+        'Bootcampdan keyingi kundalik oʻquv vazifalari',
       ],
       outcomes: [
-        'Amaliy texnologiya asoslari',
-        'Yakunlangan jamoaviy mini-loyihalar',
-        'Kuchliroq hamkorlik koʻnikmalari',
+        'Aniq Frontend va Backend yoʻl xaritasi',
+        'Oʻrganishni davom ettirish uchun kundalik vazifalar',
+        'Ishlayotgan IT mutaxassislaridan bevosita maslahat',
+      ],
+      speakers: [
+        { ...projects[1].speakers![0], role: 'AISHA AI asoschisi' },
+        { ...projects[1].speakers![1], role: 'AI muhandisi va Python · 6+ yillik tajriba' },
+        { ...projects[1].speakers![2], role: 'Frontend dasturchi · 3+ yillik tajriba' },
       ],
     },
     {
       ...projects[2],
       title: 'ILM HUB Camp S3',
       summary:
-        '3-mavsum uchun toʻliq jamiyat lageri — challengeʼdan tashqari oʻrganish, doʻstlik va oʻsish.',
+        'Fargʻonada oʻtgan universitetga kirish lageri — chet elda oʻqish sessiyalari, grantlar boʻyicha maslahat va buni uddalagan insonlarning tajribasi.',
       description:
-        'ILM HUB Camp S3 3-mavsum ishtirokchilarini workshopʼlar, faoliyatlar va jamiyat bogʻlanishi uchun birlashtirdi.',
-      season: '3-mavsum',
-      date: '2025',
+        'ILM HUB Camp S3 oʻquvchilarga maktabdan keyin nima qilishni aniqlashga yordam berdi: Yevropa va AQShda qanday oʻqish, grantlarni qanday yutish va keyin nimani oʻrganish — buni oʻzi bosib oʻtgan insonlardan.',
+      season: 'Universitetga kirish',
+      date: 'Noyabr 2025',
       location: 'Offline',
       category: 'Lager',
       highlights: [
-        'Workshopʼlar va jamoaviy faoliyatlar',
-        'Jamiyatni mustahkamlash sessiyalari',
-        '3-mavsum bayram lahzalari',
+        'Study in Europe and USA sessiyalari',
+        'Chet el grantlari va El-yurt umidi haqida toʻliq maʼlumot',
+        'IT sohasida qizlar uchun imkoniyatlar',
       ],
       overview:
-        'ILM HUB Camp S3 3-mavsum uchun muhim jamiyat loyihasi edi. 21 kunlik challengeʼdan alohida, lager talabalarga birga oʻrganish, doʻstlik qurish va oʻsishni nishonlash imkonini berdi.',
+        'ILM HUB Camp S3 (Fargʻona, 2025-yil noyabr) universitetga kirish va maktabdan keyingi qadamga bagʻishlandi. Oʻquvchilar chet elda tahsil olgan insonlardan oʻrgandi: Saidamir Egamberdiev — FLEX’23, Clarkson University talabasi, educateduz.com asoschisi — hamda Gulnoza Xamidova — Aberdeen University bitiruvchisi, Fulbright TEA, ITEC va EYUF gʻolibasi. Sessiyalar orasida networking, oʻyinlar, pizza party va coffee break boʻldi, har bir ishtirokchi sertifikat oldi.',
       activities: [
-        'Ochilish marosimi va kutib olish',
-        'Koʻnikma workshopʼlari va guruhlar',
-        'Jamoaviy challengeʼlar va oʻyinlar',
-        'Refleksiya doiralari',
-        'Yakuniy bayram',
+        'Study in Europe and USA sessiyalari',
+        'Chet el grantlari va El-yurt umidi haqida toʻliq maʼlumot',
+        'IT sohasida qizlar uchun imkoniyatlar',
+        'Networking va oʻyinlar',
+        'Pizza party va coffee break',
+        'Har bir ishtirokchiga sertifikat',
       ],
       outcomes: [
-        'Chuqurroq jamiyat bogʻlanishi',
-        'Esdalik 3-mavsum bosqichi',
-        'Keyingi lagerlar uchun ilhom',
+        'Yevropa va AQShda oʻqish haqida aniq tasavvur',
+        'Qaysi grant va stipendiyalarga topshirishni bilish',
+        'Kirgan insonlardan amaliy maslahatlar',
+      ],
+      speakers: [
+        {
+          ...projects[2].speakers![0],
+          role: 'FLEX’23 · Clarkson University talabasi · educateduz.com asoschisi, chet elda tahsil olayotgan koʻplab talabalarning mentori',
+        },
+        {
+          ...projects[2].speakers![1],
+          role: 'Aberdeen University bitiruvchisi (Angliya) · Fulbright TEA, ITEC, EYUF gʻolibasi',
+        },
       ],
     },
   ],
   stats: [
     { value: 250, suffix: '+', label: 'Oʻzbekiston boʻylab talabalar' },
-    { value: 2, suffix: '', label: 'Challenge mavsumlari' },
+    { value: 3, suffix: '', label: 'Challenge mavsumlari' },
     { value: 3, suffix: '', label: 'Yirik loyihalar' },
     { value: 4.9, suffix: '★', label: 'Oʻrtacha baho', decimals: 1 },
   ],
   testimonials: [
+    {
+      name: 'Nargiza Keldiyeva',
+      role: '3-mavsum bitiruvchisi',
+      seasonId: 'season-3',
+      quote:
+        'ILM Mode S3 shunchaki loyiha emas edi — men oʻzimni yangidan kashf qildim. “Ertaga qilaman” degan gapni unutdim, bu mening eng katta yutugʻim. 21 kunlik challengeʼdan keyin foydali odatlarga ega boʻldim va vaqtimni oson taqsimlayapman. Juda-juda katta rahmat!',
+      rating: 5,
+    },
+    {
+      name: 'Murodbek Tuychiyev',
+      role: '3-mavsum ishtirokchisi',
+      seasonId: 'season-3',
+      quote:
+        'Bu loyiha menga nafaqat intizomni mustahkamlash, balki oʻqishga boʻlgan yondashuvimni yanada tizimlashtirish imkonini berdi. Ayniqsa, challenge davomida berilgan takliflar, tasklar va mentorlarning yoʻnalishlari foydali boʻldi. Eng muhimi, ishtirokchilar bir-birini qoʻllab-quvvatlab, oʻz maqsadlari ustida muntazam ishlashmoqda. Meningcha, ILM Mode — shunchaki challenge emas, balki rivojlanish uchun yaxshi muhit.',
+      rating: 5,
+      link: 'https://www.linkedin.com/posts/murodbektuychiyev_ilm-mode-challenge-haqida-qisqacha-fikrim-activity-7504424112824610816-Da15',
+    },
     {
       name: 'Vahhobova Mubinaxon',
       role: '1-mavsum bitiruvchisi',
@@ -358,48 +361,6 @@ export const defaultSiteContentUz: SiteContent = {
       rating: 5,
     },
   ],
-  events: [
-    {
-      ...events[0],
-      title: 'Ochilish marosimi',
-      date: 'Challenge boshi',
-      time: 'Online',
-      type: 'Marosim',
-      location: 'Google Meet · ~80 kishi',
-      description:
-        'Challenge bilan tanishuv, qoidalar tushuntiriladi va muzlatuvchi mashgʻulotlar.',
-    },
-    {
-      ...events[1],
-      title: 'Mehmon spikerlar',
-      date: 'Challenge davomida',
-      time: 'Online',
-      type: 'Suhbat',
-      location: 'Google Meet / Telegram · ~70–80 kishi',
-      description:
-        'Ishtirokchilarni ilhomlantirish va yoʻnaltirish uchun mehmon spiker sessiyalari.',
-    },
-    {
-      ...events[2],
-      title: 'Haftalik uchrashuvlar',
-      date: 'Har hafta',
-      time: 'Online',
-      type: 'Uchrashuv',
-      location: 'Google Meet · ~70–80 kishi',
-      description:
-        'Oʻtgan haftani koʻrib chiqish, qiyinchilikka duch kelganlarni qoʻllab-quvvatlash va eng faol ishtirokchini eʼtirof etish.',
-    },
-    {
-      ...events[3],
-      title: 'Yakuniy marosim',
-      date: 'Challenge oxiri',
-      time: 'Online',
-      type: 'Marosim',
-      location: 'Google Meet · ~60–80 kishi',
-      description:
-        '21 kunlik natijalarni koʻrib chiqish, eng yaxshi ishtirokchilarni eʼtirof etish, sertifikatlar va yakuniy yopilish.',
-    },
-  ],
   challenges: [
     {
       ...challenges[0],
@@ -447,12 +408,12 @@ export const defaultSiteContentUz: SiteContent = {
       title: '2-mavsum',
       period: 'Fevral – Mart 2026',
       description:
-        'Haqiqatan intizomli boʻlishni xohlagan 20 nafar tanlab olingan ishtirokchi — 15 nafari bitirdi.',
+        'Haqiqatan intizomli boʻlishni xohlagan talabalar uchun tanlovli mavsum — ularning 75% bitirdi.',
       story:
-        '2-mavsum ongli ravishda tanlovli boʻldi. Biz intizomli boʻlishga sodiq 20 ishtirokchini tanladik. Kundalik vazifalar, mentoring va hisobdorlik orqali 15 bitiruvchi 21 kunda haqiqiy oʻzgarish boʻlishini isbotladi.',
+        '2-mavsum ongli ravishda tanlovli boʻldi. Biz intizomli boʻlishga sodiq ishtirokchilarni tanladik. Kundalik vazifalar, mentoring va hisobdorlik orqali ularning 75% bitirdi — 21 kunda haqiqiy oʻzgarish mumkinligini isbotladi.',
       highlights: [
-        '20 nafar ehtiyotkorlik bilan tanlangan ishtirokchi',
-        '15 nafar intizomli bitiruvchi',
+        'Ehtiyotkorlik bilan tanlangan ishtirokchilar',
+        '75% yakunlash darajasi',
         'Kundalik mentoring va check-inlar',
         '21 kunlik diqqatli odat qurish',
       ],
@@ -462,12 +423,12 @@ export const defaultSiteContentUz: SiteContent = {
       title: '1-mavsum — Boshlanish',
       period: 'Yanvar 2026',
       description:
-        'Birinchi challenge mavsumimiz — 40 ishtirokchi, 28 bitiruvchi intizomli oʻrganuvchi ekanligini isbotladi.',
+        'Birinchi challenge mavsumimiz — ishtirokchilarning 70% intizomli oʻrganuvchi sifatida bitirdi.',
       story:
-        '2026-yil yanvarida ILM Hub birinchi Intizom Challengeʼini oʻtkazdi. Qirq talaba yaxshi odatlar qurishga kirishdi. Yigirma sakkiz nafari bitirdi — niyat va izchillik bilan haqiqiy oʻzgarish mumkinligini koʻrsatdi.',
+        '2026-yil yanvarida ILM Hub birinchi Intizom Challengeʼini oʻtkazdi. Oʻzbekiston boʻylab talabalar yaxshi odatlar qurishga kirishdi va ularning 70% bitirdi — niyat va izchillik bilan haqiqiy oʻzgarish mumkinligini koʻrsatdi.',
       highlights: [
-        'Birinchi guruhda 40 ishtirokchi',
-        '28 intizomli bitiruvchi',
+        'Birinchi guruhimiz',
+        '70% yakunlash darajasi',
         'Kundalik oʻqish, sport va refleksiya',
         'Mentoring va jamiyat qoʻllab-quvvatlashi',
       ],
@@ -475,13 +436,7 @@ export const defaultSiteContentUz: SiteContent = {
   ],
   gallery: defaultSiteContent.gallery.map((g, i) => ({
     ...g,
-    label: [
-      'Oʻqish sessiyasi',
-      'Bitirish',
-      'Jamoa ishi',
-      'Ochilish kechasi',
-      'Jamiyat',
-    ][i] ?? g.label,
+    label: ['Sertifikat topshirish marosimi', 'Sertifikatli bitiruvchilar'][i] ?? g.label,
   })),
 }
 

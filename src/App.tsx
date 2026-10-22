@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, Navigate, Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import { Navbar } from './components/Navbar'
 import { Footer } from './components/Footer'
@@ -6,11 +6,11 @@ import { HomePage } from './pages/HomePage'
 import { SeasonPage } from './pages/SeasonPage'
 import { ProjectsPage } from './pages/ProjectsPage'
 import { ProjectDetailPage } from './pages/ProjectDetailPage'
-import { EventsPage } from './pages/EventsPage'
 import { ChallengesPage } from './pages/ChallengesPage'
 import { AboutPage } from './pages/AboutPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { GalleryPage } from './pages/GalleryPage'
+import { HabitZonePage } from './pages/HabitZonePage'
 import { AdminPage } from './pages/admin/AdminPage'
 import { ContentProvider } from './content/ContentContext'
 import { LocaleProvider } from './i18n/locale'
@@ -31,14 +31,16 @@ function Layout() {
 
   if (isAdmin) {
     return (
-      <Routes>
-        <Route path="/admin" element={<AdminPage />} />
-      </Routes>
+      <div className="min-h-screen bg-tint text-ink">
+        <Routes>
+          <Route path="/admin" element={<AdminPage />} />
+        </Routes>
+      </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-navy">
+    <div className="min-h-screen bg-canvas">
       <Navbar />
       <main>
         <Routes>
@@ -48,9 +50,10 @@ function Layout() {
           <Route path="/projects/:id" element={<ProjectDetailPage />} />
           <Route path="/challenges" element={<ChallengesPage />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/events" element={<EventsPage />} />
+          <Route path="/events" element={<Navigate to="/challenges" replace />} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/habit-zone" element={<HabitZonePage />} />
         </Routes>
       </main>
       <Footer />

@@ -21,8 +21,7 @@ export const seasons: Season[] = [
     number: 2,
     title: 'Season 2',
     period: 'February – March 2026',
-    cover:
-      'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80',
+    cover: '',
     participants: 20,
     cities: 0,
     graduates: 15,
@@ -30,12 +29,12 @@ export const seasons: Season[] = [
     satisfaction: 95,
     rating: 5,
     description:
-      'A focused season of 20 selected participants who truly wanted to become disciplined — 15 graduated.',
+      'A focused, selective season for students who truly wanted to become disciplined — 75% of them graduated.',
     story:
-      'Season 2 was intentionally selective. We chose 20 participants who were committed to becoming disciplined. Through daily tasks, mentorship, and accountability, 15 graduates proved that intention and consistency create real change over 21 days.',
+      'Season 2 was intentionally selective. We chose participants who were committed to becoming disciplined. Through daily tasks, mentorship, and accountability, 75% of them graduated — proof that intention and consistency create real change in 21 days.',
     highlights: [
-      '20 carefully selected participants',
-      '15 disciplined graduates',
+      'Carefully selected participants',
+      '75% completion rate',
       'Daily mentorship & check-ins',
       '21 days of focused habit building',
     ],
@@ -45,8 +44,7 @@ export const seasons: Season[] = [
     number: 1,
     title: 'Season 1 — The Beginning',
     period: 'January 2026',
-    cover:
-      'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1200&q=80',
+    cover: '',
     participants: 40,
     cities: 0,
     graduates: 28,
@@ -54,12 +52,12 @@ export const seasons: Season[] = [
     satisfaction: 95,
     rating: 5,
     description:
-      'Our first challenge season — 40 participants, 28 graduates who proved themselves as disciplined learners.',
+      'Our first challenge season — 70% of participants graduated as disciplined learners.',
     story:
-      'In January 2026, ILM Hub ran its first Discipline Challenge. Forty students committed to building better habits. Twenty-eight graduated — proving that with intention and consistency, real change is possible. From reading and exercise to focus and teamwork, Season 1 set the foundation for everything that followed.',
+      'In January 2026, ILM Hub ran its first Discipline Challenge. Students from across Uzbekistan committed to building better habits, and 70% of them graduated — proving that with intention and consistency, real change is possible. From reading and exercise to focus and teamwork, Season 1 set the foundation for everything that followed.',
     highlights: [
-      '40 participants in the first cohort',
-      '28 disciplined graduates',
+      'Our first cohort',
+      '70% completion rate',
       'Daily reading, exercise & reflection habits',
       'Mentorship and community support',
     ],
@@ -68,16 +66,9 @@ export const seasons: Season[] = [
 
 export const stats = [
   { value: 250, suffix: '+', label: 'Students Across Uzbekistan' },
-  { value: 2, suffix: '', label: 'Challenge Seasons' },
+  { value: 3, suffix: '', label: 'Challenge Seasons' },
   { value: 3, suffix: '', label: 'Major Projects' },
   { value: 4.9, suffix: '★', label: 'Average Rating', decimals: 1 },
-]
-
-export const impactStats = [
-  { value: 250, suffix: '+', label: 'Students Reached' },
-  { value: 2, suffix: '', label: 'Challenge Seasons' },
-  { value: 3, suffix: '', label: 'Community Projects' },
-  { value: 15, suffix: '+', label: 'Cities Represented' },
 ]
 
 export const values = [
@@ -100,34 +91,6 @@ export const values = [
   {
     title: 'Continuous Learning',
     description: 'Curiosity never graduates — neither should you.',
-  },
-]
-
-export const whatWeDo = [
-  {
-    title: 'Challenges',
-    description:
-      'Daily accountability challenges that help students create productive habits.',
-    icon: 'target',
-    accent: 'teal',
-  },
-  {
-    title: 'Projects',
-    description: 'Real-world collaborative projects that turn learning into proof.',
-    icon: 'folder',
-    accent: 'indigo',
-  },
-  {
-    title: 'Events',
-    description: 'Workshops, guest speakers, networking, and community sessions.',
-    icon: 'calendar',
-    accent: 'gold',
-  },
-  {
-    title: 'Recognition',
-    description: 'Certificates, badges, and achievements that mark your journey.',
-    icon: 'award',
-    accent: 'orange',
   },
 ]
 
@@ -175,8 +138,7 @@ export const challenges: Challenge[] = [
     title: 'ILM Mode Challenge',
     duration: '21 days',
     category: 'Flagship',
-    cover:
-      'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80',
+    cover: '',
     description:
       'A 21-day discipline challenge to sharpen focus, build self-control, and grow into a stronger version of yourself. Participants join tracks based on their goals: IELTS, SAT, IT (No-coding), or Biology.',
     outcomes: [
@@ -186,44 +148,6 @@ export const challenges: Challenge[] = [
     ],
     featured: true,
   },
-]
-
-export const timeline = [
-  {
-    title: 'Opening Ceremony',
-    detail:
-      'Google Meet · ~80 people. Challenge intro, rules, and ice-breaking.',
-  },
-  {
-    title: 'Guest Speakers',
-    detail:
-      'Google Meet or Telegram · ~70–80 people. Inspiration and guidance from guest speakers.',
-  },
-  {
-    title: 'Weekly Meetings',
-    detail:
-      'Google Meet · ~70–80 people. Weekly review, support, and most active challenger recognition.',
-  },
-  {
-    title: 'Closing Ceremony',
-    detail:
-      'Google Meet · ~60–80 people. Achievements review, certificates, awards, and formal closing.',
-  },
-]
-
-export const cities = [
-  { name: 'Tashkent', lon: 69.24, lat: 41.31 },
-  { name: 'Samarkand', lon: 66.96, lat: 39.65 },
-  { name: 'Bukhara', lon: 64.42, lat: 39.77 },
-  { name: 'Namangan', lon: 71.67, lat: 40.99 },
-  { name: 'Andijan', lon: 72.34, lat: 40.78 },
-  { name: 'Fergana', lon: 71.79, lat: 40.39 },
-  { name: 'Nukus', lon: 59.61, lat: 42.46 },
-  { name: 'Khiva', lon: 60.36, lat: 41.38 },
-  { name: 'Termez', lon: 67.28, lat: 37.22 },
-  { name: 'Karshi', lon: 65.79, lat: 38.86 },
-  { name: 'Navoi', lon: 65.38, lat: 40.08 },
-  { name: 'Jizzakh', lon: 67.84, lat: 40.12 },
 ]
 
 export type Project = {
@@ -247,6 +171,14 @@ export type Project = {
   gallery: string[]
   schedule?: { time: string; activity: string }[]
   scheduleImage?: string
+  /** Guest speakers shown on the project page */
+  speakers?: Speaker[]
+}
+
+export type Speaker = {
+  name: string
+  role: string
+  photo?: string
 }
 
 export const projects: Project[] = [
@@ -309,147 +241,97 @@ export const projects: Project[] = [
     id: 'it-bootcamp',
     title: 'IT Bootcamp',
     summary:
-      'A hands-on technology bootcamp introducing students to digital skills and collaborative building.',
+      'A May 2025 bootcamp where people working in IT introduced students to AI, Python and frontend development.',
     description:
-      'A focused IT Bootcamp where students explored digital tools, basic tech skills, and teamwork through practical sessions and mini-projects.',
-    cover:
-      'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80',
-    season: 'Season 2',
-    date: '2024',
+      'An IT Bootcamp with three speakers from the industry. After the session, every participant received a roadmap and daily tasks to keep learning Frontend and Backend.',
+    cover: '',
+    season: 'Spring 2025',
+    date: 'May 2025',
     location: 'Hybrid',
     participants: 120,
     category: 'Bootcamp',
     featured: true,
     highlights: [
-      'Hands-on tech workshops',
-      'Team mini-projects',
-      'Mentor-led sessions',
+      'Talks from three IT professionals',
+      'AI, Python and Frontend development',
+      'A learning roadmap for every participant',
     ],
     overview:
-      'IT Bootcamp brought ILM Hub students into a practical technology learning experience. Through workshops and collaborative mini-projects, participants built foundational digital skills while learning how to work as a team — preparing them for future growth beyond the challenge seasons.',
+      'IT Bootcamp took place in May 2025. Three speakers working in IT — Elzodxon Sharofaddinov (founder of AISHA AI), Asadbek Rahimov (AI engineer, Python) and Farrux Adxamov (frontend developer) — shared how they learned and how they work. After the session, participants received a roadmap and daily tasks to learn Frontend and Backend on their own.',
     activities: [
-      'Orientation and goal setting',
-      'Digital literacy workshops',
-      'Guided hands-on practice',
-      'Team mini-project build',
-      'Demo day and feedback',
+      'Speaker sessions on AI, Python and Frontend',
+      'A roadmap for Frontend and Backend',
+      'Daily learning tasks after the bootcamp',
     ],
     outcomes: [
-      'Practical tech foundations',
-      'Completed team mini-projects',
-      'Stronger collaboration skills',
+      'A clear Frontend and Backend roadmap',
+      'Daily tasks to keep learning',
+      'Direct advice from working IT professionals',
     ],
-    gallery: [
-      'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80',
+    speakers: [
+      { name: 'Elzodxon Sharofaddinov', role: 'Founder of AISHA AI', photo: '/assets/projects/it-bootcamp/speaker-elzodxon-sharofaddinov.png' },
+      { name: 'Asadbek Rahimov', role: 'AI Engineer & Python · 6+ years of experience', photo: '/assets/projects/it-bootcamp/speaker-asadbek-rahimov.png' },
+      { name: 'Farrux Adxamov', role: 'Frontend Developer · 3+ years of experience', photo: '/assets/projects/it-bootcamp/speaker-farrux-adxamov.png' },
     ],
+    gallery: [],
   },
   {
     id: 'ilm-hub-camp-s3',
     title: 'ILM HUB Camp S3',
     summary:
-      'A full community camp experience for Season 3 — learning, bonding, and growth beyond the challenge.',
+      'A college admissions camp in Fergana — study abroad sessions, grant advice and real stories from people who did it.',
     description:
-      'ILM HUB Camp S3 brought Season 3 learners together for an unforgettable camp of workshops, activities, and community connection.',
-    cover:
-      'https://images.unsplash.com/photo-1523580494863-6f3031224c6a?auto=format&fit=crop&w=1200&q=80',
-    season: 'Season 3',
-    date: '2025',
+      'ILM HUB Camp S3 helped students figure out what to do after school: how to study in Europe and the USA, how to win grants, and what to learn next — from people who have done it.',
+    cover: '/assets/projects/ilm-hub-camp-s3/cover.jpg',
+    backgroundVideo: '/assets/projects/ilm-hub-camp-s3/camp-s3.mp4',
+    season: 'College admissions',
+    date: 'November 2025',
     location: 'In-person',
     participants: 150,
     category: 'Camp',
     featured: true,
     highlights: [
-      'Workshops & team activities',
-      'Community bonding sessions',
-      'Season 3 celebration moments',
+      'Study in Europe and USA sessions',
+      'Foreign grants and El-yurt umidi, fully explained',
+      'Opportunities for girls in IT',
     ],
     overview:
-      'ILM HUB Camp S3 was a landmark community project for Season 3. Separate from the 21-day challenge, the camp gave students space to learn together, build friendships, and celebrate growth through workshops, outdoor activities, and shared experiences that strengthened the ILM Hub community.',
+      'ILM HUB Camp S3 (Fergana, November 2025) was about college admissions and the next step after school. Students learned from people who have studied abroad: Saidamir Egamberdiev — FLEX’23, Clarkson University student and founder of educateduz.com — and Gulnoza Xamidova, a University of Aberdeen graduate and winner of Fulbright TEA, ITEC and EYUF. Between sessions there was networking, games, a pizza party and a coffee break, and every participant received a certificate.',
     activities: [
-      'Opening ceremony and welcome',
-      'Skill workshops and breakout sessions',
-      'Team challenges and games',
-      'Reflection circles',
-      'Closing celebration',
+      'Study in Europe and USA sessions',
+      'Everything about foreign grants and El-yurt umidi',
+      'Opportunities for girls in IT',
+      'Networking and games',
+      'Pizza party and coffee break',
+      'Certificates for every participant',
     ],
     outcomes: [
-      'Deeper community bonds',
-      'Memorable Season 3 milestone',
-      'Inspired next-generation camps',
+      'A clear picture of studying in Europe and the USA',
+      'Knowing which grants and scholarships to apply for',
+      'Practical admission tips from people who got in',
+    ],
+    speakers: [
+      {
+        name: 'Saidamir Egamberdiev',
+        role: 'FLEX’23 · Clarkson University student · founder of educateduz.com, mentor to many students studying abroad',
+        photo: '/assets/projects/ilm-hub-camp-s3/speaker-saidamir-egamberdiev.jpg',
+      },
+      {
+        name: 'Gulnoza Xamidova',
+        role: 'University of Aberdeen graduate (UK) · winner of Fulbright TEA, ITEC and EYUF',
+        photo: '/assets/projects/ilm-hub-camp-s3/speaker-gulnoza-xamidova.jpg',
+      },
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1523580494863-6f3031224c6a?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80',
+      '/assets/projects/ilm-hub-camp-s3/photo-1.jpg',
+      '/assets/projects/ilm-hub-camp-s3/photo-2.jpg',
+      '/assets/projects/ilm-hub-camp-s3/photo-3.jpg',
+      '/assets/projects/ilm-hub-camp-s3/photo-4.jpg',
+      '/assets/projects/ilm-hub-camp-s3/photo-5.jpg',
+      '/assets/projects/ilm-hub-camp-s3/photo-6.jpg',
+      '/assets/projects/ilm-hub-camp-s3/photo-7.jpg',
+      '/assets/projects/ilm-hub-camp-s3/photo-8.jpg',
     ],
-  },
-]
-
-export type EventItem = {
-  id: string
-  title: string
-  date: string
-  time: string
-  type: string
-  location: string
-  description: string
-  featured?: boolean
-  cover: string
-}
-
-export const events: EventItem[] = [
-  {
-    id: 'opening-ceremony',
-    title: 'Opening Ceremony',
-    date: 'Start of challenge',
-    time: 'Online',
-    type: 'Ceremony',
-    location: 'Google Meet · ~80 people',
-    description:
-      'Introduction to the challenge, explanation of the rules, and ice-breaking activities.',
-    featured: true,
-    cover:
-      'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    id: 'guest-speakers',
-    title: 'Guest Speakers',
-    date: 'During the challenge',
-    time: 'Online',
-    type: 'Talk',
-    location: 'Google Meet / Telegram · ~70–80 people',
-    description:
-      'Guest speaker sessions to inspire and guide challengers throughout the season.',
-    cover:
-      'https://images.unsplash.com/photo-1591115765373-5207764f72e7?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    id: 'weekly-meetings',
-    title: 'Weekly Meetings',
-    date: 'Every week',
-    time: 'Online',
-    type: 'Meeting',
-    location: 'Google Meet · ~70–80 people',
-    description:
-      'Review the past week, support participants facing difficulties, and recognize the most active challenger of the week.',
-    cover:
-      'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    id: 'closing-ceremony',
-    title: 'Closing Ceremony',
-    date: 'End of challenge',
-    time: 'Online',
-    type: 'Ceremony',
-    location: 'Google Meet · ~60–80 people',
-    description:
-      'Overall review of 21-day achievements, recognition of outstanding participants, certificates and awards, and formal closing.',
-    cover:
-      'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80',
   },
 ]
 

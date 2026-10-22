@@ -1,67 +1,6 @@
-import { whatWeDo, impactStats, timeline, weekOneWins } from '../data/content'
+import { weekOneWins } from '../data/content'
 import { journeyTimeline } from '../data/team'
 import type { Locale } from '../i18n/messages'
-
-const whatWeDoUz = [
-  {
-    title: 'Challenges',
-    description:
-      'Talabalarga samarali odatlar yaratishga yordam beruvchi kundalik hisobdorlik challenges.',
-    icon: 'target',
-    accent: 'teal',
-  },
-  {
-    title: 'Loyihalar',
-    description:
-      'Oʻrganishni isbotga aylantiradigan haqiqiy hamkorlikdagi loyihalar.',
-    icon: 'folder',
-    accent: 'indigo',
-  },
-  {
-    title: 'Tadbirlar',
-    description:
-      'Workshopʼlar, mehmon spikerlar, networking va jamiyat sessiyalari.',
-    icon: 'calendar',
-    accent: 'gold',
-  },
-  {
-    title: 'Eʼtirof',
-    description:
-      'Sertifikatlar, nishonlar va yutuqlar — safaringizni belgilaydi.',
-    icon: 'award',
-    accent: 'orange',
-  },
-]
-
-const impactStatsUz = [
-  { value: 250, suffix: '+', label: 'Qamrab olingan talabalar' },
-  { value: 2, suffix: '', label: 'Challenge mavsumlari' },
-  { value: 3, suffix: '', label: 'Jamiyat loyihalari' },
-  { value: 15, suffix: '+', label: 'Shaharlar' },
-]
-
-const timelineUz = [
-  {
-    title: 'Ochilish marosimi',
-    detail:
-      'Google Meet · ~80 kishi. Challenge tanishtiruvi, qoidalar va muzlatuvchi mashgʻulotlar.',
-  },
-  {
-    title: 'Mehmon spikerlar',
-    detail:
-      'Google Meet yoki Telegram · ~70–80 kishi. Mehmon spikerlardan ilhom va yoʻl-yoʻriq.',
-  },
-  {
-    title: 'Haftalik uchrashuvlar',
-    detail:
-      'Google Meet · ~70–80 kishi. Haftani koʻrib chiqish, qoʻllab-quvvatlash va eng faol ishtirokchini eʼtirof etish.',
-  },
-  {
-    title: 'Yakuniy marosim',
-    detail:
-      'Google Meet · ~60–80 kishi. 21 kunlik natijalar, sertifikatlar va rasmiy yakun.',
-  },
-]
 
 const weekOneWinsUz = [
   'Ijtimoiyroq va ishonchliroq boʻldim',
@@ -89,53 +28,48 @@ const journeyUz = [
     type: 'community' as const,
   },
   {
-    period: 'May – Iyun 2025',
+    period: 'May 2025',
     title: 'IT Bootcamp',
     detail:
-      'Talabalar workshopʼlar va jamoaviy mini-loyihalar orqali raqamli koʻnikmalar qurgan amaliy IT bootcamp.',
+      'Sunʼiy intellekt, Python va Frontend boʻyicha uchta IT spikeri — soʻng Frontend va Backendni oʻrganish uchun yoʻl xaritasi va kundalik vazifalar.',
     type: 'project' as const,
   },
   {
     period: '6-noyabr, 2025',
     title: 'ILM Hub Camp S3',
     detail:
-      'Toʻliq jamiyat lageri — workshopʼlar, doʻstlik va challenge formatidan tashqari bayram.',
+      'Fargʻonada universitetga kirish lageri — chet elda oʻqish sessiyalari, grantlar boʻyicha maslahat, networking va sertifikatlar.',
     type: 'project' as const,
   },
   {
     period: 'Yanvar 2026',
     title: 'Challenge 1-mavsum',
     detail:
-      'Birinchi Intizom Challenge — 40 ishtirokchi, 28 bitiruvchi.',
+      'Birinchi Intizom Challenge — ishtirokchilarning 70% bitirdi.',
     type: 'challenge' as const,
   },
   {
     period: 'Fevral – Mart 2026',
     title: 'Challenge 2-mavsum',
     detail:
-      '20 sodiq ishtirokchidan iborat tanlovli mavsum — 15 nafari 21 kundan soʻng bitirdi.',
+      'Sodiq ishtirokchilardan iborat tanlovli mavsum — 75% 21 kundan soʻng bitirdi.',
     type: 'challenge' as const,
   },
   {
     period: 'Iyul 2026',
-    title: '3-mavsum yaqinlashmoqda',
+    title: 'Challenge 3-mavsum',
     detail:
-      'ILM Mode Challenge 3-mavsum ochiladi — IELTS, SAT, IT (No-coding) va Biologiya yoʻnalishlari.',
-    type: 'upcoming' as const,
+      'Uchinchi ILM Mode mavsumi — IELTS, SAT, IT (No-coding) va Biologiya yoʻnalishlari.',
+    type: 'challenge' as const,
+  },
+  {
+    period: 'Kuz 2026',
+    title: 'Habit Zone ilovasi',
+    detail:
+      'Android uchun oʻz odat ilovamiz — 40 ta tayyor dastur, ballar, ketma-ket kunlar, guruhlar va reytinglar. Bepul va reklamasiz.',
+    type: 'latest' as const,
   },
 ]
-
-export function localizedWhatWeDo(locale: Locale) {
-  return locale === 'uz' ? whatWeDoUz : whatWeDo
-}
-
-export function localizedImpactStats(locale: Locale) {
-  return locale === 'uz' ? impactStatsUz : impactStats
-}
-
-export function localizedTimeline(locale: Locale) {
-  return locale === 'uz' ? timelineUz : timeline
-}
 
 export function localizedWeekOneWins(locale: Locale) {
   return locale === 'uz' ? weekOneWinsUz : weekOneWins

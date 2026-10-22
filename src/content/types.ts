@@ -1,4 +1,4 @@
-import type { Challenge, EventItem, Project, Season } from '../data/content'
+import type { Challenge, Project, Season } from '../data/content'
 import type { TeamMember } from '../data/team'
 import type { Testimonial } from '../data/testimonials'
 
@@ -65,7 +65,6 @@ export type SiteContent = {
   projects: Project[]
   stats: SiteStat[]
   testimonials: Testimonial[]
-  events: EventItem[]
   challenges: Challenge[]
   challengeWeeks: ChallengeWeek[]
   seasons: Season[]

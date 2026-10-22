@@ -1,220 +1,187 @@
-import { ArrowRight } from 'lucide-react'
-import { Reveal, Stagger, StaggerItem } from '../components/Reveal'
-import { Button } from '../components/Button'
+import { PageHeader } from '../components/PageHeader'
+import { ClosingCta } from '../components/HomeSections'
 import { useLocale } from '../i18n/locale'
 import { localizedJourney } from '../i18n/staticContent'
-import { SEASON3_APPLY_URL } from '../lib/links'
 import { useSiteContent } from '../content/ContentContext'
-
-const typeStyles: Record<string, string> = {
-  project: 'bg-teal/15 text-teal',
-  community: 'bg-indigo/20 text-indigo',
-  challenge: 'bg-gold/15 text-gold',
-  upcoming: 'bg-orange/15 text-orange',
-}
+import { initials } from '../lib/initials'
 
 export function AboutPage() {
   const { content } = useSiteContent()
   const { locale } = useLocale()
-  const { about, teamLeads, teamMembers } = content
+  const { about, whoWeAre, teamLeads, teamMembers } = content
   const journey = localizedJourney(locale)
+  const uz = locale === 'uz'
 
   return (
-    <div className="pt-20">
-      <section className="section-pad relative overflow-hidden py-20 lg:py-28">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(24,190,188,0.15),transparent_45%),radial-gradient(ellipse_at_bottom_right,rgba(79,70,229,0.12),transparent_50%)]" />
-        <div className="relative mx-auto max-w-7xl">
-          <Reveal>
-            <p className="text-sm font-semibold tracking-[0.2em] text-teal uppercase">
-              {about.eyebrow}
-            </p>
-            <h1 className="mt-4 max-w-3xl font-display text-5xl font-bold tracking-tight sm:text-6xl">
-              {about.headline}{' '}
-              <span className="text-gradient">{about.headlineAccent}</span>
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg text-white/60 leading-relaxed">
-              {about.intro}
-            </p>
-          </Reveal>
-        </div>
-      </section>
+    <>
+      <PageHeader
+        eyebrow={about.eyebrow}
+        title={
+          <>
+            {about.headline} <span className="text-blue">{about.headlineAccent}</span>
+          </>
+        }
+        subtitle={about.intro}
+        image={{ src: '/assets/who-we-are-2.png', alt: 'ILM Hub graduates with certificates' }}
+      />
 
-      <section className="section-pad pt-12 pb-20 sm:pt-16 lg:pt-20">
-        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2">
-          <Reveal>
-            <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-              <h2 className="font-display text-2xl font-bold text-gold">
-                Mission
-              </h2>
-              <p className="mt-4 text-white/60 leading-relaxed">
-                {about.mission}
-              </p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-              <h2 className="font-display text-2xl font-bold text-gold">
-                Our Story
-              </h2>
-              <p className="mt-4 text-white/60 leading-relaxed">
-                {about.story}
-              </p>
-            </div>
-          </Reveal>
-        </div>
-
-        <Reveal delay={0.15} className="mx-auto mt-10 max-w-7xl">
-          <h3 className="font-display text-lg font-semibold text-white">
-            Values
-          </h3>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {about.values.map((v) => (
-              <span
-                key={v}
-                className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/70"
-              >
-                {v}
-              </span>
-            ))}
+      <section className="bg-tint">
+        <div className="container-page grid gap-12 py-20 lg:grid-cols-12 lg:gap-16 lg:py-28">
+          <div className="lg:col-span-5">
+            <p className="eyebrow">{uz ? 'Vazifamiz' : 'Our mission'}</p>
+            <p className="mt-6 text-[28px] leading-[1.25] font-bold tracking-[-0.025em] sm:text-[34px]">{about.mission}</p>
           </div>
-        </Reveal>
+          <div className="lg:col-span-7">
+            <p className="eyebrow">{uz ? 'Bizning tariximiz' : 'Our story'}</p>
+            <p className="mt-6 text-lg leading-relaxed text-ink-soft">{about.story}</p>
+            <div className="mt-10 grid grid-cols-2 gap-3">
+              <img src={whoWeAre.photoTop} alt="ILM Hub students" className="aspect-[4/3] w-full rounded-2xl object-cover" />
+              <img src={whoWeAre.photoBottom} alt="ILM Hub students with certificates" className="aspect-[4/3] w-full rounded-2xl object-cover" />
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section id="timeline" className="section-pad pb-24">
-        <div className="mx-auto max-w-3xl">
-          <Reveal className="text-center">
-            <p className="text-sm font-semibold tracking-[0.2em] text-teal uppercase">
-              Journey
-            </p>
-            <h2 className="mt-4 font-display text-4xl font-bold tracking-tight sm:text-5xl">
-              Project timeline
+      <section className="bg-white">
+        <div className="container-page grid gap-12 py-20 lg:grid-cols-12 lg:gap-16 lg:py-28">
+          <div className="lg:sticky lg:top-28 lg:col-span-5 lg:self-start">
+            <p className="eyebrow">{uz ? 'Qadriyatlarimiz' : 'What we stand for'}</p>
+            <h2 className="h-section mt-5">
+              {uz ? 'Har bir mavsum ortidagi tamoyillar' : 'The principles behind every season'}
             </h2>
-            <p className="mt-4 text-white/55">
-              From Telegram posts to camps and challenges — how ILM Hub grew.
+            <p className="mt-5 max-w-[42ch] text-lg leading-relaxed text-ink-soft">
+              {uz
+                ? 'Challenjlar, lagerlar va haftalik uchrashuvlar — barchasi shu qadriyatlar asosida quriladi.'
+                : 'Challenges, camps and weekly meetings are all built around the same few ideas.'}
             </p>
-          </Reveal>
+          </div>
+          <ul className="border-t border-line lg:col-span-7">
+            {about.values.map((v, i) => (
+              <li key={v} className="flex items-baseline gap-6 border-b border-line py-7 sm:gap-10">
+                <span className="w-8 shrink-0 text-base font-bold text-accent tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+                <p className="text-[30px] leading-tight font-bold tracking-[-0.035em] sm:text-[40px]">{v}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
-          <div className="relative mt-16">
-            <div className="absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-teal via-indigo to-gold sm:left-1/2 sm:-translate-x-px" />
-            {journey.map((item, i) => (
-              <Reveal
-                key={`${item.period}-${item.title}`}
-                delay={i * 0.04}
-                className={`relative mb-10 flex ${
-                  i % 2 === 0 ? 'sm:flex-row' : 'sm:flex-row-reverse'
-                }`}
+      <section id="timeline" className="bg-navy text-white">
+        <div className="container-page grid gap-12 py-20 lg:grid-cols-12 lg:gap-16 lg:py-28">
+          <div className="lg:sticky lg:top-28 lg:col-span-4 lg:self-start">
+            <p className="eyebrow eyebrow-light">{uz ? 'Yoʻlimiz' : 'Journey'}</p>
+            <h2 className="h-section mt-5">{uz ? 'ILM Hub qanday oʻsdi' : 'How ILM Hub grew'}</h2>
+            <figure className="mt-10 hidden lg:block">
+              <img
+                src="/assets/projects/english-day-camp/photo-5.png"
+                alt={uz ? 'English Day Camp sertifikat topshirish marosimi' : 'Certificate ceremony at English Day Camp'}
+                className="aspect-[4/5] w-full max-w-[340px] rounded-2xl object-cover object-[50%_40%]"
+              />
+              <figcaption className="mt-3 text-sm text-white/50">
+                {uz ? 'English Day Camp, 2024-yil avgust' : 'English Day Camp, August 2024'}
+              </figcaption>
+            </figure>
+          </div>
+          <ol className="relative lg:col-span-8">
+            <span className="absolute top-2 bottom-2 left-[7px] w-px bg-white/15" aria-hidden="true" />
+            {journey.map((item) => (
+              <li key={`${item.period}-${item.title}`} className="relative pb-10 pl-10 last:pb-0">
+                <span
+                  className={`absolute top-1.5 left-0 h-[15px] w-[15px] rounded-full border-[3px] border-navy ${
+                    item.type === 'latest' ? 'bg-accent' : 'bg-white'
+                  }`}
+                  aria-hidden="true"
+                />
+                <p className="text-sm font-semibold text-white/50">{item.period}</p>
+                <p className="mt-1 text-xl font-bold tracking-tight">
+                  {item.title}
+                  {item.type === 'latest' && (
+                    <span className="ml-2 rounded-md bg-accent px-2 py-0.5 align-middle text-xs font-semibold">
+                      {uz ? 'Yangi' : 'New'}
+                    </span>
+                  )}
+                </p>
+                <p className="mt-2 max-w-[56ch] leading-relaxed text-white/65">{item.detail}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section id="team" className="scroll-mt-20 bg-white">
+        <div className="container-page py-20 lg:py-28">
+          <div className="grid gap-6 lg:grid-cols-12 lg:gap-16">
+            <div className="lg:col-span-7">
+              <p className="eyebrow">{uz ? 'Jamoa' : 'Team'}</p>
+              <h2 className="h-section mt-5">{uz ? 'ILM Hub ortidagi insonlar' : 'The people behind ILM Hub'}</h2>
+            </div>
+            <p className="text-lg leading-relaxed text-ink-soft lg:col-span-5 lg:self-end">
+              {uz
+                ? 'Challengelarni ishlab chiqadigan, lagerlarni oʻtkazadigan va ishtirokchilarni har kuni qoʻllab-quvvatlaydigan talabalar.'
+                : 'Students who design the challenges, run the camps and support participants every single day.'}
+            </p>
+          </div>
+
+          <div className={`mt-14 grid gap-4 ${teamLeads.length > 1 ? 'md:grid-cols-2' : ''}`}>
+            {teamLeads.map((lead) => (
+              <figure
+                key={lead.name}
+                className={`grid overflow-hidden rounded-2xl bg-tint ${teamLeads.length > 1 ? '' : 'md:grid-cols-12'}`}
               >
-                <div className="hidden w-1/2 sm:block" />
-                <div className="absolute left-4 top-1 h-3 w-3 -translate-x-1/2 rounded-full border-2 border-navy bg-gold shadow-[0_0_12px_rgba(246,199,68,0.8)] sm:left-1/2" />
-                <div className="ml-10 w-full rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:ml-0 sm:w-[calc(50%-2rem)]">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs font-semibold tracking-wide text-gold uppercase">
-                      {item.period}
-                    </span>
-                    <span
-                      className={`rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase ${typeStyles[item.type]}`}
-                    >
-                      {item.type}
-                    </span>
-                  </div>
-                  <h3 className="mt-2 font-display text-lg font-bold text-white">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-white/55">{item.detail}</p>
+                <div
+                  className={`aspect-[4/5] overflow-hidden bg-line ${
+                    teamLeads.length > 1 ? '' : 'md:col-span-5 md:aspect-auto md:min-h-[460px]'
+                  }`}
+                >
+                  {lead.photo ? (
+                    <img src={lead.photo} alt={lead.name} className="h-full w-full object-cover object-top" />
+                  ) : (
+                    <div className="flex h-full items-center justify-center text-5xl font-bold">{initials(lead.name)}</div>
+                  )}
                 </div>
-              </Reveal>
+                <figcaption
+                  className={`flex flex-col justify-center p-8 sm:p-10 ${teamLeads.length > 1 ? '' : 'md:col-span-7 lg:p-14'}`}
+                >
+                  <span className="w-fit rounded-lg bg-accent-soft px-3 py-1 text-sm font-semibold text-accent-ink">
+                    {lead.role}
+                  </span>
+                  <p className="mt-5 text-[34px] leading-tight font-bold tracking-[-0.03em] sm:text-[44px]">{lead.name}</p>
+                  {lead.bio && (
+                    <p className="mt-5 max-w-[46ch] text-lg leading-relaxed text-ink-soft sm:text-xl">{lead.bio}</p>
+                  )}
+                </figcaption>
+              </figure>
             ))}
           </div>
+
+          {teamMembers.length > 0 && (
+            <>
+              <h3 className="mt-16 text-2xl font-bold tracking-tight">
+                {uz ? 'Tashkilotchilar va mentorlar' : 'Organizers & mentors'}
+              </h3>
+              <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {teamMembers.map((member) => (
+                  <li key={member.name} className="flex items-center gap-4 rounded-2xl border border-line bg-white p-5">
+                    {member.photo ? (
+                      <img src={member.photo} alt="" className="h-14 w-14 shrink-0 rounded-full object-cover" />
+                    ) : (
+                      <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-navy text-base font-bold text-white">
+                        {initials(member.name)}
+                      </span>
+                    )}
+                    <div className="min-w-0">
+                      <p className="text-lg leading-snug font-bold tracking-tight">{member.name}</p>
+                      <p className="mt-0.5 text-[15px] text-ink-soft">{member.role}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       </section>
 
-      <section id="team" className="section-pad pb-24">
-        <div className="mx-auto max-w-7xl">
-          <Reveal>
-            <p className="text-sm font-semibold tracking-[0.2em] text-gold uppercase">
-              Team
-            </p>
-            <h2 className="mt-4 font-display text-3xl font-bold sm:text-4xl">
-              The people behind ILM Hub
-            </h2>
-            <p className="mt-3 max-w-xl text-white/55">
-              Organizers and mentors who design challenges, run camps, and
-              support students every day.
-            </p>
-          </Reveal>
-
-          <Stagger className="mt-12 flex flex-wrap items-start justify-center gap-10 sm:gap-16">
-            {teamLeads.map((member) => (
-              <StaggerItem key={member.name} className="w-[12rem] text-center sm:w-[14rem]">
-                <article className="group">
-                  {member.photo ? (
-                    <div className="mx-auto flex h-44 w-36 items-center justify-center overflow-hidden rounded-2xl border border-white/15 bg-navy-deep sm:h-52 sm:w-40">
-                      <img
-                        src={member.photo}
-                        alt={member.name}
-                        className="h-full w-full object-contain transition duration-500 group-hover:scale-[1.03]"
-                      />
-                    </div>
-                  ) : (
-                    <div className="mx-auto flex h-44 w-36 items-center justify-center rounded-2xl bg-gradient-to-br from-teal/25 to-indigo/25 font-display text-3xl font-bold text-white/80 sm:h-52 sm:w-40">
-                      {member.name.charAt(0)}
-                    </div>
-                  )}
-                  <h3 className="mt-5 font-display text-lg font-bold text-white sm:text-xl">
-                    {member.name}
-                  </h3>
-                  <p className="mt-1.5 text-sm font-medium text-gold">
-                    {member.role}
-                  </p>
-                </article>
-              </StaggerItem>
-            ))}
-          </Stagger>
-
-          <Stagger className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-            {teamMembers.map((member) => (
-              <StaggerItem key={member.name}>
-                <article className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-5 text-center transition hover:border-teal/30">
-                  {member.photo ? (
-                    <img
-                      src={member.photo}
-                      alt={member.name}
-                      className="mx-auto h-10 w-10 rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-teal/30 to-indigo/30 font-display text-sm font-bold text-white">
-                      {member.name.charAt(0)}
-                    </div>
-                  )}
-                  <h3 className="mt-3 font-display text-sm font-bold text-white sm:text-base">
-                    {member.name}
-                  </h3>
-                  <p className="mt-1 text-xs font-medium text-gold">
-                    {member.role}
-                  </p>
-                </article>
-              </StaggerItem>
-            ))}
-          </Stagger>
-        </div>
-      </section>
-
-      <section className="section-pad pb-24">
-        <Reveal>
-          <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-brand-navy via-indigo/80 to-navy p-10 sm:p-14">
-            <h2 className="font-display text-3xl font-bold sm:text-4xl">
-              Season 3 is coming
-            </h2>
-            <p className="mt-3 max-w-xl text-white/70">
-              Join the next chapter of ILM Mode — build discipline with a
-              community across Uzbekistan.
-            </p>
-            <Button href={SEASON3_APPLY_URL} variant="gold" className="mt-8">
-              Apply for Season 3 <ArrowRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </Reveal>
-      </section>
-    </div>
+      <ClosingCta />
+    </>
   )
 }

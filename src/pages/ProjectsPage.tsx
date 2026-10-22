@@ -1,22 +1,23 @@
 import { useMemo, useState } from 'react'
-import { ArrowRight, Search, Users, MapPin, Calendar } from 'lucide-react'
+import { ArrowRight, Search } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { type Project } from '../data/content'
-import { Reveal, Stagger, StaggerItem } from '../components/Reveal'
+import type { Project } from '../data/content'
+import { PageHeader } from '../components/PageHeader'
+import { CoverImage } from '../components/CoverImage'
+import { ClosingCta } from '../components/HomeSections'
 import { useSiteContent } from '../content/ContentContext'
 
 const categories = ['All', 'Camp', 'Bootcamp']
 
 export function ProjectsPage() {
   const { content } = useSiteContent()
-  const projects = content.projects
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('All')
 
   const filtered = useMemo(() => {
-    return projects.filter((p) => {
+    const q = query.trim().toLowerCase()
+    return content.projects.filter((p) => {
       const matchCat = category === 'All' || p.category === category
-      const q = query.toLowerCase()
       const matchQ =
         !q ||
         p.title.toLowerCase().includes(q) ||
@@ -24,120 +25,146 @@ export function ProjectsPage() {
         p.summary.toLowerCase().includes(q)
       return matchCat && matchQ
     })
-  }, [query, category, projects])
+  }, [query, category, content.projects])
+
+  const [lead, ...rest] = filtered
 
   return (
-    <div className="pt-20">
-      <section className="section-pad relative overflow-hidden py-20 lg:py-28">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(79,70,229,0.2),transparent_50%)]" />
-        <div className="relative mx-auto max-w-7xl">
-          <Reveal>
-            <p className="text-sm font-semibold tracking-[0.2em] text-teal uppercase">
-              Projects
-            </p>
-            <h1 className="mt-4 max-w-3xl font-display text-5xl font-bold tracking-tight sm:text-6xl">
-              Past projects beyond the challenge
-            </h1>
-            <p className="mt-5 max-w-xl text-white/55">
-              Camps, bootcamps, and community programs ILM Hub has organized —
-              separate from our challenge seasons.
-            </p>
-          </Reveal>
+    <>
+      <PageHeader
+        eyebrow="Projects"
+        title={
+          <>
+            Camps and projects <span className="text-blue">beyond the challenge</span>
+          </>
+        }
+        subtitle="Programs ILM Hub has organized alongside the challenge seasons — where learning turns into shared, real-world work."
+        image={{ src: '/assets/projects/english-day-camp/photo-2.png', alt: 'English Day Camp participants' }}
+      />
 
-          <Reveal delay={0.1} className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search projects..."
-                className="w-full rounded-full border border-white/10 bg-white/5 py-3 pr-4 pl-11 text-sm outline-none focus:border-teal/40"
-              />
-            </div>
-            <div className="flex flex-wrap gap-2">
+      <section className="bg-tint">
+        <div className="container-page py-16 lg:py-20">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex gap-1 rounded-xl bg-white p-1" role="group" aria-label="Filter by category">
               {categories.map((c) => (
                 <button
                   key={c}
                   type="button"
                   onClick={() => setCategory(c)}
-                  className={`rounded-full px-4 py-2.5 text-sm font-medium transition ${
-                    category === c
-                      ? 'bg-indigo text-white'
-                      : 'border border-white/10 text-white/60 hover:text-white'
+                  aria-pressed={category === c}
+                  className={`press rounded-lg px-4 py-2 text-[15px] font-semibold ${
+                    category === c ? 'bg-navy text-white' : 'text-ink-soft hover:text-ink'
                   }`}
                 >
                   {c}
                 </button>
               ))}
             </div>
-          </Reveal>
-        </div>
-      </section>
+            <label className="relative block sm:w-80">
+              <span className="sr-only">Search projects</span>
+              <Search className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-ink-faint" />
+              <input
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search projects"
+                className="h-12 w-full rounded-xl border border-line bg-white pr-4 pl-11 text-base outline-none focus:border-blue"
+              />
+            </label>
+          </div>
 
-      <section className="section-pad pb-24">
-        <div className="mx-auto max-w-7xl">
-          <Stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((project) => (
-              <StaggerItem key={project.id}>
-                <ProjectCard project={project} />
-              </StaggerItem>
-            ))}
-          </Stagger>
-          {filtered.length === 0 && (
-            <p className="py-20 text-center text-white/45">
-              No projects match your search.
-            </p>
+          {!lead ? (
+            <div className="mt-8 rounded-2xl bg-white py-20 text-center">
+              <p className="text-lg font-semibold">No projects match your search.</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setQuery('')
+                  setCategory('All')
+                }}
+                className="mt-3 font-semibold text-blue hover:underline"
+              >
+                Clear filters
+              </button>
+            </div>
+          ) : (
+            <>
+              <Link
+                to={`/projects/${lead.id}`}
+                className="group mt-8 grid overflow-hidden rounded-2xl bg-white lg:grid-cols-12"
+              >
+                <div className="overflow-hidden lg:col-span-7">
+                  <CoverImage
+                    src={lead.cover}
+                    alt={lead.title}
+                    label={`${lead.participants} students`}
+                    className="aspect-[4/3] h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  />
+                </div>
+                <div className="flex flex-col p-8 sm:p-10 lg:col-span-5">
+                  <p className="text-sm font-semibold text-accent-ink">{lead.category}</p>
+                  <h2 className="mt-3 text-[32px] leading-tight font-bold tracking-[-0.03em] group-hover:text-blue">
+                    {lead.title}
+                  </h2>
+                  <p className="mt-4 text-lg leading-relaxed text-ink-soft">{lead.summary}</p>
+                  <Meta project={lead} />
+                  <span className="mt-auto inline-flex items-center gap-2 pt-8 font-semibold text-blue">
+                    Read the full story <ArrowRight className="h-4 w-4" />
+                  </span>
+                </div>
+              </Link>
+
+              {rest.length > 0 && (
+                <div className="mt-4 grid gap-4 md:grid-cols-2">
+                  {rest.map((project) => (
+                    <ProjectCard key={project.id} project={project} />
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
-    </div>
+
+      <ClosingCta />
+    </>
+  )
+}
+
+function Meta({ project }: { project: Project }) {
+  return (
+    <dl className="mt-8 grid grid-cols-3 gap-4 border-t border-line pt-6">
+      {[
+        [project.date, 'Date'],
+        [String(project.participants), 'Students'],
+        [project.location, 'Format'],
+      ].map(([value, label]) => (
+        <div key={label}>
+          <dd className="font-bold">{value}</dd>
+          <dt className="mt-0.5 text-sm text-ink-faint">{label}</dt>
+        </div>
+      ))}
+    </dl>
   )
 }
 
 function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.03] transition hover:-translate-y-1 hover:border-teal/30">
-      <div className="relative aspect-[16/10] overflow-hidden bg-navy-deep">
-        {project.cover ? (
-          <img
-            src={project.cover}
-            alt={project.title}
-            className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center text-sm text-white/30">
-            No cover photo
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent" />
-        <span className="absolute left-4 top-4 rounded-full bg-navy/80 px-3 py-1 text-xs font-semibold text-gold backdrop-blur">
-          {project.category}
-        </span>
+    <Link to={`/projects/${project.id}`} className="group block overflow-hidden rounded-2xl bg-white">
+      <div className="overflow-hidden">
+        <CoverImage
+          src={project.cover}
+          alt={project.title}
+          label={`${project.participants} students`}
+          className="aspect-[16/10] w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+        />
       </div>
-      <div className="flex flex-1 flex-col p-6">
-        <div className="flex flex-wrap gap-3 text-xs text-white/45">
-          <span className="inline-flex items-center gap-1">
-            <Calendar className="h-3.5 w-3.5" />
-            {project.date}
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <Users className="h-3.5 w-3.5" />
-            {project.participants} students
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <MapPin className="h-3.5 w-3.5" />
-            {project.location}
-          </span>
-        </div>
-        <h3 className="mt-3 font-display text-xl font-bold">{project.title}</h3>
-        <p className="mt-2 flex-1 text-sm text-white/55">{project.summary}</p>
-        <Link
-          to={`/projects/${project.id}`}
-          className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-gold transition hover:gap-2.5"
-        >
-          Read fully <ArrowRight className="h-3.5 w-3.5" />
-        </Link>
+      <div className="p-7">
+        <p className="text-sm font-semibold text-accent-ink">{project.category}</p>
+        <h2 className="mt-2 text-2xl font-bold tracking-tight group-hover:text-blue">{project.title}</h2>
+        <p className="mt-2 line-clamp-2 leading-relaxed text-ink-soft">{project.summary}</p>
+        <Meta project={project} />
       </div>
-    </article>
+    </Link>
   )
 }

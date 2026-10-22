@@ -1,15 +1,20 @@
 import { Link } from 'react-router-dom'
 import type { ReactNode } from 'react'
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'gold'
+type Variant = 'primary' | 'secondary' | 'inverse' | 'ghost-inverse'
+type Size = 'md' | 'sm' | 'lg'
 
 const styles: Record<Variant, string> = {
-  primary:
-    'bg-gradient-to-r from-indigo to-teal text-white shadow-lg shadow-indigo/25 hover:shadow-teal/30 hover:scale-[1.02]',
-  secondary:
-    'border border-white/25 bg-white/5 text-white hover:bg-white/10 hover:border-white/40',
-  ghost: 'text-white/80 hover:text-white',
-  gold: 'bg-gold text-navy-deep font-semibold hover:bg-gold-soft hover:scale-[1.02] shadow-lg shadow-gold/20',
+  primary: 'bg-blue text-white hover:bg-blue-hover',
+  secondary: 'border border-line bg-white text-ink hover:border-ink-faint',
+  inverse: 'bg-white text-navy hover:bg-white/90',
+  'ghost-inverse': 'border border-white/25 text-white hover:border-white/60 hover:bg-white/5',
+}
+
+const sizes: Record<Size, string> = {
+  sm: 'h-10 px-4 text-[15px]',
+  md: 'h-12 px-6 text-base',
+  lg: 'h-14 px-7 text-[17px]',
 }
 
 type Props = {
@@ -18,6 +23,7 @@ type Props = {
   href?: string
   onClick?: () => void
   variant?: Variant
+  size?: Size
   className?: string
   type?: 'button' | 'submit'
 }
@@ -28,10 +34,11 @@ export function Button({
   href,
   onClick,
   variant = 'primary',
+  size = 'md',
   className = '',
   type = 'button',
 }: Props) {
-  const classes = `inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold tracking-wide transition-all duration-300 ${styles[variant]} ${className}`
+  const classes = `press inline-flex items-center justify-center gap-2 rounded-xl font-semibold whitespace-nowrap ${sizes[size]} ${styles[variant]} ${className}`
 
   if (to) {
     return (
@@ -47,9 +54,7 @@ export function Button({
       <a
         href={href}
         className={classes}
-        {...(external
-          ? { target: '_blank', rel: 'noopener noreferrer' }
-          : {})}
+        {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       >
         {children}
       </a>

@@ -1,8 +1,8 @@
 import { type FormEvent, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  CalendarDays,
-  FileText,
+  ArrowLeft,
+  ExternalLink,
   Flame,
   FolderKanban,
   ImagePlus,
@@ -11,6 +11,7 @@ import {
   LogOut,
   MessageSquareQuote,
   Plus,
+  RotateCcw,
   Save,
   Sparkles,
   Trash2,
@@ -26,7 +27,7 @@ import type {
   LocalizedSiteContent,
   SiteContent,
 } from '../../content/types'
-import type { EventItem, Project, Season } from '../../data/content'
+import type { Project, Season } from '../../data/content'
 import type { TeamMember } from '../../data/team'
 import type { Testimonial } from '../../data/testimonials'
 import { isSupabaseConfigured, supabase } from '../../lib/supabase'
@@ -40,7 +41,6 @@ type Tab =
   | 'who'
   | 'team'
   | 'projects'
-  | 'events'
   | 'challenges'
   | 'gallery'
   | 'voices'
@@ -52,7 +52,6 @@ const tabs: { id: Tab; label: string; icon: typeof Sparkles }[] = [
   { id: 'who', label: 'Who We Are', icon: LayoutDashboard },
   { id: 'team', label: 'Team', icon: Users },
   { id: 'projects', label: 'Projects', icon: FolderKanban },
-  { id: 'events', label: 'Events', icon: CalendarDays },
   { id: 'challenges', label: 'Seasons', icon: Flame },
   { id: 'gallery', label: 'Gallery', icon: Images },
   { id: 'voices', label: 'Voices', icon: MessageSquareQuote },
@@ -74,7 +73,7 @@ function Field({
 }) {
   return (
     <label className="block space-y-1.5">
-      <span className="text-xs font-medium tracking-wide text-white/45 uppercase">
+      <span className="text-sm font-semibold text-ink">
         {label}
       </span>
       {rows ? (
@@ -82,16 +81,16 @@ function Field({
           value={value}
           rows={rows}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full resize-y rounded-xl border border-white/10 bg-[#0b1220] px-3 py-2.5 text-sm text-white outline-none transition focus:border-teal/50"
+          className="w-full resize-y rounded-xl border border-line bg-white px-3.5 py-2.5 text-[15px] leading-relaxed text-ink outline-none transition focus:border-blue focus:ring-2 focus:ring-blue-soft"
         />
       ) : (
         <input
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full rounded-xl border border-white/10 bg-[#0b1220] px-3 py-2.5 text-sm text-white outline-none transition focus:border-teal/50"
+          className="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-blue focus:ring-2 focus:ring-blue-soft"
         />
       )}
-      {hint ? <span className="text-xs text-white/35">{hint}</span> : null}
+      {hint ? <span className="text-sm text-ink-faint">{hint}</span> : null}
     </label>
   )
 }
@@ -110,18 +109,18 @@ function ImageField({
   const [uploading, setUploading] = useState(false)
 
   return (
-    <div className="space-y-2 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-      <p className="text-xs font-medium tracking-wide text-white/45 uppercase">
+    <div className="space-y-3 rounded-2xl border border-line bg-tint p-4">
+      <p className="text-sm font-semibold text-ink">
         {label}
       </p>
       {value ? (
         <img
           src={value}
           alt=""
-          className="h-32 w-full rounded-xl object-cover object-center"
+          className="h-44 w-full rounded-xl bg-white object-cover object-center"
         />
       ) : (
-        <div className="flex h-32 items-center justify-center rounded-xl border border-dashed border-white/15 text-xs text-white/35">
+        <div className="flex h-44 items-center justify-center rounded-xl border border-dashed border-line bg-white text-sm text-ink-faint">
           No image yet
         </div>
       )}
@@ -129,9 +128,9 @@ function ImageField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Image URL or upload below"
-        className="w-full rounded-xl border border-white/10 bg-[#0b1220] px-3 py-2 text-sm text-white outline-none focus:border-teal/50"
+        className="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-blue focus:ring-2 focus:ring-blue-soft"
       />
-      <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/15 px-3 py-1.5 text-xs text-white/70 hover:border-teal/40 hover:text-white">
+      <label className="press inline-flex cursor-pointer items-center gap-2 rounded-xl border border-line bg-white px-3.5 py-2 text-sm font-semibold text-ink hover:border-ink-faint">
         {uploading ? (
           <Loader2 className="h-3.5 w-3.5 animate-spin" />
         ) : (
@@ -172,20 +171,20 @@ function VideoField({
   const [uploading, setUploading] = useState(false)
 
   return (
-    <div className="space-y-2 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-      <p className="text-xs font-medium tracking-wide text-white/45 uppercase">
+    <div className="space-y-3 rounded-2xl border border-line bg-tint p-4">
+      <p className="text-sm font-semibold text-ink">
         {label}
       </p>
       {value ? (
         <video
           src={value}
-          className="h-36 w-full rounded-xl object-cover bg-black"
+          className="h-44 w-full rounded-xl bg-navy object-cover"
           muted
           controls
           playsInline
         />
       ) : (
-        <div className="flex h-36 items-center justify-center rounded-xl border border-dashed border-white/15 text-xs text-white/35">
+        <div className="flex h-44 items-center justify-center rounded-xl border border-dashed border-line bg-white text-sm text-ink-faint">
           No video yet — image background will be used
         </div>
       )}
@@ -193,11 +192,11 @@ function VideoField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Video URL (.mp4) or upload below"
-        className="w-full rounded-xl border border-white/10 bg-[#0b1220] px-3 py-2 text-sm text-white outline-none focus:border-teal/50"
+        className="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-blue focus:ring-2 focus:ring-blue-soft"
       />
-      {hint ? <p className="text-xs text-white/35">{hint}</p> : null}
+      {hint ? <p className="text-sm text-ink-faint">{hint}</p> : null}
       <div className="flex flex-wrap gap-2">
-        <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/15 px-3 py-1.5 text-xs text-white/70 hover:border-teal/40 hover:text-white">
+        <label className="press inline-flex cursor-pointer items-center gap-2 rounded-xl border border-line bg-white px-3.5 py-2 text-sm font-semibold text-ink hover:border-ink-faint">
           {uploading ? (
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
           ) : (
@@ -222,7 +221,7 @@ function VideoField({
           <button
             type="button"
             onClick={() => onChange('')}
-            className="inline-flex items-center gap-1 rounded-full border border-orange/30 px-3 py-1.5 text-xs text-orange"
+            className="press inline-flex items-center gap-1.5 rounded-xl border border-accent/30 bg-white px-3.5 py-2 text-sm font-semibold text-accent-ink hover:bg-accent-soft"
           >
             <Trash2 className="h-3 w-3" /> Clear video
           </button>
@@ -242,15 +241,25 @@ function Panel({
   children: React.ReactNode
 }) {
   return (
-    <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">
-      <div className="mb-5 border-b border-white/8 pb-4">
-        <h2 className="font-display text-xl font-bold text-white">{title}</h2>
+    <section className="rounded-2xl border border-line bg-white p-5 sm:p-8">
+      <div className="mb-6 border-b border-line pb-5">
+        <h2 className="text-xl font-bold tracking-tight">{title}</h2>
         {description ? (
-          <p className="mt-1 text-sm text-white/45">{description}</p>
+          <p className="mt-1 text-[15px] text-ink-soft">{description}</p>
         ) : null}
       </div>
       {children}
     </section>
+  )
+}
+
+function AdminBrand() {
+  return (
+    <Link to="/" className="inline-flex items-center gap-2.5">
+      <img src="/assets/logo-icon.png" alt="" className="h-9 w-9 object-contain" />
+      <span className="text-lg font-bold tracking-tight">ILM Hub</span>
+      <span className="rounded-md bg-accent-soft px-2 py-0.5 text-xs font-semibold text-accent-ink">Admin</span>
+    </Link>
   )
 }
 
@@ -280,7 +289,6 @@ export function AdminPage() {
   const [status, setStatus] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [projectId, setProjectId] = useState(bundle.en.projects[0]?.id ?? '')
-  const [eventId, setEventId] = useState(bundle.en.events[0]?.id ?? '')
   const [seasonId, setSeasonId] = useState(bundle.en.seasons[0]?.id ?? '')
   const [voiceIndex, setVoiceIndex] = useState(0)
   const [galleryIndex, setGalleryIndex] = useState(0)
@@ -315,11 +323,6 @@ export function AdminPage() {
         ? prev
         : (source.projects[0]?.id ?? ''),
     )
-    setEventId((prev) =>
-      source.events.some((e) => e.id === prev)
-        ? prev
-        : (source.events[0]?.id ?? ''),
-    )
     setSeasonId((prev) =>
       source.seasons.some((s) => s.id === prev)
         ? prev
@@ -337,11 +340,6 @@ export function AdminPage() {
         ? prev
         : (source.projects[0]?.id ?? ''),
     )
-    setEventId((prev) =>
-      source.events.some((e) => e.id === prev)
-        ? prev
-        : (source.events[0]?.id ?? ''),
-    )
     setSeasonId((prev) =>
       source.seasons.some((s) => s.id === prev)
         ? prev
@@ -354,11 +352,6 @@ export function AdminPage() {
   const selectedProject = useMemo(
     () => draft.projects.find((p) => p.id === projectId) ?? null,
     [draft.projects, projectId],
-  )
-
-  const selectedEvent = useMemo(
-    () => draft.events.find((e) => e.id === eventId) ?? null,
-    [draft.events, eventId],
   )
 
   const selectedSeason = useMemo(
@@ -384,15 +377,6 @@ export function AdminPage() {
     setDraft((d) => ({
       ...d,
       projects: d.projects.map((p) => (p.id === id ? { ...p, ...patch } : p)),
-    }))
-  }
-
-  const updateEvent = (patch: Partial<EventItem>) => {
-    if (!selectedEvent) return
-    const id = selectedEvent.id
-    setDraft((d) => ({
-      ...d,
-      events: d.events.map((e) => (e.id === id ? { ...e, ...patch } : e)),
     }))
   }
 
@@ -440,25 +424,6 @@ export function AdminPage() {
     setStatus('New project created — edit details, then Save.')
   }
 
-  const addEvent = () => {
-    const id = `event-${Date.now()}`
-    const next: EventItem = {
-      id,
-      title: 'New event',
-      date: 'TBD',
-      time: 'Online',
-      type: 'Meeting',
-      location: 'Google Meet',
-      description: 'Describe this event…',
-      featured: false,
-      cover:
-        'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=1200&q=80',
-    }
-    setDraft((d) => ({ ...d, events: [...d.events, next] }))
-    setEventId(id)
-    setStatus('New event created — edit details, then Save.')
-  }
-
   const addSeason = () => {
     const number =
       (draft.seasons.reduce((max, s) => Math.max(max, s.number), 0) || 0) + 1
@@ -468,8 +433,7 @@ export function AdminPage() {
       number,
       title: `Season ${number}`,
       period: '2026',
-      cover:
-        'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1200&q=80',
+      cover: '',
       participants: 0,
       cities: 0,
       graduates: 0,
@@ -524,22 +488,25 @@ export function AdminPage() {
 
   if (!isSupabaseConfigured) {
     return (
-      <div className="mx-auto flex min-h-screen max-w-lg flex-col justify-center px-6 text-white">
-        <h1 className="font-display text-3xl font-bold">Admin setup needed</h1>
-        <p className="mt-4 text-white/60">
-          Add Supabase keys to <code className="text-teal">.env</code> and follow{' '}
-          <code className="text-teal">ADMIN.md</code>.
-        </p>
-        <Link to="/" className="mt-8 text-sm text-teal">
-          ← Back to site
-        </Link>
+      <div className="bg-grid flex min-h-screen items-center justify-center px-5">
+        <div className="w-full max-w-md rounded-2xl border border-line bg-white p-8 shadow-[0_24px_60px_-30px_rgba(11,18,32,0.35)]">
+          <AdminBrand />
+          <h1 className="mt-8 text-[28px] leading-tight font-bold tracking-tight">Admin setup needed</h1>
+          <p className="mt-3 leading-relaxed text-ink-soft">
+            Add the Supabase keys to <code className="rounded bg-tint px-1.5 py-0.5 text-[14px] text-ink">.env</code> and
+            follow <code className="rounded bg-tint px-1.5 py-0.5 text-[14px] text-ink">ADMIN.md</code>.
+          </p>
+          <Link to="/" className="mt-8 inline-flex items-center gap-2 font-semibold text-blue hover:underline">
+            <ArrowLeft className="h-4 w-4" /> {t('admin.backToSite')}
+          </Link>
+        </div>
       </div>
     )
   }
 
   if (authLoading || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-white/60">
+      <div className="flex min-h-screen items-center justify-center text-ink-faint">
         <Loader2 className="h-6 w-6 animate-spin" />
       </div>
     )
@@ -547,153 +514,180 @@ export function AdminPage() {
 
   if (!session) {
     return (
-      <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6">
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8">
-          <p className="text-xs tracking-[0.2em] text-teal uppercase">ILM Hub</p>
-          <h1 className="mt-2 font-display text-3xl font-bold text-white">
-            Admin login
-          </h1>
+      <div className="bg-grid flex min-h-screen flex-col items-center justify-center px-5 py-12">
+        <div className="w-full max-w-md rounded-2xl border border-line bg-white p-8 shadow-[0_24px_60px_-30px_rgba(11,18,32,0.35)] sm:p-10">
+          <AdminBrand />
+          <h1 className="mt-8 text-[32px] leading-tight font-bold tracking-[-0.03em]">Sign in</h1>
+          <p className="mt-2 leading-relaxed text-ink-soft">
+            Edit the website content. Changes go live when you click Save.
+          </p>
           <form onSubmit={handleLogin} className="mt-8 space-y-4">
             <Field label="Email" value={email} onChange={setEmail} />
             <label className="block space-y-1.5">
-              <span className="text-xs font-medium tracking-wide text-white/45 uppercase">
-                Password
-              </span>
+              <span className="text-sm font-semibold text-ink">Password</span>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-[#0b1220] px-3 py-2.5 text-sm text-white outline-none focus:border-teal/50"
+                className="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-blue focus:ring-2 focus:ring-blue-soft"
               />
             </label>
-            {authError && <p className="text-sm text-orange">{authError}</p>}
+            {authError && (
+              <p className="rounded-xl border border-accent/30 bg-accent-soft px-4 py-3 text-sm font-medium text-accent-ink">
+                {authError}
+              </p>
+            )}
             <button
               type="submit"
-              className="w-full rounded-full bg-gold py-3 text-sm font-semibold text-navy"
+              className="press h-12 w-full rounded-xl bg-blue text-base font-semibold text-white hover:bg-blue-hover"
             >
               Sign in
             </button>
           </form>
         </div>
-        <Link
-          to="/"
-          className="mt-6 text-center text-sm text-white/50 hover:text-white"
-        >
-          ← Back to site
+        <Link to="/" className="mt-6 inline-flex items-center gap-2 font-semibold text-ink-soft hover:text-ink">
+          <ArrowLeft className="h-4 w-4" /> {t('admin.backToSite')}
         </Link>
       </div>
     )
   }
 
+  const activeTab = tabs.find((x) => x.id === tab)
+  const isError = Boolean(status && (status.startsWith('Error') || status.startsWith('Upload')))
+  const localeSwitch = (
+    <div className="flex gap-1 rounded-xl bg-tint p-1" role="group" aria-label="Editing language">
+      {(['en', 'uz'] as Locale[]).map((loc) => (
+        <button
+          key={loc}
+          type="button"
+          onClick={() => setAdminLocale(loc)}
+          aria-pressed={adminLocale === loc}
+          className={`press flex-1 rounded-lg px-3 py-1.5 text-sm font-semibold ${
+            adminLocale === loc ? 'bg-white text-ink shadow-sm' : 'text-ink-soft hover:text-ink'
+          }`}
+        >
+          {loc === 'en' ? 'English' : 'Oʻzbek'}
+        </button>
+      ))}
+    </div>
+  )
+
   return (
-    <div className="flex min-h-screen bg-[#070b14] text-white">
-      {/* Left sidebar */}
-      <aside className="sticky top-0 flex h-screen w-60 shrink-0 flex-col border-r border-white/10 bg-[#0a1020]">
-        <div className="border-b border-white/10 px-5 py-5">
-          <p className="text-[10px] tracking-[0.25em] text-teal uppercase">
-            ILM Hub
-          </p>
-          <h1 className="mt-1 font-display text-lg font-bold">Admin</h1>
-          <p className="mt-1 truncate text-xs text-white/40">
-            {session.user.email}
-          </p>
+    <div className="flex min-h-screen bg-tint text-ink">
+      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-line bg-white lg:flex">
+        <div className="border-b border-line px-5 py-5">
+          <AdminBrand />
+          <p className="mt-3 truncate text-sm text-ink-faint">{session.user.email}</p>
         </div>
 
         <nav className="flex-1 space-y-1 overflow-y-auto p-3">
-          {tabs.map((t) => {
-            const Icon = t.icon
-            const active = tab === t.id
+          {tabs.map((item) => {
+            const Icon = item.icon
+            const active = tab === item.id
             return (
               <button
-                key={t.id}
+                key={item.id}
                 type="button"
-                onClick={() => setTab(t.id)}
-                className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition ${
-                  active
-                    ? 'bg-teal/15 font-semibold text-teal'
-                    : 'text-white/55 hover:bg-white/5 hover:text-white'
+                onClick={() => setTab(item.id)}
+                aria-current={active ? 'page' : undefined}
+                className={`press flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[15px] ${
+                  active ? 'bg-blue-soft font-semibold text-blue' : 'text-ink-soft hover:bg-tint hover:text-ink'
                 }`}
               >
-                <Icon className="h-4 w-4 shrink-0" />
-                {t.label}
+                <Icon className="h-[18px] w-[18px] shrink-0" />
+                {item.label}
               </button>
             )
           })}
         </nav>
 
-        <div className="space-y-2 border-t border-white/10 p-3">
-          <div className="flex gap-1 rounded-xl border border-white/10 p-1">
-            {(['en', 'uz'] as Locale[]).map((loc) => (
-              <button
-                key={loc}
-                type="button"
-                onClick={() => setAdminLocale(loc)}
-                className={`flex-1 rounded-lg py-1.5 text-xs font-semibold transition ${
-                  adminLocale === loc
-                    ? 'bg-teal text-navy'
-                    : 'text-white/50 hover:text-white'
-                }`}
-              >
-                {loc === 'en' ? 'EN' : 'Oʻzbek'}
-              </button>
-            ))}
+        <div className="space-y-3 border-t border-line p-4">
+          <p className="text-xs font-semibold text-ink-faint">Editing language</p>
+          {localeSwitch}
+          <div className="flex gap-2 pt-1">
+            <Link
+              to="/"
+              className="press flex flex-1 items-center justify-center gap-2 rounded-xl border border-line py-2 text-sm font-semibold text-ink hover:border-ink-faint"
+            >
+              <ExternalLink className="h-4 w-4" /> View site
+            </Link>
+            <button
+              type="button"
+              onClick={() => void supabase?.auth.signOut()}
+              className="press flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-ink-soft hover:bg-accent-soft hover:text-accent-ink"
+              aria-label="Sign out"
+              title="Sign out"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={() => void handleSave()}
-            disabled={saving}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-gold py-2.5 text-sm font-semibold text-navy disabled:opacity-60"
-          >
-            {saving ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Save className="h-4 w-4" />
-            )}
-            {saving ? t('admin.saving') : t('admin.save')}
-          </button>
-          <Link
-            to="/"
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 py-2 text-sm text-white/60 hover:text-white"
-          >
-            <FileText className="h-4 w-4" /> View site
-          </Link>
-          <button
-            type="button"
-            onClick={() => void supabase?.auth.signOut()}
-            className="flex w-full items-center justify-center gap-2 rounded-xl py-2 text-sm text-white/40 hover:text-orange"
-          >
-            <LogOut className="h-4 w-4" /> Sign out
-          </button>
         </div>
       </aside>
 
-      {/* Main */}
-      <div className="min-w-0 flex-1 overflow-y-auto">
-        <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-white/10 bg-[#070b14]/95 px-6 py-4 backdrop-blur">
-          <div>
-            <h2 className="font-display text-2xl font-bold">
-              {tabs.find((t) => t.id === tab)?.label}
-            </h2>
-            <p className="text-sm text-white/40">
-              {adminLocale === 'uz' ? t('admin.editingUz') : t('admin.editingEn')}
-            </p>
+      <div className="min-w-0 flex-1">
+        <header className="sticky top-0 z-10 border-b border-line bg-white/90 backdrop-blur-md">
+          <div className="flex items-center justify-between gap-4 px-5 py-4 sm:px-8">
+            <div className="min-w-0">
+              <h1 className="truncate text-2xl font-bold tracking-tight">{activeTab?.label}</h1>
+              <p className="mt-0.5 text-sm text-ink-soft">
+                {adminLocale === 'uz' ? t('admin.editingUz') : t('admin.editingEn')}
+              </p>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                onClick={() => void refresh()}
+                className="press hidden h-10 items-center gap-2 rounded-xl border border-line bg-white px-4 text-sm font-semibold text-ink hover:border-ink-faint sm:inline-flex"
+              >
+                <RotateCcw className="h-4 w-4" /> Reload
+              </button>
+              <button
+                type="button"
+                onClick={() => void handleSave()}
+                disabled={saving}
+                className="press inline-flex h-10 items-center gap-2 rounded-xl bg-blue px-4 text-sm font-semibold text-white hover:bg-blue-hover disabled:opacity-60"
+              >
+                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                {saving ? t('admin.saving') : t('admin.save')}
+              </button>
+            </div>
           </div>
-          <button
-            type="button"
-            onClick={() => void refresh()}
-            className="rounded-full border border-white/15 px-4 py-2 text-sm text-white/60 hover:text-white"
-          >
-            Reload
-          </button>
+
+          {/* Phones and tablets: sections + language under the header */}
+          <div className="space-y-3 border-t border-line px-5 py-3 sm:px-8 lg:hidden">
+            <div className="-mx-5 flex gap-1.5 overflow-x-auto px-5 sm:-mx-8 sm:px-8">
+              {tabs.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setTab(item.id)}
+                  className={`press shrink-0 rounded-lg px-3 py-1.5 text-sm font-semibold ${
+                    tab === item.id ? 'bg-navy text-white' : 'bg-tint text-ink-soft'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <div className="w-48">{localeSwitch}</div>
+              <button
+                type="button"
+                onClick={() => void supabase?.auth.signOut()}
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink-soft hover:text-accent-ink"
+              >
+                <LogOut className="h-4 w-4" /> Sign out
+              </button>
+            </div>
+          </div>
         </header>
 
-        <div className="space-y-6 px-6 py-6">
+        <div className="mx-auto max-w-5xl space-y-6 px-5 py-8 sm:px-8">
           {status && (
             <p
-              className={`rounded-xl border px-4 py-3 text-sm ${
-                status.startsWith('Error') || status.startsWith('Upload')
-                  ? 'border-orange/40 text-orange'
-                  : 'border-teal/30 bg-teal/5 text-teal'
+              role="status"
+              className={`rounded-xl border px-4 py-3 text-[15px] font-medium ${
+                isError ? 'border-accent/30 bg-accent-soft text-accent-ink' : 'border-blue/20 bg-blue-soft text-blue'
               }`}
             >
               {status}
@@ -701,7 +695,7 @@ export function AdminPage() {
           )}
 
           {tab === 'hero' && (
-            <Panel title="Homepage hero" description="First screen visitors see.">
+            <Panel title="Homepage hero" description="Headline, subtitle and the large photo at the top of the homepage.">
               <div className="grid gap-4 sm:grid-cols-2">
                 <Field
                   label="Line 1"
@@ -734,7 +728,7 @@ export function AdminPage() {
                 />
                 <div className="sm:col-span-2">
                   <ImageField
-                    label="Background image (fallback)"
+                    label="Hero photo (large, right side)"
                     value={draft.hero.backgroundImage}
                     onChange={(v) =>
                       setDraft({
@@ -759,7 +753,7 @@ export function AdminPage() {
                   <VideoField
                     label="Background video"
                     value={draft.hero.backgroundVideo}
-                    hint="If set, video plays instead of the image. Prefer short muted MP4 under ~40MB."
+                    hint="Optional. If set, this muted video plays in place of the hero photo. Keep it short (MP4 under ~40MB)."
                     onChange={(v) =>
                       setDraft({
                         ...draft,
@@ -867,7 +861,7 @@ export function AdminPage() {
           {tab === 'who' && (
             <Panel
               title="Who We Are"
-              description="Homepage section texts and photos."
+              description="The “What we do” intro on the homepage and the two story photos on the About page."
             >
               <div className="grid gap-4 sm:grid-cols-2">
                 <Field
@@ -901,50 +895,8 @@ export function AdminPage() {
                   }
                   rows={4}
                 />
-                <Field
-                  label="Mission"
-                  value={draft.whoWeAre.mission}
-                  onChange={(v) =>
-                    setDraft({
-                      ...draft,
-                      whoWeAre: { ...draft.whoWeAre, mission: v },
-                    })
-                  }
-                  rows={3}
-                />
-                <Field
-                  label="Story"
-                  value={draft.whoWeAre.story}
-                  onChange={(v) =>
-                    setDraft({
-                      ...draft,
-                      whoWeAre: { ...draft.whoWeAre, story: v },
-                    })
-                  }
-                  rows={3}
-                />
-                <Field
-                  label="Badge value"
-                  value={draft.whoWeAre.badgeValue}
-                  onChange={(v) =>
-                    setDraft({
-                      ...draft,
-                      whoWeAre: { ...draft.whoWeAre, badgeValue: v },
-                    })
-                  }
-                />
-                <Field
-                  label="Badge label"
-                  value={draft.whoWeAre.badgeLabel}
-                  onChange={(v) =>
-                    setDraft({
-                      ...draft,
-                      whoWeAre: { ...draft.whoWeAre, badgeLabel: v },
-                    })
-                  }
-                />
                 <ImageField
-                  label="Top photo"
+                  label="About page — story photo 1"
                   value={draft.whoWeAre.photoTop}
                   onChange={(v) =>
                     setDraft({
@@ -965,7 +917,7 @@ export function AdminPage() {
                   }
                 />
                 <ImageField
-                  label="Bottom photo"
+                  label="About page — story photo 2"
                   value={draft.whoWeAre.photoBottom}
                   onChange={(v) =>
                     setDraft({
@@ -991,7 +943,7 @@ export function AdminPage() {
 
           {tab === 'team' && (
             <div className="space-y-6">
-              <Panel title="Leads" description="Founder & Project Manager row.">
+              <Panel title="Leads" description="Shown large on the homepage and About page.">
                 <div className="grid gap-4 lg:grid-cols-2">
                   {draft.teamLeads.map((member, i) => (
                     <TeamEditor
@@ -1037,7 +989,7 @@ export function AdminPage() {
                       ],
                     }))
                   }
-                  className="mt-4 inline-flex items-center gap-2 text-sm text-teal"
+                  className="mt-5 press inline-flex items-center gap-1.5 rounded-lg border border-dashed border-blue/40 px-3.5 py-2 text-sm font-semibold text-blue hover:bg-blue-soft"
                 >
                   <Plus className="h-4 w-4" /> Add lead
                 </button>
@@ -1093,7 +1045,7 @@ export function AdminPage() {
                       ],
                     }))
                   }
-                  className="mt-4 inline-flex items-center gap-2 text-sm text-teal"
+                  className="mt-5 press inline-flex items-center gap-1.5 rounded-lg border border-dashed border-blue/40 px-3.5 py-2 text-sm font-semibold text-blue hover:bg-blue-soft"
                 >
                   <Plus className="h-4 w-4" /> Add member
                 </button>
@@ -1112,10 +1064,10 @@ export function AdminPage() {
                     key={p.id}
                     type="button"
                     onClick={() => setProjectId(p.id)}
-                    className={`rounded-full px-3 py-1.5 text-sm transition ${
+                    className={`press rounded-lg px-3.5 py-2 text-sm font-semibold transition ${
                       selectedProject?.id === p.id
-                        ? 'bg-indigo text-white'
-                        : 'border border-white/15 text-white/60 hover:text-white'
+                        ? 'bg-navy text-white'
+                        : 'border border-line bg-white text-ink-soft hover:text-ink'
                     }`}
                   >
                     {p.title}
@@ -1124,14 +1076,14 @@ export function AdminPage() {
                 <button
                   type="button"
                   onClick={addProject}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-teal/50 px-3 py-1.5 text-sm text-teal hover:bg-teal/10"
+                  className="press inline-flex items-center gap-1.5 rounded-lg border border-dashed border-blue/40 px-3.5 py-2 text-sm font-semibold text-blue hover:bg-blue-soft"
                 >
                   <Plus className="h-4 w-4" /> Add project
                 </button>
               </div>
 
               {!selectedProject ? (
-                <p className="text-sm text-white/50">
+                <p className="text-ink-soft">
                   No projects yet. Click “Add project”.
                 </p>
               ) : (
@@ -1204,9 +1156,9 @@ export function AdminPage() {
                     </div>
                     <div className="sm:col-span-2">
                       <VideoField
-                        label="Background video (inside — project page)"
+                        label="Video (project page, next to the title)"
                         value={selectedProject.backgroundVideo ?? ''}
-                        hint="Shown only on the project detail page. The cover photo is always used on the projects list."
+                        hint="Plays with controls next to the project title. Cards on the Projects page always use the cover photo."
                         onChange={(v) => updateProject({ backgroundVideo: v })}
                         onUpload={(file) =>
                           handleUpload(
@@ -1220,12 +1172,12 @@ export function AdminPage() {
                   </div>
 
                   <div>
-                    <h3 className="font-display text-lg font-bold">Gallery</h3>
+                    <h3 className="text-lg font-bold tracking-tight">Gallery</h3>
                     <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                       {(selectedProject.gallery ?? []).map((src, i) => (
                         <div
                           key={`${src}-${i}`}
-                          className="rounded-xl border border-white/10 p-2"
+                          className="rounded-xl border border-line bg-white p-2"
                         >
                           <img
                             src={src}
@@ -1241,14 +1193,14 @@ export function AdminPage() {
                                 ),
                               })
                             }
-                            className="mt-2 inline-flex items-center gap-1 text-xs text-orange"
+                            className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-accent-ink hover:underline"
                           >
                             <Trash2 className="h-3 w-3" /> Remove
                           </button>
                         </div>
                       ))}
                     </div>
-                    <label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/15 px-3 py-2 text-sm text-white/70">
+                    <label className="mt-3 press inline-flex cursor-pointer items-center gap-2 rounded-xl border border-line bg-white px-3.5 py-2 text-sm font-semibold text-ink hover:border-ink-faint">
                       <ImagePlus className="h-4 w-4" /> Add gallery photo
                       <input
                         type="file"
@@ -1295,123 +1247,9 @@ export function AdminPage() {
                       })
                       setStatus('Project removed — click Save to publish.')
                     }}
-                    className="inline-flex items-center gap-2 rounded-full border border-orange/40 px-4 py-2 text-sm text-orange"
+                    className="press inline-flex items-center gap-2 rounded-xl border border-accent/30 bg-white px-4 py-2.5 text-sm font-semibold text-accent-ink hover:bg-accent-soft"
                   >
                     <Trash2 className="h-4 w-4" /> Delete this project
-                  </button>
-                </div>
-              )}
-            </Panel>
-          )}
-
-          {tab === 'events' && (
-            <Panel
-              title="Events"
-              description="Opening, guest talks, weekly meetings, ceremonies."
-            >
-              <div className="mb-5 flex flex-wrap items-center gap-2">
-                {draft.events.map((e) => (
-                  <button
-                    key={e.id}
-                    type="button"
-                    onClick={() => setEventId(e.id)}
-                    className={`rounded-full px-3 py-1.5 text-sm transition ${
-                      selectedEvent?.id === e.id
-                        ? 'bg-indigo text-white'
-                        : 'border border-white/15 text-white/60 hover:text-white'
-                    }`}
-                  >
-                    {e.title}
-                  </button>
-                ))}
-                <button
-                  type="button"
-                  onClick={addEvent}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-teal/50 px-3 py-1.5 text-sm text-teal hover:bg-teal/10"
-                >
-                  <Plus className="h-4 w-4" /> Add event
-                </button>
-              </div>
-
-              {!selectedEvent ? (
-                <p className="text-sm text-white/50">No events yet.</p>
-              ) : (
-                <div className="space-y-4">
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <Field
-                      label="Title"
-                      value={selectedEvent.title}
-                      onChange={(v) => updateEvent({ title: v })}
-                    />
-                    <Field
-                      label="Type"
-                      value={selectedEvent.type}
-                      onChange={(v) => updateEvent({ type: v })}
-                      hint="Ceremony, Talk, Meeting…"
-                    />
-                    <Field
-                      label="Date label"
-                      value={selectedEvent.date}
-                      onChange={(v) => updateEvent({ date: v })}
-                    />
-                    <Field
-                      label="Time"
-                      value={selectedEvent.time}
-                      onChange={(v) => updateEvent({ time: v })}
-                    />
-                    <Field
-                      label="Location"
-                      value={selectedEvent.location}
-                      onChange={(v) => updateEvent({ location: v })}
-                    />
-                    <label className="flex items-center gap-3 rounded-xl border border-white/10 bg-[#0b1220] px-3 py-3 text-sm text-white/70">
-                      <input
-                        type="checkbox"
-                        checked={Boolean(selectedEvent.featured)}
-                        onChange={(e) =>
-                          updateEvent({ featured: e.target.checked })
-                        }
-                        className="h-4 w-4 accent-teal"
-                      />
-                      Featured on Events page
-                    </label>
-                    <div className="sm:col-span-2">
-                      <Field
-                        label="Description"
-                        value={selectedEvent.description}
-                        onChange={(v) => updateEvent({ description: v })}
-                        rows={4}
-                      />
-                    </div>
-                    <div className="sm:col-span-2">
-                      <ImageField
-                        label="Cover photo"
-                        value={selectedEvent.cover}
-                        onChange={(v) => updateEvent({ cover: v })}
-                        onUpload={(file) =>
-                          handleUpload(
-                            file,
-                            (url) => updateEvent({ cover: url }),
-                            `events/${selectedEvent.id}`,
-                          )
-                        }
-                      />
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const id = selectedEvent.id
-                      setDraft((d) => {
-                        const events = d.events.filter((e) => e.id !== id)
-                        setEventId(events[0]?.id ?? '')
-                        return { ...d, events }
-                      })
-                      setStatus('Event removed — click Save to publish.')
-                    }}
-                    className="inline-flex items-center gap-2 rounded-full border border-orange/40 px-4 py-2 text-sm text-orange"
-                  >
-                    <Trash2 className="h-4 w-4" /> Delete this event
                   </button>
                 </div>
               )}
@@ -1421,7 +1259,7 @@ export function AdminPage() {
           {tab === 'challenges' && (
             <Panel
               title="Challenge seasons"
-              description="Edit Season 1, Season 2, Season 3… stories, stats, and covers."
+              description="Season stories and results. Public pages show completion and satisfaction as percentages, not headcounts."
             >
               <div className="mb-5 flex flex-wrap items-center gap-2">
                 {draft.seasons.map((s) => (
@@ -1429,10 +1267,10 @@ export function AdminPage() {
                     key={s.id}
                     type="button"
                     onClick={() => setSeasonId(s.id)}
-                    className={`rounded-full px-3 py-1.5 text-sm transition ${
+                    className={`press rounded-lg px-3.5 py-2 text-sm font-semibold transition ${
                       selectedSeason?.id === s.id
-                        ? 'bg-indigo text-white'
-                        : 'border border-white/15 text-white/60 hover:text-white'
+                        ? 'bg-navy text-white'
+                        : 'border border-line bg-white text-ink-soft hover:text-ink'
                     }`}
                   >
                     {s.title}
@@ -1441,14 +1279,14 @@ export function AdminPage() {
                 <button
                   type="button"
                   onClick={addSeason}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-teal/50 px-3 py-1.5 text-sm text-teal hover:bg-teal/10"
+                  className="press inline-flex items-center gap-1.5 rounded-lg border border-dashed border-blue/40 px-3.5 py-2 text-sm font-semibold text-blue hover:bg-blue-soft"
                 >
                   <Plus className="h-4 w-4" /> Add season
                 </button>
               </div>
 
               {!selectedSeason ? (
-                <p className="text-sm text-white/50">No seasons yet.</p>
+                <p className="text-ink-soft">No seasons yet.</p>
               ) : (
                 <div className="space-y-4">
                   <div className="grid gap-4 sm:grid-cols-2">
@@ -1579,7 +1417,7 @@ export function AdminPage() {
                       })
                       setStatus('Season removed — click Save to publish.')
                     }}
-                    className="inline-flex items-center gap-2 rounded-full border border-orange/40 px-4 py-2 text-sm text-orange"
+                    className="press inline-flex items-center gap-2 rounded-xl border border-accent/30 bg-white px-4 py-2.5 text-sm font-semibold text-accent-ink hover:bg-accent-soft"
                   >
                     <Trash2 className="h-4 w-4" /> Delete this season
                   </button>
@@ -1599,10 +1437,10 @@ export function AdminPage() {
                     key={g.id}
                     type="button"
                     onClick={() => setGalleryIndex(i)}
-                    className={`max-w-[10rem] truncate rounded-full px-3 py-1.5 text-sm ${
+                    className={`press max-w-[12rem] truncate rounded-lg px-3.5 py-2 text-sm font-semibold ${
                       galleryIndex === i
-                        ? 'bg-indigo text-white'
-                        : 'border border-white/15 text-white/60'
+                        ? 'bg-navy text-white'
+                        : 'border border-line bg-white text-ink-soft hover:text-ink'
                     }`}
                   >
                     {g.label || `Item ${i + 1}`}
@@ -1624,14 +1462,14 @@ export function AdminPage() {
                     setGalleryIndex(draft.gallery.length)
                     setStatus('Gallery item added — upload media, then Save.')
                   }}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-teal/50 px-3 py-1.5 text-sm text-teal"
+                  className="press inline-flex items-center gap-1.5 rounded-lg border border-dashed border-blue/40 px-3.5 py-2 text-sm font-semibold text-blue hover:bg-blue-soft"
                 >
                   <Plus className="h-4 w-4" /> Add item
                 </button>
               </div>
 
               {!selectedGallery ? (
-                <p className="text-sm text-white/50">
+                <p className="text-ink-soft">
                   No extra gallery items yet. Project media still appears on the
                   site automatically.
                 </p>
@@ -1643,7 +1481,7 @@ export function AdminPage() {
                     onChange={(v) => updateGalleryItem({ label: v })}
                   />
                   <label className="block space-y-1.5">
-                    <span className="text-xs font-medium tracking-wide text-white/45 uppercase">
+                    <span className="text-sm font-semibold text-ink">
                       Type
                     </span>
                     <select
@@ -1653,7 +1491,7 @@ export function AdminPage() {
                           type: e.target.value as GalleryItemType,
                         })
                       }
-                      className="w-full rounded-xl border border-white/10 bg-[#0b1220] px-3 py-2.5 text-sm text-white outline-none focus:border-teal/50"
+                      className="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-blue focus:ring-2 focus:ring-blue-soft"
                     >
                       <option value="photos">photos</option>
                       <option value="videos">videos</option>
@@ -1709,7 +1547,7 @@ export function AdminPage() {
                       setGalleryIndex(0)
                       setStatus('Gallery item removed — click Save to publish.')
                     }}
-                    className="inline-flex items-center gap-2 text-sm text-orange"
+                    className="press inline-flex items-center gap-2 rounded-xl border border-accent/30 bg-white px-4 py-2.5 text-sm font-semibold text-accent-ink hover:bg-accent-soft"
                   >
                     <Trash2 className="h-4 w-4" /> Delete this item
                   </button>
@@ -1729,10 +1567,10 @@ export function AdminPage() {
                     key={`${t.name}-${i}`}
                     type="button"
                     onClick={() => setVoiceIndex(i)}
-                    className={`max-w-[10rem] truncate rounded-full px-3 py-1.5 text-sm ${
+                    className={`press max-w-[12rem] truncate rounded-lg px-3.5 py-2 text-sm font-semibold ${
                       voiceIndex === i
-                        ? 'bg-indigo text-white'
-                        : 'border border-white/15 text-white/60'
+                        ? 'bg-navy text-white'
+                        : 'border border-line bg-white text-ink-soft hover:text-ink'
                     }`}
                   >
                     {t.name || `Voice ${i + 1}`}
@@ -1755,14 +1593,14 @@ export function AdminPage() {
                     setVoiceIndex(draft.testimonials.length)
                     setStatus('New voice added — edit, then Save.')
                   }}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-teal/50 px-3 py-1.5 text-sm text-teal"
+                  className="press inline-flex items-center gap-1.5 rounded-lg border border-dashed border-blue/40 px-3.5 py-2 text-sm font-semibold text-blue hover:bg-blue-soft"
                 >
                   <Plus className="h-4 w-4" /> Add voice
                 </button>
               </div>
 
               {!selectedVoice ? (
-                <p className="text-sm text-white/50">No voices yet.</p>
+                <p className="text-ink-soft">No voices yet.</p>
               ) : (
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field
@@ -1779,7 +1617,7 @@ export function AdminPage() {
                     label="Season ID"
                     value={selectedVoice.seasonId}
                     onChange={(v) => updateVoice({ seasonId: v })}
-                    hint="Use season-1 or season-2"
+                    hint="Which season page shows this quote, e.g. season-1"
                   />
                   <Field
                     label="Rating (1–5)"
@@ -1810,7 +1648,7 @@ export function AdminPage() {
                       setVoiceIndex(0)
                       setStatus('Voice removed — click Save to publish.')
                     }}
-                    className="inline-flex items-center gap-2 text-sm text-orange"
+                    className="press inline-flex items-center gap-2 rounded-xl border border-accent/30 bg-white px-4 py-2.5 text-sm font-semibold text-accent-ink hover:bg-accent-soft"
                   >
                     <Trash2 className="h-4 w-4" /> Delete this voice
                   </button>
@@ -1820,12 +1658,12 @@ export function AdminPage() {
           )}
 
           {tab === 'stats' && (
-            <Panel title="Stats" description="Homepage number counters.">
+            <Panel title="Stats" description="The four numbers in the homepage hero.">
               <div className="grid gap-4 sm:grid-cols-2">
                 {draft.stats.map((stat, i) => (
                   <div
                     key={i}
-                    className="space-y-3 rounded-2xl border border-white/10 p-4"
+                    className="space-y-3 rounded-2xl border border-line bg-tint p-4"
                   >
                     <Field
                       label="Label"
@@ -1885,7 +1723,7 @@ function TeamEditor({
   compact?: boolean
 }) {
   return (
-    <div className="space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+    <div className="space-y-3 rounded-2xl border border-line bg-tint p-4">
       {member.photo ? (
         <img
           src={member.photo}
@@ -1912,7 +1750,7 @@ function TeamEditor({
         />
       )}
       <div className="flex flex-wrap gap-2">
-        <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/15 px-3 py-1.5 text-xs text-white/70">
+        <label className="press inline-flex cursor-pointer items-center gap-2 rounded-xl border border-line bg-white px-3.5 py-2 text-sm font-semibold text-ink hover:border-ink-faint">
           <ImagePlus className="h-3.5 w-3.5" /> Photo
           <input
             type="file"
@@ -1928,7 +1766,7 @@ function TeamEditor({
         <button
           type="button"
           onClick={onRemove}
-          className="inline-flex items-center gap-1 text-xs text-orange"
+          className="inline-flex items-center gap-1 text-sm font-semibold text-accent-ink hover:underline"
         >
           <Trash2 className="h-3 w-3" /> Remove
         </button>

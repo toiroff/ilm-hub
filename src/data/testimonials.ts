@@ -4,9 +4,28 @@ export type Testimonial = {
   quote: string
   seasonId: string
   rating: number
+  /** Where the participant shared it publicly (e.g. a LinkedIn post) */
+  link?: string
 }
 
 export const testimonials: Testimonial[] = [
+  {
+    name: 'Nargiza Keldiyeva',
+    role: 'Season 3 Graduate',
+    seasonId: 'season-3',
+    quote:
+      'ILM Mode S3 wasn’t just a project — I discovered a new me. I forgot about “I’ll do it tomorrow”, and that is my biggest achievement. After the 21-day challenge I have useful habits and I divide my time easily. Thank you so, so much!',
+    rating: 5,
+  },
+  {
+    name: 'Murodbek Tuychiyev',
+    role: 'Season 3 Participant',
+    seasonId: 'season-3',
+    quote:
+      'This project didn’t just strengthen my discipline — it made my approach to studying more systematic. The suggestions, tasks and mentors’ guidance during the challenge were especially useful. Most importantly, participants support each other and work on their goals every day. ILM Mode isn’t just a challenge, it’s a great environment for growth.',
+    rating: 5,
+    link: 'https://www.linkedin.com/posts/murodbektuychiyev_ilm-mode-challenge-haqida-qisqacha-fikrim-activity-7504424112824610816-Da15',
+  },
   {
     name: 'Vahhobova Mubinaxon',
     role: 'Season 1 Graduate',

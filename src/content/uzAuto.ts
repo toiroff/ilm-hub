@@ -1,4 +1,4 @@
-import type { Project, Season, Challenge, EventItem } from '../data/content'
+import type { Project, Season, Challenge } from '../data/content'
 import type { TeamMember } from '../data/team'
 import type { Testimonial } from '../data/testimonials'
 import type { SiteContent, SiteStat, ChallengeWeek, GalleryItem } from './types'
@@ -36,9 +36,6 @@ export function buildAutoUzbek(en: SiteContent): SiteContent {
           (x) => x.name === t.name && x.seasonId === t.seasonId,
         ) ?? catalog.testimonials[i],
       ),
-    ),
-    events: en.events.map((e) =>
-      localizeEvent(e, catalog.events.find((x) => x.id === e.id)),
     ),
     challenges: en.challenges.map((c) =>
       localizeChallenge(c, catalog.challenges.find((x) => x.id === c.id)),
@@ -99,6 +96,7 @@ function localizeProject(en: Project, uz?: Project): Project {
     featured: en.featured,
     schedule: en.schedule ?? uz.schedule,
     scheduleImage: en.scheduleImage ?? uz.scheduleImage,
+    speakers: uz.speakers ?? en.speakers,
   }
 }
 
@@ -125,6 +123,8 @@ function translateSeasonLabel(s: string): string {
     'Season 1': '1-mavsum',
     'Season 2': '2-mavsum',
     'Season 3': '3-mavsum',
+    'Spring 2025': '2025-yil bahor',
+    'College admissions': 'Universitetga kirish',
   }
   return map[s] ?? s
 }
@@ -144,6 +144,8 @@ function localizeTestimonial(en: Testimonial, uz?: Testimonial): Testimonial {
         .replace('Season 1 Graduate', '1-mavsum bitiruvchisi')
         .replace('Season 2 Graduate', '2-mavsum bitiruvchisi')
         .replace('Season 2 Participant', '2-mavsum ishtirokchisi')
+        .replace('Season 3 Graduate', '3-mavsum bitiruvchisi')
+        .replace('Season 3 Participant', '3-mavsum ishtirokchisi')
         .replace('21-Day Discipline Challenge', '21 kunlik intizom challenge'),
     }
   }
@@ -152,25 +154,6 @@ function localizeTestimonial(en: Testimonial, uz?: Testimonial): Testimonial {
     role: uz.role,
     quote: uz.quote,
   }
-}
-
-function localizeEvent(en: EventItem, uz?: EventItem): EventItem {
-  if (!uz) return { ...en, type: translateEventType(en.type) }
-  return {
-    ...uz,
-    id: en.id,
-    cover: en.cover,
-    featured: en.featured,
-  }
-}
-
-function translateEventType(t: string): string {
-  const map: Record<string, string> = {
-    Ceremony: 'Marosim',
-    Talk: 'Suhbat',
-    Meeting: 'Uchrashuv',
-  }
-  return map[t] ?? t
 }
 
 function localizeChallenge(en: Challenge, uz?: Challenge): Challenge {

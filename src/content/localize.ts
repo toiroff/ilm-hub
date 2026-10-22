@@ -46,7 +46,10 @@ export function mergeContent(
   const root = structuredClone(base)
   if (!raw || typeof raw !== 'object') return root
   const data = raw as Partial<SiteContent>
-  const projects = (data.projects ?? root.projects).map(normalizeProject)
+  // Projects saved before a field existed (e.g. speakers) fall back to the default project with the same id
+  const projects = (data.projects ?? root.projects).map((p) =>
+    normalizeProject({ speakers: root.projects.find((d) => d.id === p.id)?.speakers, ...p }),
+  )
   const galleryRaw = data.gallery ?? root.gallery
   const gallery = (Array.isArray(galleryRaw) ? galleryRaw : [])
     .map(normalizeGalleryItem)
@@ -62,7 +65,6 @@ export function mergeContent(
     projects,
     stats: data.stats ?? root.stats,
     testimonials: data.testimonials ?? root.testimonials,
-    events: data.events ?? root.events,
     challenges: data.challenges ?? root.challenges,
     challengeWeeks: data.challengeWeeks ?? root.challengeWeeks,
     seasons: data.seasons ?? root.seasons,

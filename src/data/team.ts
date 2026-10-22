@@ -2,7 +2,7 @@ export type JourneyItem = {
   period: string
   title: string
   detail: string
-  type: 'project' | 'community' | 'challenge' | 'upcoming'
+  type: 'project' | 'community' | 'challenge' | 'latest'
 }
 
 export const journeyTimeline: JourneyItem[] = [
@@ -21,39 +21,46 @@ export const journeyTimeline: JourneyItem[] = [
     type: 'community',
   },
   {
-    period: 'May – June 2025',
+    period: 'May 2025',
     title: 'IT Bootcamp',
     detail:
-      'A hands-on technology bootcamp where students built digital skills through workshops and team mini-projects.',
+      'Three IT speakers on AI, Python and Frontend — then a roadmap and daily tasks for learning Frontend and Backend.',
     type: 'project',
   },
   {
     period: 'November 6, 2025',
     title: 'ILM Hub Camp S3',
     detail:
-      'A full community camp — workshops, bonding, and celebration beyond the challenge format.',
+      'A college admissions camp in Fergana — study abroad sessions, grant advice, networking and certificates.',
     type: 'project',
   },
   {
     period: 'January 2026',
     title: 'Challenge Season 1',
     detail:
-      'Our first Discipline Challenge — 40 participants, 28 graduates who proved themselves as disciplined learners.',
+      'Our first Discipline Challenge — 70% of participants graduated as disciplined learners.',
     type: 'challenge',
   },
   {
     period: 'February – March 2026',
     title: 'Challenge Season 2',
     detail:
-      'A selective season of 20 committed participants — 15 graduated after 21 days of focused habit building.',
+      'A selective season of committed participants — 75% graduated after 21 days of focused habit building.',
     type: 'challenge',
   },
   {
     period: 'July 2026',
-    title: 'Season 3 is coming',
+    title: 'Challenge Season 3',
     detail:
-      'ILM Mode Challenge Season 3 opens next — tracks in IELTS, SAT, IT (No-coding), and Biology.',
-    type: 'upcoming',
+      'The third ILM Mode season, with tracks in IELTS, SAT, IT (No-coding), and Biology.',
+    type: 'challenge',
+  },
+  {
+    period: 'Autumn 2026',
+    title: 'Habit Zone app',
+    detail:
+      'Our own habit app for Android — 40 ready-made challenges, points, streaks, groups and rankings. Free, with no ads.',
+    type: 'latest',
   },
 ]
 
@@ -72,13 +79,6 @@ export const teamLeads: TeamMember[] = [
     photo: '/assets/team-muhammadumar.png',
     lead: true,
     bio: 'Leads ILM Hub’s vision — from Telegram posts to camps and challenges that help students build discipline across Uzbekistan.',
-  },
-  {
-    name: 'Siddiqjonov Suhrobbek',
-    role: 'Project Manager',
-    photo: '/assets/team-suhrobbek.png',
-    lead: true,
-    bio: 'Manages ILM Hub programs and operations, supporting every season from planning to graduation.',
   },
 ]
 

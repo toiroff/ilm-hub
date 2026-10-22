@@ -1,34 +1,37 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { ArrowRight, Globe2 } from 'lucide-react'
-import { SEASON3_APPLY_URL } from '../lib/links'
+import { HABIT_ZONE_DOWNLOAD_URL } from '../lib/links'
 import { useLocale } from '../i18n/locale'
+
+type FooterLink = { label: string; to?: string; href?: string }
 
 export function Footer() {
   const navigate = useNavigate()
   const { t, locale } = useLocale()
+  const uz = locale === 'uz'
 
-  const footerLinks = [
+  const columns: { title: string; items: FooterLink[] }[] = [
     {
       title: t('footer.explore'),
       items: [
-        { label: t('nav.about'), to: '/about' },
         { label: t('nav.challenges'), to: '/challenges' },
+        { label: t('nav.habitZone'), to: '/habit-zone' },
         { label: t('nav.projects'), to: '/projects' },
-        { label: t('nav.events'), to: '/events' },
+        { label: t('nav.gallery'), to: '/gallery' },
       ],
     },
     {
-      title: locale === 'uz' ? 'Jamiyat' : 'Community',
+      title: 'ILM Hub',
       items: [
-        {
-          label: locale === 'uz' ? 'Fikrlar' : 'Testimonials',
-          to: '/#testimonials',
-        },
-        { label: t('nav.gallery'), to: '/gallery' },
-        {
-          label: locale === 'uz' ? 'Roʻyxat' : 'Register',
-          to: '/register',
-        },
+        { label: t('nav.about'), to: '/about' },
+        { label: uz ? 'Jamoa' : 'Team', to: '/about#team' },
+        { label: uz ? 'Keyingi mavsum' : 'Next season', to: '/register' },
+      ],
+    },
+    {
+      title: t('footer.connect'),
+      items: [
+        { label: t('footer.downloadApp'), href: HABIT_ZONE_DOWNLOAD_URL },
+        { label: 'hello@ilmhub.community', href: 'mailto:hello@ilmhub.community' },
       ],
     },
   ]
@@ -40,88 +43,61 @@ export function Footer() {
   }
 
   return (
-    <footer className="relative border-t border-white/10 bg-navy-deep">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(24,190,188,0.08),transparent_50%)]" />
-      <div className="section-pad relative mx-auto max-w-7xl py-16 lg:py-20">
-        <div className="grid gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-5">
-            <Link
-              to="/"
-              onClick={(e) => {
-                e.preventDefault()
-                goHome()
-              }}
-              className="inline-flex items-center gap-3"
-            >
-              <img
-                src="/assets/logo-wordmark.png"
-                alt="ILM Hub"
-                className="h-12 object-contain"
-              />
-            </Link>
-            <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/55">
-              {locale === 'uz'
-                ? 'Litsey oʻquvchilari va bitiruvchilarga Oʻzbekiston boʻylab intizom, izchillik va amaliy koʻnikmalar qurishga yordam beruvchi taʼlim tashabbusi.'
-                : 'An educational initiative helping high school students and graduates build discipline, consistency, and practical skills across Uzbekistan.'}
-            </p>
-            <a
-              href={SEASON3_APPLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gold transition hover:gap-3"
-            >
-              {t('footer.joinSeason')} <ArrowRight className="h-4 w-4" />
-            </a>
-          </div>
-
-          {footerLinks.map((group) => (
-            <div key={group.title} className="lg:col-span-2">
-              <h4 className="font-display text-sm font-semibold tracking-wide text-white">
-                {group.title}
-              </h4>
-              <ul className="mt-4 space-y-3">
-                {group.items.map((item) => (
-                  <li key={item.label}>
-                    <Link
-                      to={item.to}
-                      className="text-sm text-white/50 transition hover:text-teal"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-
-          <div className="lg:col-span-3">
-            <h4 className="font-display text-sm font-semibold tracking-wide text-white">
-              {t('footer.connect')}
-            </h4>
-            <p className="mt-4 text-sm text-white/50">
-              hello@ilmhub.community
-            </p>
-            <div className="mt-5 flex gap-3">
-              {['Instagram', 'LinkedIn', 'YouTube'].map((label) => (
-                <a
-                  key={label}
-                  href="#"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white/60 transition hover:border-teal/40 hover:text-teal"
-                  aria-label={label}
-                >
-                  <Globe2 className="h-4 w-4" />
-                </a>
-              ))}
-            </div>
-          </div>
+    <footer className="bg-navy-deep text-white">
+      <div className="container-page grid grid-cols-2 gap-x-6 gap-y-10 py-16 md:grid-cols-[1.5fr_repeat(3,1fr)] lg:py-20">
+        <div className="col-span-2 md:col-span-1">
+          <Link
+            to="/"
+            onClick={(e) => {
+              e.preventDefault()
+              goHome()
+            }}
+            className="inline-flex items-center gap-3"
+          >
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white">
+              <img src="/assets/logo-icon.png" alt="" className="h-8 w-8 object-contain" />
+            </span>
+            <span className="text-lg font-bold tracking-tight">ILM Hub</span>
+          </Link>
+          <p className="mt-5 max-w-[34ch] text-[15px] leading-relaxed text-white/60">
+            {uz
+              ? 'Litsey oʻquvchilari va bitiruvchilarga Oʻzbekiston boʻylab intizom, izchillik va amaliy koʻnikmalar qurishga yordam beruvchi taʼlim tashabbusi.'
+              : 'An educational initiative helping high school students and graduates build discipline, consistency, and practical skills across Uzbekistan.'}
+          </p>
         </div>
 
-        <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-8 text-xs text-white/35 sm:flex-row sm:items-center sm:justify-between">
+        {columns.map((col, i) => (
+          <div key={col.title + col.items[0].label} className={i === columns.length - 1 ? 'col-span-2 md:col-span-1' : ''}>
+            <p className="text-sm font-semibold text-white/40">{col.title}</p>
+            <ul className="mt-4 space-y-3">
+              {col.items.map((item) => (
+                <li key={item.label}>
+                  {item.to ? (
+                    <Link to={item.to} className="text-[15px] text-white/75 hover:text-white">
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <a
+                      href={item.href}
+                      className="text-[15px] break-words text-white/75 hover:text-white"
+                      {...(item.href?.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    >
+                      {item.label}
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <div className="container-page">
+        <div className="flex flex-col gap-2 border-t border-white/10 py-6 text-sm text-white/40 sm:flex-row sm:justify-between">
           <p>
-            © {new Date().getFullYear()} ILM Hub.{' '}
-            {locale === 'uz' ? 'Barcha huquqlar himoyalangan.' : 'All rights reserved.'}
+            © {new Date().getFullYear()} ILM Hub. {uz ? 'Barcha huquqlar himoyalangan.' : 'All rights reserved.'}
           </p>
-          <p>{locale === 'uz' ? 'Oʻrgan. Yarat. Ilhomlantir.' : 'Learn. Build. Inspire.'}</p>
+          <p>{uz ? 'Oʻrgan. Yarat. Ilhomlantir.' : 'Learn. Build. Inspire.'}</p>
         </div>
       </div>
     </footer>

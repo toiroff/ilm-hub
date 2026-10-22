@@ -40,17 +40,20 @@ After changing `.env`, restart `npm run dev`.
 
 ## Brand
 
-| Token | Value |
-|--------|--------|
-| Navy | `#0F172A` |
-| Teal | `#18bebc` |
-| Blue / Indigo | `#1E3A8A` / `#033d95` / indigo accents |
-| Gold | `#f6c744` |
-| Orange | `#f15a29` |
+Palette is derived from the logo and the ILM Hub app (`public/assets/app-home.png`): deep navy, confident blue, signature orange, cool light tint. Tokens live in `@theme` in `src/index.css`.
+
+| Token | Value | Use |
+|--------|--------|-----|
+| `canvas` / `tint` | `#FFFFFF` / `#F3F6FB` | Page / alternating section background |
+| `ink` / `ink-soft` / `ink-faint` | `#0B1220` / `#4A5468` / `#8A93A6` | Headings, body, captions |
+| `line` | `#E3E8F0` | Hairline dividers and borders |
+| `navy` / `navy-2` / `navy-deep` | `#0E1B3D` / `#172A57` / `#0A1430` | Dark sections (challenge, timeline, closing CTA), footer |
+| `blue` / `blue-hover` / `blue-soft` | `#2457D6` / `#1C47B4` / `#E8EEFC` | Primary buttons, headline accent words, links, focus |
+| `accent` / `accent-ink` / `accent-soft` | `#FF5E00` / `#B94400` / `#FFF1E8` | Orange accent: eyebrow marker, numbers, ceremonies, progress bars — never body text |
 
 Logos and static images live under `public/assets/`.
 
-Prefer expressive fonts already in the site (not default Inter/Roboto/Arial stacks). Keep dark navy aesthetic with teal/gold accents.
+Visual direction (Oct 2026 redesign, inspired by voicelab.uz, topcoachuni.com, unicraft.uz, openai.com): photo-led, editorial, confident. One typeface — **Onest** (renders the Uzbek ʻ natively) — bold and tightly tracked for headlines (`.h-display`, `.h-section`). Buttons are 12px-radius rectangles (`Button` variants `primary`, `secondary`, `inverse`, `ghost-inverse`). White / tint / navy sections alternate for rhythm; no gradients, glows or blobs. The home hero and `PageHeader` sit on a faint square grid (`.bg-grid`); the home hero shows one large + two small photos. The navbar turns into a floating rounded pill once the page scrolls (like voicelab.uz). Motion is limited to hover states and the FAQ accordion. `/admin` uses the same light style (white panels on `tint`, blue primary buttons, navy for the selected item, orange only for destructive actions) and still has no site Navbar/Footer.
 
 ## Project layout (important paths)
 
@@ -62,18 +65,23 @@ src/
     defaults.ts           # seed content from src/data/*
     ContentContext.tsx    # load/save/upload; merge with defaults
   data/
-    content.ts            # seasons, projects, events, challenges, stats…
+    content.ts            # seasons, projects, challenges, stats…
     team.ts               # team + journey timeline
     testimonials.ts       # voices
   lib/
     supabase.ts           # client; DEV uses Vite proxy /supabase-api
-    links.ts              # SEASON3_APPLY_URL (Google Form)
+    links.ts              # HABIT_ZONE_URL / _DOWNLOAD_URL / _PRIVACY_URL (Habit Zone site on Vercel)
+    tracks.ts             # challenge tracks list
   pages/
     admin/AdminPage.tsx   # CMS UI (left sidebar)
-    AboutPage.tsx, ChallengesPage.tsx, ProjectsPage.tsx, …
+    AboutPage.tsx, ChallengesPage.tsx, ProjectsPage.tsx, HabitZonePage.tsx, …
   components/
     MediaBackground.tsx   # image or looping muted video background
-    Hero.tsx, AboutStats.tsx, ChallengeSeasons.tsx, …
+    Hero.tsx              # headline + stats + photo bento (CMS hero image/video, Habit Zone tile)
+    HabitZone.tsx         # Phone (screenshot in a phone frame) + HabitZoneSection (homepage app section)
+    HomeSections.tsx      # WhatWeDo, Challenge (+ ChallengeCalendar), Seasons, FeaturedProject, Voices, Team, Faq, ClosingCta
+    PageHeader.tsx        # PageHeader (optional image / aside), SectionHeading, DetailRow
+    CoverImage.tsx        # image with branded fallback for dead URLs
 public/assets/            # static images (deploy with the site)
 supabase/setup.sql        # DB + storage RLS setup
 ADMIN.md                  # human setup checklist for Supabase
@@ -90,8 +98,9 @@ vite.config.ts            # Tailwind + /supabase-api proxy in dev
 | `/projects/:id` | Project detail (hero = **video** if set, else cover photo) |
 | `/challenges` | ILM Mode challenge + agenda + previous seasons |
 | `/seasons/:id` | Season story + season-specific voices |
-| `/events` | Agenda-style events |
-| `/register` | Season 3 apply → Google Form |
+| `/events` | Removed — redirects to `/challenges` |
+| `/register` | "Season 3 has ended" + what a season includes → Habit Zone (next-season applications not open) |
+| `/habit-zone` | Habit Zone app page (screens, points, groups); downloads go to the Habit Zone site |
 | `/admin` | Content admin (authenticated) |
 
 There is **no** separate `/team` route — team lives on About.
@@ -100,12 +109,18 @@ There is **no** separate `/team` route — team lives on About.
 
 - Geography: **Uzbekistan** (not global)
 - Students: **250+**
-- Challenge seasons completed: **2** (Season 3 upcoming)
-- Season 1 (Jan 2026): 40 participants, 28 graduates
-- Season 2 (Feb–Mar 2026): 20 selected, 15 graduates
-- Season 3: open / July 2026; apply URL in `src/lib/links.ts`
+- Challenge seasons completed: **3** (Season 3 ended; next season not announced — no apply link)
+- Season 1 (Jan 2026): 40 participants, 28 graduates — **70% completion**
+- Season 2 (Feb–Mar 2026): 20 selected, 15 graduates — **75% completion**
+- **Public pages show season results as rates (completion %, satisfaction %), never raw participant/graduate counts** (`SeasonRates` in `HomeSections.tsx`)
+- Team lead: Muhammadumar (Founder & CEO). Suhrob is no longer on the team — don't add him back
+- Season 3 voices: Nargiza Keldiyeva (Telegram) and Murodbek Tuychiyev (public LinkedIn post, linked via the optional testimonial `link`). The Challenges page shows a real Season 3 review sheet (`public/assets/challenge/daily-review-sheet.jpg`) with **names blurred** — it is private, never publish an unredacted copy
+- Season 3: July 2026, ended. Its results are not in `seasons` yet — add them in /admin → Seasons when known, never invent them
+- **Habit Zone**: ILM Hub's habit app (Android, free, no ads; iPhone in preparation). 40 challenges in 9 categories, 21 or 30 days; +5 per task, +10 perfect day, −15 missed day; days close 23:59 Tashkent. Source app: `Desktop/App`; its site: `Desktop/habit-zone-website` → https://habit-zone.vercel.app (hosts the APK). Screenshots copied to `public/assets/habit-zone/` — refresh them from that site's `assets/screens/*-light.png`
 - Tracks: IELTS, SAT, IT (No-coding), Biology
 - Major projects include: English Day Camp (Aug 2024, **30** participants), IT Bootcamp, ILM Hub Camp S3
+- IT Bootcamp: **May 2025**. Speakers: Elzodxon Sharofaddinov (founder of AISHA AI), Asadbek Rahimov (AI engineer & Python, 6+ yrs), Farrux Adxamov (frontend developer, 3+ yrs). After the session participants got a roadmap and daily tasks to learn Frontend and Backend. Speaker photos: `public/assets/projects/it-bootcamp/` (cropped from the event poster). Projects take an optional `speakers` list (shown on `/projects/:id`; data-only, no admin UI yet)
+- ILM HUB Camp S3: **Fergana, November 2025**, college admissions camp (Study in Europe/USA, foreign grants & El-yurt umidi, girls in IT, networking, pizza/coffee, certificates). Speakers: Saidamir Egamberdiev (FLEX’23, Clarkson University, founder of educateduz.com) and Gulnoza Xamidova (University of Aberdeen graduate; Fulbright TEA, ITEC, EYUF). Video + cover + gallery frames live in `public/assets/projects/ilm-hub-camp-s3/` (frames were captured from `camp-s3.mp4`)
 - This is an info/storytelling site, not an LMS
 
 ## Content architecture
@@ -132,7 +147,6 @@ When adding editable fields:
 - Who We Are (texts + photos)
 - Team (leads + members, photos)
 - Projects (CRUD; cover photo + detail video + gallery)
-- Events (CRUD)
 - **Seasons** (challenge seasons CRUD — not the whole “ILM Mode” challenge blob)
 - Voices (testimonials)
 - Stats
@@ -169,7 +183,7 @@ In development, Supabase calls go through Vite proxy path `/supabase-api` (see `
 | Surface | Media |
 |---------|--------|
 | **Outside** — `/projects` cards, “More projects” thumbnails | Always **cover photo** |
-| **Inside** — `/projects/:id` hero | **Video** if set; otherwise cover photo |
+| **Inside** — `/projects/:id` header | **Video** (with controls, beside the title) if set; otherwise cover photo |
 
 Do **not** put project videos on list cards.  
 Do **not** add background video to challenge seasons (image cover only).
@@ -182,10 +196,12 @@ Project galleries use natural image aspect ratios (masonry / no forced crop that
 
 When changing marketing pages:
 
-- One strong composition per first viewport; brand-forward
-- Avoid generic purple-on-white AI clichés, flat single-color only backgrounds, and card-heavy heroes
-- Prefer real community photos over stock when available
-- Match existing section patterns rather than inventing a new design system
+- Lead with real community photography, presented large (editorial image/text rows, bento grids) — never as tiny thumbnails, never stock
+- Use `PageHeader` for inner pages (pass `image` or `aside` for a split header), `DetailRow` for label/text content, and `ClosingCta` as the closing call to action
+- Alternate white / `tint` / `navy` sections; avoid repeated three-card grids and decorative shapes
+- Blue highlights one phrase per headline; orange is a small accent (eyebrow marker, numbers, ceremonies), not a fill
+- Stats come only from `content.stats` / seasons data — never invent numbers or quotes
+- New homepage copy goes through `src/i18n/messages.ts` (`home.*` keys) for EN + UZ
 - Mobile + desktop both matter
 
 ## Supabase setup (summary)

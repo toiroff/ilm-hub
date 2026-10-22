@@ -39,5 +39,5 @@ export function MediaBackground({
     )
   }
 
-  return <div className={`absolute inset-0 bg-navy-deep ${className}`} />
+  return <div className={`absolute inset-0 bg-tint ${className}`} />
 }
