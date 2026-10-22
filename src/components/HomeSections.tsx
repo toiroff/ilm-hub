@@ -74,8 +74,7 @@ export function WhatWeDo() {
                 <img src={row.image} alt={row.alt} className="aspect-[3/2] w-full object-cover" loading="lazy" />
               </div>
               <div className={`lg:col-span-5 ${i % 2 === 1 ? 'lg:order-1' : ''}`}>
-                <p className="text-[56px] leading-none font-bold tracking-[-0.05em] text-accent">0{i + 1}</p>
-                <h3 className="mt-4 text-[28px] leading-tight font-bold sm:text-[32px]">{row.title}</h3>
+                <h3 className="text-[28px] leading-tight font-bold sm:text-[32px]">{row.title}</h3>
                 <p className="mt-4 text-lg leading-relaxed text-ink-soft">{row.text}</p>
                 {row.extra}
                 <div className="mt-8">
