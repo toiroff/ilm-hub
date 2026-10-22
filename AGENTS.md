@@ -113,7 +113,7 @@ There is **no** separate `/team` route — team lives on About.
 - Season 1 (Jan 2026): 40 participants, 28 graduates — **70% completion**
 - Season 2 (Feb–Mar 2026): 20 selected, 15 graduates — **75% completion**
 - **Public pages show season results as rates (completion %, satisfaction %), never raw participant/graduate counts** (`SeasonRates` in `HomeSections.tsx`)
-- Team lead: Muhammadumar (Founder & CEO). Suhrob is no longer on the team — don't add him back
+- Main team (shown large, `LeadCard` in `src/components/Team.tsx`): Muhammadumar (Founder & CEO) and Anvarjon Xolmirzayev (Mentor & Finance). Suhrob is no longer on the team — don't add him back
 - Season 3 voices: Nargiza Keldiyeva (Telegram) and Murodbek Tuychiyev (public LinkedIn post, linked via the optional testimonial `link`). The Challenges page shows a real Season 3 review sheet (`public/assets/challenge/daily-review-sheet.jpg`) with **names blurred** — it is private, never publish an unredacted copy
 - Season 3: July 2026, ended. Its results are not in `seasons` yet — add them in /admin → Seasons when known, never invent them
 - **Habit Zone**: ILM Hub's habit app (Android, free, no ads; iPhone in preparation). 40 challenges in 9 categories, 21 or 30 days; +5 per task, +10 perfect day, −15 missed day; days close 23:59 Tashkent. Source app: `Desktop/App`; its site: `Desktop/habit-zone-website` → https://habit-zone.vercel.app (hosts the APK). Screenshots copied to `public/assets/habit-zone/` — refresh them from that site's `assets/screens/*-light.png`
@@ -152,6 +152,8 @@ When adding editable fields:
 - Stats
 
 Click **Save** to persist to Supabase. Content updates do not require a redeploy once Supabase is connected on the host.
+
+Saved content always replaces the built-in defaults. When defaults change in code (new people, projects, quotes…), use **Reset section** in the admin header to pull the built-in EN + UZ version of that section, then Save.
 
 ### Dev proxy note
 

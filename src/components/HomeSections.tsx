@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight, Check, Download, Plus } from 'lucide-react'
 import { Button } from './Button'
 import { CoverImage } from './CoverImage'
 import { Phone } from './HabitZone'
+import { LeadCard } from './Team'
 import { HABIT_ZONE_DOWNLOAD_URL } from '../lib/links'
 import { useSiteContent } from '../content/ContentContext'
 import { useLocale } from '../i18n/locale'
@@ -438,47 +439,43 @@ export function Voices() {
 export function Team() {
   const { content } = useSiteContent()
   const { t } = useLocale()
-  const solo = content.teamLeads.length === 1
 
   return (
     <section className="bg-white">
-      <div className="container-page grid gap-12 border-t border-line py-20 lg:grid-cols-12 lg:gap-16 lg:py-28">
-        <div className="lg:col-span-5">
-          <p className="eyebrow">{t('home.team.eyebrow')}</p>
-          <h2 className="h-section mt-5">{t('home.team.title')}</h2>
-          <p className="mt-6 text-lg leading-relaxed text-ink-soft">{t('home.team.text')}</p>
-          <ul className="mt-8 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
-            {content.teamMembers.slice(0, 6).map((m) => (
-              <li key={m.name} className="border-t border-line py-3">
-                <p className="font-semibold">{m.name}</p>
-                <p className="truncate text-sm text-ink-faint">{m.role}</p>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-8">
-            <TextLink to="/about#team">{t('home.team.link')}</TextLink>
+      <div className="container-page border-t border-line py-20 lg:py-28">
+        <div className="grid gap-6 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-7">
+            <p className="eyebrow">{t('home.team.eyebrow')}</p>
+            <h2 className="h-section mt-5">{t('home.team.title')}</h2>
           </div>
+          <p className="text-lg leading-relaxed text-ink-soft lg:col-span-5 lg:self-end">{t('home.team.text')}</p>
         </div>
-        <div className={`grid gap-4 lg:col-span-7 ${solo ? 'grid-cols-1' : 'grid-cols-2'}`}>
-          {content.teamLeads.map((lead, i) => (
-            <figure
-              key={lead.name}
-              className={solo ? 'grid items-end gap-6 sm:grid-cols-2 sm:gap-8' : i % 2 === 1 ? 'sm:mt-16' : ''}
-            >
-              <div className="aspect-[3/4] overflow-hidden rounded-2xl bg-tint">
-                {lead.photo ? (
-                  <img src={lead.photo} alt={lead.name} className="h-full w-full object-cover" loading="lazy" />
-                ) : (
-                  <div className="flex h-full items-center justify-center text-4xl font-bold">{initials(lead.name)}</div>
-                )}
-              </div>
-              <figcaption className={solo ? 'sm:pb-2' : 'mt-4'}>
-                <p className={`font-bold tracking-tight ${solo ? 'text-2xl' : 'text-lg'}`}>{lead.name}</p>
-                <p className="text-[15px] text-ink-soft">{lead.role}</p>
-                {solo && lead.bio && <p className="mt-4 text-lg leading-relaxed text-ink-soft">{lead.bio}</p>}
-              </figcaption>
-            </figure>
-          ))}
+
+        <div className="mt-12 grid gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="grid gap-4 sm:grid-cols-2 lg:col-span-8">
+            {content.teamLeads.map((lead) => (
+              <LeadCard key={lead.name} lead={lead} compact />
+            ))}
+          </div>
+          <div className="lg:col-span-4">
+            <p className="text-sm font-semibold text-ink-faint">{t('home.team.more')}</p>
+            <ul className="mt-3 border-t border-line">
+              {content.teamMembers.map((m) => (
+                <li key={m.name} className="flex items-center gap-3 border-b border-line py-3.5">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-navy text-xs font-bold text-white">
+                    {initials(m.name)}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block font-semibold">{m.name}</span>
+                    <span className="block text-sm text-ink-soft">{m.role}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-8">
+              <TextLink to="/about#team">{t('home.team.link')}</TextLink>
+            </div>
+          </div>
         </div>
       </div>
     </section>

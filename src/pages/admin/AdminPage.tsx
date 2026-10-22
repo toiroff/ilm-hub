@@ -12,6 +12,7 @@ import {
   MessageSquareQuote,
   Plus,
   RotateCcw,
+  Undo2,
   Save,
   Sparkles,
   Trash2,
@@ -21,6 +22,7 @@ import {
   Images,
 } from 'lucide-react'
 import { useSiteContent } from '../../content/ContentContext'
+import { defaultLocalizedContent } from '../../content/defaults'
 import type {
   GalleryItem,
   GalleryItemType,
@@ -57,6 +59,18 @@ const tabs: { id: Tab; label: string; icon: typeof Sparkles }[] = [
   { id: 'voices', label: 'Voices', icon: MessageSquareQuote },
   { id: 'stats', label: 'Stats', icon: BarChart3 },
 ]
+
+const tabContentKeys: Record<Tab, (keyof SiteContent)[]> = {
+  hero: ['hero'],
+  about: ['about'],
+  who: ['whoWeAre'],
+  team: ['teamLeads', 'teamMembers'],
+  projects: ['projects'],
+  challenges: ['seasons'],
+  gallery: ['gallery'],
+  voices: ['testimonials'],
+  stats: ['stats'],
+}
 
 function Field({
   label,
@@ -464,6 +478,29 @@ export function AdminPage() {
     }
   }
 
+  /** Replace the current section (EN + UZ) with the website's built-in version; nothing is published until Save. */
+  const resetSection = () => {
+    const label = tabs.find((x) => x.id === tab)?.label ?? 'this section'
+    if (!window.confirm(`Replace "${label}" with the website's built-in version (English and Uzbek)? Unsaved edits in this section will be lost.`)) {
+      return
+    }
+    const keys = tabContentKeys[tab]
+    setDraftBundle((b) => {
+      const next = structuredClone(b)
+      for (const loc of ['en', 'uz'] as Locale[]) {
+        for (const key of keys) {
+          ;(next[loc] as Record<string, unknown>)[key] = structuredClone(defaultLocalizedContent[loc][key])
+        }
+      }
+      return next
+    })
+    if (tab === 'projects') setProjectId(defaultLocalizedContent[adminLocale].projects[0]?.id ?? '')
+    if (tab === 'challenges') setSeasonId(defaultLocalizedContent[adminLocale].seasons[0]?.id ?? '')
+    setVoiceIndex(0)
+    setGalleryIndex(0)
+    setStatus(`${label} reset to the website's built-in version — click Save to publish.`)
+  }
+
   const handleSave = async () => {
     setSaving(true)
     setStatus(null)
@@ -640,6 +677,14 @@ export function AdminPage() {
                 className="press hidden h-10 items-center gap-2 rounded-xl border border-line bg-white px-4 text-sm font-semibold text-ink hover:border-ink-faint sm:inline-flex"
               >
                 <RotateCcw className="h-4 w-4" /> Reload
+              </button>
+              <button
+                type="button"
+                onClick={resetSection}
+                title="Replace this section with the website's built-in version"
+                className="press hidden h-10 items-center gap-2 rounded-xl border border-line bg-white px-4 text-sm font-semibold text-ink hover:border-ink-faint md:inline-flex"
+              >
+                <Undo2 className="h-4 w-4" /> Reset section
               </button>
               <button
                 type="button"

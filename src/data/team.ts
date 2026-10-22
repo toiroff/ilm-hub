@@ -78,7 +78,14 @@ export const teamLeads: TeamMember[] = [
     role: 'Founder & CEO',
     photo: '/assets/team-muhammadumar.png',
     lead: true,
-    bio: 'Leads ILM Hub’s vision — from Telegram posts to camps and challenges that help students build discipline across Uzbekistan.',
+    bio: 'Founded ILM Hub in July 2024 and leads it: the ILM Mode challenge seasons, English Day Camp, IT Bootcamp, ILM HUB Camp S3 and the Habit Zone app.',
+  },
+  {
+    name: 'Anvarjon Xolmirzayev',
+    role: 'Mentor & Finance',
+    photo: '/assets/team-anvarjon.jpg',
+    lead: true,
+    bio: 'Mentors challenge participants and manages ILM Hub’s finances.',
   },
 ]
 

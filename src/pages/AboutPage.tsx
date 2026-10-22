@@ -3,7 +3,7 @@ import { ClosingCta } from '../components/HomeSections'
 import { useLocale } from '../i18n/locale'
 import { localizedJourney } from '../i18n/staticContent'
 import { useSiteContent } from '../content/ContentContext'
-import { initials } from '../lib/initials'
+import { LeadCard, MemberGrid } from '../components/Team'
 
 export function AboutPage() {
   const { content } = useSiteContent()
@@ -117,40 +117,14 @@ export function AboutPage() {
             </div>
             <p className="text-lg leading-relaxed text-ink-soft lg:col-span-5 lg:self-end">
               {uz
-                ? 'Challengelarni ishlab chiqadigan, lagerlarni oʻtkazadigan va ishtirokchilarni har kuni qoʻllab-quvvatlaydigan talabalar.'
-                : 'Students who design the challenges, run the camps and support participants every single day.'}
+                ? 'ILM Hub talabalar tomonidan boshqariladi: challengelarni ishlab chiqadi, lagerlarni oʻtkazadi va ishtirokchilarni har kuni qoʻllab-quvvatlaydi.'
+                : 'ILM Hub is run by students: they design the challenges, run the camps and support participants every single day.'}
             </p>
           </div>
 
-          <div className={`mt-14 grid gap-4 ${teamLeads.length > 1 ? 'md:grid-cols-2' : ''}`}>
+          <div className="mt-14 grid gap-6 md:grid-cols-2">
             {teamLeads.map((lead) => (
-              <figure
-                key={lead.name}
-                className={`grid overflow-hidden rounded-2xl bg-tint ${teamLeads.length > 1 ? '' : 'md:grid-cols-12'}`}
-              >
-                <div
-                  className={`aspect-[4/5] overflow-hidden bg-line ${
-                    teamLeads.length > 1 ? '' : 'md:col-span-5 md:aspect-auto md:min-h-[460px]'
-                  }`}
-                >
-                  {lead.photo ? (
-                    <img src={lead.photo} alt={lead.name} className="h-full w-full object-cover object-top" />
-                  ) : (
-                    <div className="flex h-full items-center justify-center text-5xl font-bold">{initials(lead.name)}</div>
-                  )}
-                </div>
-                <figcaption
-                  className={`flex flex-col justify-center p-8 sm:p-10 ${teamLeads.length > 1 ? '' : 'md:col-span-7 lg:p-14'}`}
-                >
-                  <span className="w-fit rounded-lg bg-accent-soft px-3 py-1 text-sm font-semibold text-accent-ink">
-                    {lead.role}
-                  </span>
-                  <p className="mt-5 text-[34px] leading-tight font-bold tracking-[-0.03em] sm:text-[44px]">{lead.name}</p>
-                  {lead.bio && (
-                    <p className="mt-5 max-w-[46ch] text-lg leading-relaxed text-ink-soft sm:text-xl">{lead.bio}</p>
-                  )}
-                </figcaption>
-              </figure>
+              <LeadCard key={lead.name} lead={lead} />
             ))}
           </div>
 
@@ -159,23 +133,9 @@ export function AboutPage() {
               <h3 className="mt-16 text-2xl font-bold tracking-tight">
                 {uz ? 'Tashkilotchilar va mentorlar' : 'Organizers & mentors'}
               </h3>
-              <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {teamMembers.map((member) => (
-                  <li key={member.name} className="flex items-center gap-4 rounded-2xl border border-line bg-white p-5">
-                    {member.photo ? (
-                      <img src={member.photo} alt="" className="h-14 w-14 shrink-0 rounded-full object-cover" />
-                    ) : (
-                      <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-navy text-base font-bold text-white">
-                        {initials(member.name)}
-                      </span>
-                    )}
-                    <div className="min-w-0">
-                      <p className="text-lg leading-snug font-bold tracking-tight">{member.name}</p>
-                      <p className="mt-0.5 text-[15px] text-ink-soft">{member.role}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <div className="mt-6">
+                <MemberGrid members={teamMembers} />
+              </div>
             </>
           )}
         </div>

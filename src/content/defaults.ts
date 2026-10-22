@@ -145,7 +145,14 @@ export const defaultSiteContentUz: SiteContent = {
       role: 'Asoschi va CEO',
       photo: teamLeads[0]!.photo,
       lead: true,
-      bio: 'ILM Hub vizyonini boshqaradi — Telegram postlaridan lagerlar va challengesgacha, Oʻzbekiston boʻylab talabalarga intizom qurishda yordam beradi.',
+      bio: '2024-yil iyulida ILM Hubʼga asos solgan va uni boshqaradi: ILM Mode challenge mavsumlari, English Day Camp, IT Bootcamp, ILM HUB Camp S3 va Habit Zone ilovasi.',
+    },
+    {
+      name: teamLeads[1]!.name,
+      role: 'Mentor va moliya',
+      photo: teamLeads[1]!.photo,
+      lead: true,
+      bio: 'Challenge ishtirokchilariga mentorlik qiladi va ILM Hub moliyasini boshqaradi.',
     },
   ],
   teamMembers: teamMembers.map((m) => ({

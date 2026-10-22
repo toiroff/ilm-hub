@@ -69,6 +69,7 @@ function localizeTeam(en: TeamMember, uz?: TeamMember): TeamMember {
 function translateRole(role: string): string {
   const map: Record<string, string> = {
     'Founder & CEO': 'Asoschi va CEO',
+    'Mentor & Finance': 'Mentor va moliya',
     'Project Manager': 'Loyiha menejeri',
     'Organizer & Mentor': 'Tashkilotchi va mentor',
     Organizer: 'Tashkilotchi',
