@@ -2,20 +2,71 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/assets/logo-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-site-verification" content="lUEfxcwDw2ZtWoF5tGowwfi1eehLUa93furNJMeUXmY" />
+
+    <!-- Icons: Google shows a square icon of at least 48×48 next to search results -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/icon-96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0e1b3d" />
+
+    <title>ILM Hub — 21-day discipline challenges for students in Uzbekistan</title>
     <meta
       name="description"
-      content="ILM Hub is an educational initiative helping high school students and graduates in Uzbekistan develop discipline, consistency, and practical skills through challenges, projects, and community."
+      content="ILM Hub is a student-led community in Uzbekistan: ILM Mode 21-day discipline challenges, camps and projects, and the free Habit Zone app."
     />
+    <link rel="canonical" href="https://www.ilm-hub.uz/" />
+
+    <!-- Link previews (Telegram, LinkedIn, Facebook…) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ILM Hub" />
+    <meta property="og:url" content="https://www.ilm-hub.uz/" />
+    <meta property="og:title" content="ILM Hub — 21-day discipline challenges for students in Uzbekistan" />
+    <meta
+      property="og:description"
+      content="ILM Hub is a student-led community in Uzbekistan: ILM Mode 21-day discipline challenges, camps and projects, and the free Habit Zone app."
+    />
+    <meta property="og:image" content="https://www.ilm-hub.uz/assets/projects/english-day-camp/cover.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Tells Google the site's name and logo -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://www.ilm-hub.uz/#website",
+            "name": "ILM Hub",
+            "alternateName": "ILM Hub Uzbekistan",
+            "url": "https://www.ilm-hub.uz/",
+            "inLanguage": ["en", "uz"],
+            "publisher": { "@id": "https://www.ilm-hub.uz/#organization" }
+          },
+          {
+            "@type": "EducationalOrganization",
+            "@id": "https://www.ilm-hub.uz/#organization",
+            "name": "ILM Hub",
+            "url": "https://www.ilm-hub.uz/",
+            "logo": "https://www.ilm-hub.uz/icon-512.png",
+            "description": "A student-led educational initiative in Uzbekistan running 21-day discipline challenges, camps and projects.",
+            "foundingDate": "2024-07",
+            "areaServed": "Uzbekistan",
+            "founder": { "@type": "Person", "name": "Muhammadumar" }
+          }
+        ]
+      }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <title>ILM Hub — Learn. Build. Inspire.</title>
   </head>
   <body>
     <div id="root"></div>

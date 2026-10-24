@@ -224,6 +224,13 @@ Full steps: **`ADMIN.md`**.
 - Ad-block / network blocking Supabase
 - Didn’t restart Vite after `.env` change
 
+## SEO
+
+- Live address: **https://www.ilm-hub.uz** (the bare `ilm-hub.uz` should redirect to www). Used in `index.html` (canonical, Open Graph, JSON-LD), `public/robots.txt`, `public/sitemap.xml` and `src/components/PageMeta.tsx`
+- `PageMeta` sets a unique `<title>`, description and canonical per route (EN + UZ); add new routes to its `pages` map and to `sitemap.xml`
+- Icons in `public/` (`favicon.ico`, `icon-*.png`, `apple-touch-icon.png`, `site.webmanifest`) are generated from `public/assets/logo-icon.png`. Google needs a square icon ≥48×48 for the search-result logo
+- JSON-LD in `index.html` declares the site name and logo (`WebSite` + `EducationalOrganization`)
+
 ## Deployment
 
 1. Ensure `.env` (or host env vars) has real Supabase keys on the deploy target

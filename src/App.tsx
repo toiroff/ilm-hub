@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Routes, Route, useLocation } from 'react-route
 import { useEffect } from 'react'
 import { Navbar } from './components/Navbar'
 import { Footer } from './components/Footer'
+import { PageMeta } from './components/PageMeta'
 import { HomePage } from './pages/HomePage'
 import { SeasonPage } from './pages/SeasonPage'
 import { ProjectsPage } from './pages/ProjectsPage'
@@ -41,6 +42,7 @@ function Layout() {
 
   return (
     <div className="min-h-screen bg-canvas">
+      <PageMeta />
       <Navbar />
       <main>
         <Routes>
