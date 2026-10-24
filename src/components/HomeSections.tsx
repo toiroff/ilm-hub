@@ -1,6 +1,6 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useState, type CSSProperties, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, ArrowUpRight, Check, ChevronLeft, ChevronRight, Download, Plus } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Check, Download, Plus } from 'lucide-react'
 import { Button } from './Button'
 import { CoverImage } from './CoverImage'
 import { Phone } from './HabitZone'
@@ -8,6 +8,7 @@ import { LeadCard } from './Team'
 import { HABIT_ZONE_DOWNLOAD_URL } from '../lib/links'
 import { useSiteContent } from '../content/ContentContext'
 import { useLocale } from '../i18n/locale'
+import type { Testimonial } from '../data/testimonials'
 import { initials } from '../lib/initials'
 
 import { TRACKS } from '../lib/tracks'
@@ -372,178 +373,97 @@ function SourceLink({ href }: { href: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-1 text-sm font-semibold text-white underline decoration-white/40 underline-offset-4 hover:decoration-white"
+      className="inline-flex items-center gap-1 text-sm font-semibold text-blue hover:underline"
     >
       {t('home.voices.source')} <ArrowUpRight className="h-4 w-4" />
     </a>
   )
 }
 
-/** How many cards fit side by side: 1 on phones, 2 on tablets, 3 on desktop. */
-function useCardsPerView() {
-  const query = () => (window.matchMedia('(min-width: 1024px)').matches ? 3 : window.matchMedia('(min-width: 640px)').matches ? 2 : 1)
-  const [perView, setPerView] = useState(query)
-  useEffect(() => {
-    const update = () => setPerView(query())
-    window.addEventListener('resize', update)
-    return () => window.removeEventListener('resize', update)
-  }, [])
-  return perView
+const AVATAR_COLORS = ['bg-accent', 'bg-blue', 'bg-navy', 'bg-accent-ink', 'bg-blue-hover']
+const QUOTE_PREVIEW_CHARS = 150
+
+function VoiceCard({ voice, seasonLabel }: { voice: Testimonial; seasonLabel: string }) {
+  const { t } = useLocale()
+  const [open, setOpen] = useState(false)
+  const long = voice.quote.length > QUOTE_PREVIEW_CHARS
+  const color = AVATAR_COLORS[[...voice.name].reduce((sum, ch) => sum + ch.charCodeAt(0), 0) % AVATAR_COLORS.length]
+
+  return (
+    <figure className="w-[300px] rounded-2xl bg-blue-soft p-5 sm:w-[360px] sm:p-6">
+      <figcaption className="flex items-center gap-3">
+        <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white ${color}`}>
+          {initials(voice.name)}
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block truncate font-semibold text-ink">{voice.name}</span>
+          <span className="block truncate text-sm text-ink-soft">{voice.role}</span>
+        </span>
+        <span className="shrink-0 rounded-full bg-white/70 px-2.5 py-1 text-xs font-semibold text-blue">{seasonLabel}</span>
+      </figcaption>
+      <blockquote className={`mt-4 text-[15px] leading-relaxed text-ink ${long && !open ? 'line-clamp-3' : ''}`}>
+        {voice.quote}
+      </blockquote>
+      {(long || voice.link) && (
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1">
+          {long && (
+            <button type="button" onClick={() => setOpen((v) => !v)} className="text-sm font-semibold text-blue hover:underline">
+              {open ? t('home.voices.less') : t('home.voices.more')}
+            </button>
+          )}
+          {voice.link && <SourceLink href={voice.link} />}
+        </div>
+      )}
+    </figure>
+  )
 }
 
-const VOICE_INTERVAL_MS = 5000
+/** One endlessly scrolling row: the list is rendered twice so the -50% loop is seamless. */
+function VoiceRow({ voices, reverse, seasonLabel }: { voices: Testimonial[]; reverse?: boolean; seasonLabel: (id: string) => string }) {
+  return (
+    <div className="marquee marquee-fade">
+      <ul
+        className={`marquee-track flex w-max items-start ${reverse ? 'marquee-reverse' : ''}`}
+        style={{ '--marquee-duration': `${Math.max(30, voices.length * 9)}s` } as CSSProperties}
+      >
+        {[...voices, ...voices].map((v, i) => (
+          <li key={`${v.name}-${i}`} className="shrink-0 pr-4" aria-hidden={i >= voices.length}>
+            <VoiceCard voice={v} seasonLabel={seasonLabel(v.seasonId)} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
 
 export function Voices() {
   const { content } = useSiteContent()
   const { t, locale } = useLocale()
-  const [season, setSeason] = useState('all')
-  const [index, setIndex] = useState(0)
-  const [paused, setPaused] = useState(false)
-  const perView = useCardsPerView()
   const all = content.testimonials
+  if (all.length === 0) return null
 
   const seasonNumber = (id: string) => Number(id.replace(/\D/g, '')) || 0
   const seasonLabel = (id: string) =>
     locale === 'uz' ? `${seasonNumber(id)}-mavsum` : `Season ${seasonNumber(id)}`
-  const seasonIds = [...new Set(all.map((v) => v.seasonId))].sort((x, y) => seasonNumber(y) - seasonNumber(x))
-  const items = season === 'all' ? all : all.filter((v) => v.seasonId === season)
-  const filters = [
-    { id: 'all', label: t('home.voices.all'), count: all.length },
-    ...seasonIds.map((id) => ({ id, label: seasonLabel(id), count: all.filter((v) => v.seasonId === id).length })),
-  ]
-  const lastIndex = Math.max(0, items.length - perView)
-  const current = Math.min(index, lastIndex)
-  const go = (next: number) => setIndex(next > lastIndex ? 0 : next < 0 ? lastIndex : next)
-
-  // Slide one card every few seconds; stop while hovered/focused or for reduced-motion users
-  useEffect(() => {
-    if (paused || lastIndex === 0) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const timer = window.setInterval(() => {
-      setIndex((i) => (Math.min(i, lastIndex) >= lastIndex ? 0 : Math.min(i, lastIndex) + 1))
-    }, VOICE_INTERVAL_MS)
-    return () => window.clearInterval(timer)
-  }, [paused, lastIndex])
-
-  if (all.length === 0) return null
+  // Two rows moving in opposite directions (one row when there are only a few)
+  const twoRows = all.length >= 6
+  const rowA = twoRows ? all.filter((_, i) => i % 2 === 0) : all
+  const rowB = twoRows ? all.filter((_, i) => i % 2 === 1) : []
 
   return (
-    <section className="overflow-hidden bg-navy text-white">
-      <div className="container-page py-20 lg:py-28">
-        <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-16">
+    <section className="bg-white">
+      <div className="container-page border-t border-line pt-20 lg:pt-28">
+        <div className="grid gap-6 lg:grid-cols-12 lg:items-end lg:gap-16">
           <div className="lg:col-span-7">
-            <p className="eyebrow eyebrow-light">{t('home.voices.title')}</p>
+            <p className="eyebrow">{t('home.voices.title')}</p>
             <h2 className="h-section mt-5">{t('home.voices.heading')}</h2>
-            <p className="mt-5 max-w-[48ch] text-lg leading-relaxed text-white/70">{t('home.voices.sub')}</p>
           </div>
-          <div className="flex flex-wrap gap-2 lg:col-span-5 lg:justify-end" role="group" aria-label={t('home.voices.title')}>
-            {filters.map((f) => (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => {
-                  setSeason(f.id)
-                  setIndex(0)
-                }}
-                aria-pressed={season === f.id}
-                className={`press inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold ${
-                  season === f.id ? 'bg-white text-navy' : 'bg-white/10 text-white/80 hover:bg-white/15 hover:text-white'
-                }`}
-              >
-                {f.label}
-                <span className={season === f.id ? 'text-ink-faint' : 'text-white/45'}>{f.count}</span>
-              </button>
-            ))}
-          </div>
+          <p className="text-lg leading-relaxed text-ink-soft lg:col-span-5">{t('home.voices.sub')}</p>
         </div>
-
-        <div
-          className="mt-12"
-          role="region"
-          aria-roledescription="carousel"
-          aria-label={t('home.voices.title')}
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-          onFocus={() => setPaused(true)}
-          onBlur={() => setPaused(false)}
-        >
-          <div className="-mx-2 overflow-hidden">
-            <ul
-              className="flex transition-transform duration-700 ease-out motion-reduce:transition-none"
-              style={{ transform: `translateX(-${(current * 100) / perView}%)` }}
-            >
-              {items.map((v, i) => {
-                const visible = i >= current && i < current + perView
-                return (
-                  <li
-                    key={`${v.name}-${v.seasonId}-${i}`}
-                    className="flex shrink-0 basis-full px-2 sm:basis-1/2 lg:basis-1/3"
-                    aria-hidden={!visible}
-                  >
-                    <figure className="flex w-full flex-col rounded-2xl bg-navy-2 p-6 sm:p-7">
-                      <span className="block text-[44px] leading-[0.5] font-bold text-accent" aria-hidden="true">
-                        “
-                      </span>
-                      <blockquote className="mt-4 flex-1 leading-relaxed text-white/85">{v.quote}</blockquote>
-                      <figcaption className="mt-6 flex items-center gap-3 border-t border-white/10 pt-5">
-                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-xs font-bold text-navy">
-                          {initials(v.name)}
-                        </span>
-                        <span className="min-w-0 flex-1">
-                          <span className="block leading-snug font-semibold">{v.name}</span>
-                          <span className="block text-sm text-white/55">{v.role}</span>
-                        </span>
-                        <span className="shrink-0 rounded-md bg-white/10 px-2 py-0.5 text-xs font-semibold text-white/75">
-                          {seasonLabel(v.seasonId)}
-                        </span>
-                      </figcaption>
-                      {v.link && (
-                        <div className="mt-4">
-                          <SourceLink href={v.link} />
-                        </div>
-                      )}
-                    </figure>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-
-          {lastIndex > 0 && (
-            <div className="mt-8 flex items-center justify-between gap-6">
-              <div className="flex flex-wrap gap-2">
-                {Array.from({ length: lastIndex + 1 }, (_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => go(i)}
-                    aria-label={`${t('home.voices.goTo')} ${i + 1}`}
-                    aria-current={i === current}
-                    className={`h-2 rounded-full transition-all ${i === current ? 'w-8 bg-accent' : 'w-2 bg-white/25 hover:bg-white/45'}`}
-                  />
-                ))}
-              </div>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => go(current - 1)}
-                  aria-label={t('home.voices.prev')}
-                  className="press flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white hover:border-white/60 hover:bg-white/5"
-                >
-                  <ChevronLeft className="h-5 w-5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => go(current + 1)}
-                  aria-label={t('home.voices.next')}
-                  className="press flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white hover:border-white/60 hover:bg-white/5"
-                >
-                  <ChevronRight className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+      </div>
+      <div className="mt-12 space-y-4 pb-20 lg:pb-28">
+        <VoiceRow voices={rowA} seasonLabel={seasonLabel} />
+        {rowB.length > 0 && <VoiceRow voices={rowB} reverse seasonLabel={seasonLabel} />}
       </div>
     </section>
   )
